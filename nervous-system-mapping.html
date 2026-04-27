@@ -62,37 +62,43 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
 <title>Nervous System Mapping · Worksheet</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f7f3ea;
-    --paper: #fdfbf6;
-    --ink: #1a1613;
-    --muted: #6a6058;
-    --muted-2: #8a7e74;
-    --line: #e8e1d4;
-    --line-soft: #f0eadf;
+    --bg: #faf8f4;
+    --paper: #fffdf8;
+    --paper-warm: #f8f2e7;
+    --ink: #101722;
+    --muted: #4f5a4f;
+    --muted-2: #728072;
+    --line: #e2d9ca;
+    --line-soft: #eee8dc;
 
     --violet: #5400ff;
-    --violet-soft: #e4d8ff;
-    --violet-tint: #f4efff;
+    --violet-hover: #4200cc;
+    --violet-soft: #c6c1d2;
+    --violet-tint: #f4f0fb;
+    --deep-green: #1f3d37;
+    --teal: #6a8d91;
+    --warm-highlight: #d8cbb8;
+    --strong-purple: #222c93;
 
-    --green: #5fa985;
-    --green-dark: #3d7a5f;
-    --green-soft: #c5dfd0;
+    --green: #2f8f67;
+    --green-dark: #1f3d37;
+    --green-soft: #b8d7ca;
     --green-tint: #edf6f1;
 
-    --yellow: #c89a2e;
-    --yellow-dark: #8a691b;
-    --yellow-soft: #e8d5a1;
-    --yellow-tint: #faf3e0;
+    --yellow: #c99a2e;
+    --yellow-dark: #785c16;
+    --yellow-soft: #e2cfae;
+    --yellow-tint: #faf1dd;
 
-    --red: #a84338;
-    --red-dark: #7a2e26;
-    --red-soft: #d9a9a2;
-    --red-tint: #f8ebe8;
+    --red: #aa4038;
+    --red-dark: #74302a;
+    --red-soft: #ddb4ae;
+    --red-tint: #f8ece9;
 
-    --shadow: 0 1px 2px rgba(26, 22, 19, 0.04), 0 12px 32px -16px rgba(26, 22, 19, 0.14);
+    --shadow: 0 1px 2px rgba(31, 61, 55, 0.04), 0 18px 42px -26px rgba(31, 61, 55, 0.32);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -102,15 +108,16 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
   body {
     background: var(--bg);
     color: var(--ink);
-    font-family: 'DM Sans', -apple-system, system-ui, sans-serif;
+    font-family: 'Inter', -apple-system, system-ui, sans-serif;
     font-size: 17px;
     line-height: 1.6;
-    letter-spacing: 0.003em;
+    letter-spacing: 0;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     background-image:
-      radial-gradient(at 15% 8%, rgba(84, 0, 255, 0.05) 0, transparent 42%),
-      radial-gradient(at 85% 88%, rgba(95, 169, 133, 0.06) 0, transparent 46%),
+      linear-gradient(180deg, rgba(248, 242, 231, 0.82) 0%, rgba(250, 248, 244, 0.95) 48%, rgba(250, 248, 244, 1) 100%),
+      radial-gradient(at 16% 6%, rgba(198, 193, 210, 0.34) 0, transparent 38%),
+      radial-gradient(at 88% 92%, rgba(106, 141, 145, 0.14) 0, transparent 42%),
       url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.08 0 0 0 0 0.06 0 0 0 0.035 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
     background-attachment: fixed;
   }
@@ -180,63 +187,72 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
     transform-origin: 50% 50%;
   }
   .header-mark .r2 {
-    stroke: var(--green);
+    stroke: var(--teal);
     animation:
       drawRing 1.3s 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards,
       spinRev 72s 1.85s linear infinite;
     transform-origin: 50% 50%;
   }
   .header-mark .r3 {
-    stroke: var(--yellow);
+    stroke: var(--deep-green);
     animation:
       drawRing 1.3s 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards,
       spin 60s 2s linear infinite;
     transform-origin: 50% 50%;
   }
   .header-mark .r4 {
-    stroke: var(--red);
+    stroke: var(--violet-soft);
     animation: drawRing 1.3s 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
   @keyframes drawRing { to { stroke-dashoffset: 0; } }
   @keyframes spin    { to { transform: rotate(360deg); } }
   @keyframes spinRev { to { transform: rotate(-360deg); } }
-  @media (max-width: 560px) { .header-mark { width: 100px; height: 100px; top: -6px; } }
+  @media (max-width: 560px) {
+    .header-mark { width: 100px; height: 100px; top: -6px; }
+    h1 { font-size: 42px; }
+    .deck { font-size: 24px; }
+    .closing-note { font-size: 22px; }
+  }
 
   .eyebrow {
     display: inline-flex;
     align-items: center;
     gap: 12px;
     font-size: 12.5px;
-    letter-spacing: 0.2em;
+    letter-spacing: 0;
     text-transform: uppercase;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--violet);
     margin-bottom: 26px;
     position: relative;
     z-index: 1;
   }
-  .eyebrow::before { content: ""; width: 30px; height: 1px; background: var(--violet); }
+  .eyebrow::before { content: ""; width: 30px; height: 1px; background: var(--deep-green); }
+  .eyebrow a {
+    color: inherit;
+    text-decoration: none;
+    text-underline-offset: 3px;
+  }
+  .eyebrow a:hover { text-decoration: underline; }
 
   h1 {
-    font-family: 'Fraunces', Georgia, serif;
-    font-variation-settings: "opsz" 144, "SOFT" 50, "wght" 560;
-    font-size: clamp(42px, 6vw, 64px);
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 62px;
     line-height: 1.04;
-    letter-spacing: -0.02em;
+    letter-spacing: 0;
     margin-bottom: 16px;
     position: relative;
     z-index: 1;
   }
   h1 em {
     font-style: italic;
-    font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 560;
     color: var(--violet);
   }
 
   .deck {
-    font-family: Georgia, serif;
+    font-family: 'Playfair Display', Georgia, serif;
     font-style: normal;
-    font-size: clamp(25px, 3vw, 30px);
+    font-size: 28px;
     line-height: 1.45;
     color: var(--muted);
     max-width: 48ch;
@@ -253,7 +269,7 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
     position: relative;
     z-index: 1;
     padding-left: 20px;
-    border-left: 2px solid var(--violet-soft);
+    border-left: 2px solid var(--deep-green);
   }
 
   .meta {
@@ -287,7 +303,7 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
     gap: 10px;
     margin-left: auto;
     padding: 8px 16px;
-    background: var(--paper);
+    background: rgba(255, 253, 248, 0.82);
     border: 1px solid var(--line);
     border-radius: 999px;
     font-size: 13.5px;
@@ -340,7 +356,7 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
   .pillar {
     background: var(--paper);
     border: 1px solid var(--line);
-    border-radius: 18px;
+    border-radius: 8px;
     padding: 34px clamp(22px, 3vw, 40px);
     margin-bottom: 22px;
     box-shadow: var(--shadow);
@@ -369,12 +385,11 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
   .pillar-mark {
     flex: 0 0 auto;
     width: 46px; height: 46px;
-    border-radius: 50%;
+    border-radius: 8px;
     display: grid; place-items: center;
     background: var(--pillar-tint);
     color: var(--pillar-dark);
-    font-family: 'Fraunces', serif;
-    font-variation-settings: "opsz" 144, "wght" 500;
+    font-family: 'Playfair Display', serif;
     font-size: 16px;
     border: 1px solid var(--pillar-soft);
     font-variant-numeric: tabular-nums;
@@ -385,25 +400,24 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
 
   .pillar-title { flex: 1; min-width: 0; }
   .pillar-title h2 {
-    font-family: 'Fraunces', Georgia, serif;
-    font-variation-settings: "opsz" 144, "SOFT" 70, "wght" 580;
+    font-family: 'Playfair Display', Georgia, serif;
     font-size: 30px;
     line-height: 1.05;
-    letter-spacing: -0.015em;
+    letter-spacing: 0;
     color: var(--pillar-dark);
     margin-bottom: 8px;
   }
   .pillar-question {
     font-size: 17px;
     line-height: 1.5;
-    color: var(--ink);
+    color: var(--muted);
     font-weight: 400;
   }
 
   .pillar-count {
     flex: 0 0 auto;
     padding: 5px 14px;
-    border-radius: 999px;
+    border-radius: 8px;
     background: var(--pillar-tint);
     color: var(--pillar-dark);
     font-size: 13.5px;
@@ -420,7 +434,7 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
   /* Prompts */
   .prompts {
     background: var(--pillar-tint);
-    border-radius: 10px;
+    border-radius: 8px;
     padding: 16px 20px 16px 22px;
     margin-bottom: 16px;
     font-size: 16px;
@@ -431,7 +445,7 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
   .prompts-label {
     display: block;
     font-size: 11.5px;
-    letter-spacing: 0.2em;
+    letter-spacing: 0;
     text-transform: uppercase;
     color: var(--pillar-dark);
     font-weight: 500;
@@ -463,7 +477,7 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
   .lenses .label {
     font-style: normal;
     font-size: 11.5px;
-    letter-spacing: 0.2em;
+    letter-spacing: 0;
     text-transform: uppercase;
     color: var(--pillar-dark);
     font-weight: 500;
@@ -480,7 +494,7 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
     padding: 14px 16px;
     background-color: var(--pillar-tint);
     border: 1px solid transparent;
-    border-radius: 10px;
+    border-radius: 8px;
     font-size: 17px;
     line-height: 1.55;
     color: var(--ink);
@@ -553,7 +567,7 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
     color: var(--ink);
     background: transparent;
     border: 1px solid var(--line);
-    border-radius: 10px;
+    border-radius: 8px;
     padding: 13px 16px;
     outline: none;
     transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
@@ -572,20 +586,20 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
     color: white;
     background: var(--pillar-color);
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     padding: 0 22px;
     cursor: pointer;
     transition: transform 140ms ease, filter 180ms ease;
     white-space: nowrap;
   }
-  .add-row button:hover { filter: brightness(1.05); }
+  .add-row button:hover { filter: saturate(1.08) brightness(0.98); }
   .add-row button:active { transform: translateY(1px); }
 
   /* ───── Deeper sections ───── */
   .deeper {
     background: var(--paper);
     border: 1px solid var(--line);
-    border-radius: 18px;
+    border-radius: 8px;
     padding: 34px clamp(22px, 3vw, 42px);
     margin-top: 32px;
     box-shadow: var(--shadow);
@@ -597,7 +611,7 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
     position: absolute;
     left: 0; top: 0; bottom: 0;
     width: 4px;
-    background: var(--violet);
+    background: var(--deep-green);
     opacity: 0.9;
   }
 
@@ -610,12 +624,11 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
   .deeper-mark {
     flex: 0 0 auto;
     width: 46px; height: 46px;
-    border-radius: 50%;
+    border-radius: 8px;
     display: grid; place-items: center;
     background: var(--violet-tint);
-    color: var(--violet);
-    font-family: 'Fraunces', serif;
-    font-variation-settings: "opsz" 144, "wght" 500;
+    color: var(--deep-green);
+    font-family: 'Playfair Display', serif;
     font-size: 20px;
     border: 1px solid var(--violet-soft);
     margin-top: 2px;
@@ -624,13 +637,12 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
   .deeper:hover .deeper-mark { transform: scale(1.08); }
 
   .deeper-title h2 {
-    font-family: 'Fraunces', Georgia, serif;
-    font-variation-settings: "opsz" 144, "SOFT" 70, "wght" 580;
+    font-family: 'Playfair Display', Georgia, serif;
     font-size: 28px;
     line-height: 1.1;
-    letter-spacing: -0.01em;
+    letter-spacing: 0;
     margin-bottom: 6px;
-    color: var(--violet);
+    color: var(--deep-green);
   }
   .deeper-title p {
     font-size: 16px;
@@ -663,19 +675,19 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
     color: var(--ink);
     background: transparent;
     border: 1px solid var(--line);
-    border-radius: 10px;
+    border-radius: 8px;
     padding: 13px 16px;
     outline: none;
     resize: none;
     min-height: 74px;
     transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
     overflow: hidden;
-    font-family: 'DM Sans', system-ui, sans-serif;
+    font-family: 'Inter', system-ui, sans-serif;
   }
   .qa textarea::placeholder { color: var(--muted-2); }
   .qa textarea:focus {
     border-color: var(--violet);
-    background: var(--violet-tint);
+    background: var(--paper);
     box-shadow: 0 0 0 3px var(--violet-tint);
   }
 
@@ -684,9 +696,9 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
     margin: 52px auto 0;
     max-width: 56ch;
     text-align: center;
-    font-family: Georgia, serif;
+    font-family: 'Playfair Display', Georgia, serif;
     font-style: normal;
-    font-size: clamp(22px, 2.8vw, 27px);
+    font-size: 26px;
     line-height: 1.6;
     color: var(--muted);
     padding: 28px 20px;
@@ -707,7 +719,7 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
     font-size: 15px;
     font-weight: 500;
     padding: 12px 24px;
-    border-radius: 999px;
+    border-radius: 8px;
     cursor: pointer;
     transition: all 200ms ease;
     background: var(--paper);
@@ -724,7 +736,7 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
     color: white;
     border-color: var(--violet);
   }
-  .actions .primary:hover { color: white; filter: brightness(1.08); }
+  .actions .primary:hover { background: var(--violet-hover); color: white; filter: none; }
 
   .footnote {
     margin-top: 32px;
@@ -735,11 +747,126 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
     font-style: italic;
   }
 
+  .site-footer {
+    margin: 42px auto 0;
+    max-width: 66ch;
+    text-align: center;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.75;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+  }
+  .site-footer a {
+    color: var(--deep-green);
+    font-weight: 600;
+    text-decoration: none;
+    text-underline-offset: 3px;
+  }
+  .site-footer a:hover {
+    color: var(--violet);
+    text-decoration: underline;
+  }
+  .social-links {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 22px;
+  }
+  .social-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px;
+    padding: 7px 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--paper);
+    color: var(--deep-green);
+    font-size: 13px;
+    line-height: 1.2;
+    transition: border-color 160ms ease, color 160ms ease, background 160ms ease, transform 160ms ease;
+  }
+  .social-links a:hover {
+    border-color: var(--violet);
+    background: var(--violet-tint);
+    color: var(--violet);
+    text-decoration: none;
+    transform: translateY(-1px);
+  }
+
   :focus-visible {
     outline: 2px solid var(--violet);
     outline-offset: 2px;
   }
   input:focus-visible, textarea:focus-visible { outline: none; }
+
+  /* ───── First-visit notice ───── */
+  .opt-in-notice {
+    position: fixed;
+    top: 14px;
+    left: 50%;
+    width: min(640px, calc(100vw - 28px));
+    transform: translateX(-50%) translateY(-20px);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: var(--paper);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--violet);
+    border-radius: 8px;
+    box-shadow: 0 18px 44px -24px rgba(31, 61, 55, 0.42);
+    padding: 12px 12px 12px 16px;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 2000;
+    transition: opacity 240ms ease, transform 240ms ease;
+  }
+  .opt-in-notice.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+  .opt-in-notice p {
+    flex: 1;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+  .opt-in-close {
+    flex: 0 0 auto;
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--paper);
+    color: var(--muted);
+    cursor: pointer;
+    font: inherit;
+    font-size: 20px;
+    line-height: 1;
+    transition: border-color 160ms ease, color 160ms ease, background 160ms ease;
+  }
+  .opt-in-close:hover {
+    border-color: var(--violet);
+    color: var(--violet);
+    background: var(--violet-tint);
+  }
+
+  @media (max-width: 560px) {
+    .opt-in-notice {
+      top: 10px;
+      width: calc(100vw - 20px);
+      padding: 11px 10px 11px 13px;
+    }
+    .opt-in-notice p { font-size: 13px; }
+    .opt-in-close { width: 32px; height: 32px; }
+  }
 
   /* ───── Toast ───── */
   .toast {
@@ -772,6 +899,12 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
     transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1), opacity 900ms ease-out;
   }
 
+  @media (max-width: 560px) {
+    h1 { font-size: 42px; }
+    .deck { font-size: 24px; }
+    .closing-note { font-size: 22px; }
+  }
+
   /* ───── Print ───── */
   @media print {
     body { background: white; font-size: 12pt; }
@@ -782,7 +915,7 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
       border: 1px solid #ccc;
       margin-bottom: 16px;
     }
-    .header-mark, .add-row, .actions, .item-remove, .empty-hint, .toast, .progress, .footnote, .confetti { display: none !important; }
+    .header-mark, .add-row, .actions, .item-remove, .empty-hint, .toast, .opt-in-notice, .progress, .footnote, .confetti { display: none !important; }
     .item { background: transparent; border: 1px solid #eee; padding: 8px 12px; animation: none; }
     .prompts { background: #fafafa; }
     h1 { font-size: 32pt; }
@@ -804,6 +937,11 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
 </style>
 </head>
 <body>
+<div class="opt-in-notice" id="optInNotice" role="status" aria-live="polite">
+  <p>You will receive an email confirmation opt in - please accept to get your email copy of this tool, which you can complete any time.</p>
+  <button class="opt-in-close" id="optInClose" type="button" aria-label="Dismiss email copy notice">×</button>
+</div>
+
 <div class="page">
 
   <header>
@@ -813,7 +951,7 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
       <circle class="r3" cx="50" cy="50" r="26" pathLength="100"/>
       <circle class="r4" cx="50" cy="50" r="16" pathLength="100"/>
     </svg>
-    <span class="eyebrow">Neurodiversity Works - Worksheet</span>
+    <span class="eyebrow"><a href="http://neurodiversityworks.uk">Neurodiversity Works</a> - Worksheet</span>
     <h1>Nervous System <em>Mapping</em></h1>
     <p class="deck">A tool for noticing what supports, strains, or overwhelms my nervous system.</p>
     <p class="intro-note">This is not a test, and it is not fixed forever. It is a way of noticing what feels regulating, what feels manageable but costly, and what feels unsustainable right now. You can use it for environments, work, relationships, routines, tasks, or ways of living.</p>
@@ -986,12 +1124,31 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
   </div>
 
   <p class="footnote">Entries save automatically in this browser.</p>
+
+  <footer class="site-footer">
+    <a href="http://neurodiversityworks.uk">Copyright Neurodiversity Works</a><br>
+    Neurodiversity Works advocates for accessible employment and support for neurodivergent people<br>
+    We raise awareness about the adjustments needed for neurodivergent people<br>
+    We connect jobseekers and entrepreneurs with opportunities, education, and networks<br>
+    We make neurodivergent talent visible<br>
+    We demonstrate that Neurodiversity Works
+    <ul class="social-links" aria-label="Social links">
+      <li><a href="mailto:hi@neurodiversityworks.uk">Email</a></li>
+      <li><a href="https://www.instagram.com/neurodiversityworks/">Instagram</a></li>
+      <li><a href="https://bsky.app/profile/neurodiversity.works">Bluesky</a></li>
+      <li><a href="https://www.tiktok.com/@neurodiversityworks">TikTok</a></li>
+      <li><a href="https://www.facebook.com/groups/neurodiversityworks">Facebook Groups</a></li>
+      <li><a href="https://x.com/_Neurodiversity">X</a></li>
+      <li><a href="https://www.skool.com/neurodiversity-works-5729/">Skool</a></li>
+    </ul>
+  </footer>
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
   const STATE_KEY = 'nervous-system-mapping-v1';
+  const OPT_IN_NOTICE_KEY = 'nervous-system-mapping-opt-in-notice-seen-v1';
   const LIST_KEYS = ['green', 'yellow', 'red'];
   const REFLECTION_KEYS = ['patterns', 'matters', 'surprises', 'weakness', 'understand'];
   const ACTION_KEYS = ['greenMore', 'yellowContain', 'redSerious', 'support'];
@@ -1031,6 +1188,35 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
   }
 
   const storageAdapter = getStorageAdapter();
+
+  async function showOptInNoticeIfNeeded() {
+    const notice = document.getElementById('optInNotice');
+    const close = document.getElementById('optInClose');
+    if (!notice || !close) return;
+
+    const showNotice = async () => {
+      notice.classList.add('show');
+      if (!storageAdapter) return;
+      try {
+        await storageAdapter.set(OPT_IN_NOTICE_KEY, 'true');
+      } catch (e) { /* no storage available */ }
+    };
+
+    if (!storageAdapter) {
+      notice.classList.add('show');
+    } else {
+      try {
+        const dismissed = await storageAdapter.get(OPT_IN_NOTICE_KEY);
+        if (!dismissed) await showNotice();
+      } catch (e) {
+        notice.classList.add('show');
+      }
+    }
+
+    close.addEventListener('click', async () => {
+      notice.classList.remove('show');
+    });
+  }
 
   async function loadState() {
     try {
@@ -1241,7 +1427,7 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
     const rect = el.getBoundingClientRect();
     const cx = rect.left + rect.width / 2;
     const cy = rect.top + rect.height / 2;
-    const colors = ['#5400ff', '#5fa985', '#c89a2e', '#a84338'];
+    const colors = ['#5400ff', '#2f8f67', '#c99a2e', '#aa4038'];
     const count = 18;
 
     for (let i = 0; i < count; i++) {
@@ -1319,6 +1505,7 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
 
   document.querySelector('.header-mark')?.addEventListener('click', pulseHeaderMark);
 
+  showOptInNoticeIfNeeded();
   loadState();
 </script>
 </body>
