@@ -17,15 +17,13 @@
     --purple-whisper: #F4F1FB;
     --text-dark:      #1F3D37;   /* Deep Green */
     --text-mid:       #1F3D37;
-    --text-muted:     #6A8D91;   /* Intelligence Teal */
-    --placeholder:    #6A8D91;
+    --text-muted:     #3D6164;   /* was #6A8D91 (3.18:1 ✗) → 5.86:1 ✓ */
+    --placeholder:    #4D7275;   /* 4.73:1 ✓ */
     --bg:             #FAF8F4;   /* Calm Background */
     --border:         #C6C1D2;   /* Lavender Accent */
     --border-focus:   #5400FF;
     --answer-bg:      #FFFFFF;
-    --saved-green:    #1F3D37;   /* Deep Green */
-    --warm-highlight: #D8CBB8;   /* Warm Highlight */
-    --error-red:      #B91C1C;
+    --saved-green:    #1A5C3A;   /* was same hex as text-dark; now visually distinct */
   }
 
   /* ── Reset ── */
@@ -83,7 +81,6 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    aria-hidden: true;
   }
 
   .brand-mark svg { width: 22px; height: 22px; fill: white; }
@@ -199,8 +196,6 @@
     font-weight: 700;
     flex-shrink: 0;
     margin-top: 3px;
-    /* decorative — label text carries the number too */
-    aria-hidden: true;
   }
 
   .q-label-text { display: flex; flex-direction: column; gap: 4px; }
@@ -311,7 +306,6 @@
     background: var(--border);
     flex-shrink: 0;
     transition: background 0.3s;
-    aria-hidden: true;
   }
 
   .save-status.saved { color: var(--saved-green); }
@@ -428,7 +422,7 @@
         <span class="brand-name">Neurodiversity Works</span>
         <span class="brand-sub">Sustainable Careers</span>
       </div>
-      <span class="lesson-badge" aria-label="Lesson 1, Page 4">Lesson 1 · Page 4</span>
+      <span class="lesson-badge" aria-label="Lesson 1">Lesson 1</span>
     </div>
   </header>
 
@@ -446,7 +440,7 @@
         If this brings up something too big to grapple with emotionally, choose a smaller or more neutral example. You do not have to start with the hardest thing.
       </div>
       <div class="gdoc-box" role="note">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false" style="flex-shrink:0;margin-top:2px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z" stroke="#6A8D91" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="#6A8D91" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false" style="flex-shrink:0;margin-top:2px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z" stroke="#3D6164" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="#3D6164" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span>If you prefer to work in a Google Doc, <a href="https://docs.google.com/document/d/1UsW9wFUIKVV7-ufHEKym5E7pHBmjAxn7/edit?usp=sharing&ouid=104504634891499416372&rtpof=true&sd=true" target="_blank" rel="noopener noreferrer">access one here</a>.</span>
       </div>
     </div>
@@ -470,8 +464,8 @@
           <div class="question-label-row">
             <div class="q-number" aria-hidden="true">2</div>
             <div class="q-label-text">
-              <label class="q-text" for="q2">What did it require you to suppress, hide, tolerate, or over-perform?</label>
-              <span class="q-hint" id="q2-hint">Think about energy, sensory needs, communication, social demands, masking, or anything else.</span>
+              <label class="q-text" for="q2">What did you have to push through, hide, manage, or compensate for in order to keep going?</label>
+              <span class="q-hint" id="q2-hint">This could include energy, sensory needs, confusion, social demands, masking, emotional effort, overwhelm, or acting as if you were coping.</span>
             </div>
           </div>
           <textarea id="q2" name="q2" aria-describedby="q2-hint" placeholder="e.g. Masking in meetings, ignoring sensory overwhelm, performing enthusiasm I didn't feel…" rows="5"></textarea>
@@ -519,7 +513,8 @@
       </div>
       <div class="btn-group">
         <button class="btn btn-secondary" onclick="clearAll()" type="button">Clear all</button>
-        <button class="btn btn-primary" onclick="copyAnswers()" type="button">Copy my answers</button>
+        <button class="btn btn-secondary" onclick="copyAnswers()" type="button">Copy my answers</button>
+        <a href="Lesson002-Naming-The-Pattern.html" class="btn btn-primary">Next: Naming the Pattern →</a>
       </div>
     </div>
 
@@ -601,7 +596,7 @@
   function copyAnswers() {
     const labels = [
       'Situation',
-      'What I had to suppress, hide, tolerate, or over-perform',
+      'What I had to push through, hide, manage, or compensate for',
       'The cost',
       'What might have made it 10% more sustainable',
     ];

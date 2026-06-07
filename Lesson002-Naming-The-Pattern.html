@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Naming the Pattern — Neurodiversity Works</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  /*
+   * Accessibility: all colour combinations meet WCAG 2.1 AA (4.5:1 min)
+   * — #1F3D37 on #FAF8F4 = 11.2:1 ✓
+   * — #3D6164 on #FAF8F4 = 5.86:1 ✓  (was #6A8D91 = 3.18:1 ✗)
+   * — #5400FF on white   = 7.24:1 ✓
+   * — #222C93 on #EDE8F7 = 9.17:1 ✓
+   * — white on #5400FF   = 7.24:1 ✓
+   * — #1A5C3A on #FAF8F4 = 7.55:1 ✓
+   * All interactive elements ≥ 48px. Checkbox groups use role="group"+aria-labelledby.
+   */
+  :root {
+    color-scheme: light;
+    --purple-deep:    #5400FF;
+    --purple-mid:     #222C93;
+    --purple-soft:    #C6C1D2;
+    --purple-pale:    #EDE8F7;
+    --purple-whisper: #F4F1FB;
+    --text-dark:      #1F3D37;
+    --text-mid:       #1F3D37;
+    --text-muted:     #3D6164;   /* was #6A8D91 (3.18:1 ✗) → 5.86:1 ✓ */
+    --placeholder:    #4D7275;   /* 4.73:1 ✓ */
+    --bg:             #FAF8F4;
+    --border:         #C6C1D2;
+    --border-focus:   #5400FF;
+    --answer-bg:      #FFFFFF;
+    --saved-green:    #1A5C3A;   /* was same hex as text-dark; now visually distinct */
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .skip-link {
+    position: absolute; top: -999px; left: 8px;
+    background: var(--purple-deep); color: #fff;
+    padding: 10px 16px; border-radius: 0 0 6px 6px;
+    font-family: inherit; font-size: 16px; font-weight: 600;
+    text-decoration: none; z-index: 999;
+  }
+  .skip-link:focus { top: 0; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text-dark);
+    line-height: 1.75;
+    min-height: 100vh;
+    font-size: 18px;
+  }
+
+  .page-wrap {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 28px 80px;
+  }
+
+  /* ── Brand header ── */
+  .brand-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 36px; padding-bottom: 20px;
+    border-bottom: 2px solid var(--purple-pale);
+  }
+
+  .brand-mark {
+    width: 40px; height: 40px;
+    background: var(--purple-deep);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .brand-text { display: flex; flex-direction: column; }
+
+  .brand-name {
+    font-size: 13px; font-weight: 700;
+    color: var(--purple-deep);
+    letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.3;
+  }
+
+  .brand-sub { font-size: 13px; color: var(--text-muted); }
+
+  .lesson-badge {
+    margin-left: auto;
+    background: var(--purple-pale);
+    color: var(--purple-deep);
+    font-size: 13px; font-weight: 700;
+    padding: 6px 12px; border-radius: 20px;
+    white-space: nowrap; flex-shrink: 0;
+  }
+
+  /* ── Lesson 1 recap ── */
+  .recap-block {
+    background: var(--purple-whisper);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 36px;
+  }
+
+  .recap-block h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 17px; font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.05em;
+    margin-bottom: 16px;
+  }
+
+  .recap-row { display: flex; flex-direction: column; gap: 12px; }
+
+  .recap-item { display: flex; flex-direction: column; gap: 2px; }
+
+  .recap-label {
+    font-size: 13px; font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+
+  .recap-value {
+    font-size: 16px; color: var(--text-dark);
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    line-height: 1.65;
+    font-style: italic;
+    min-height: 44px;
+  }
+
+  .recap-value.empty { color: var(--text-muted); font-style: normal; }
+
+  /* ── Title & intro ── */
+  .title-block { margin-bottom: 36px; }
+
+  h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 30px; font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 18px; line-height: 1.25;
+  }
+
+  .intro-text { font-size: 18px; color: var(--text-mid); line-height: 1.8; }
+  .intro-text p + p { margin-top: 14px; }
+
+  /* ── Steps ── */
+  .steps-section { display: flex; flex-direction: column; gap: 44px; }
+
+  .step-block { display: flex; flex-direction: column; gap: 16px; }
+
+  .step-header { display: flex; align-items: flex-start; gap: 14px; }
+
+  .step-number {
+    min-width: 36px; height: 36px;
+    background: var(--purple-deep); color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 700; flex-shrink: 0; margin-top: 2px;
+  }
+
+  .step-title-wrap { display: flex; flex-direction: column; gap: 4px; }
+
+  .step-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 21px; font-weight: 700;
+    color: var(--text-dark); line-height: 1.3;
+  }
+
+  .step-intro {
+    font-size: 17px; color: var(--text-muted);
+    line-height: 1.7; font-style: italic;
+  }
+
+  /* ── Checkbox options ── */
+  .options-list {
+    display: flex; flex-direction: column; gap: 10px;
+    list-style: none;
+  }
+
+  /* Card provides border/background; inner label is the full click target */
+  .option-item {
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    transition: border-color 0.15s, background 0.15s;
+  }
+
+  .option-item:hover { border-color: var(--purple-soft); }
+
+  .option-inner {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 14px 16px;
+    cursor: pointer; width: 100%;
+  }
+
+  .option-item input[type="checkbox"] {
+    width: 20px; height: 20px;
+    accent-color: var(--purple-deep);
+    flex-shrink: 0; margin-top: 3px; cursor: pointer;
+  }
+
+  .option-item input[type="checkbox"]:focus-visible {
+    outline: 3px solid var(--border-focus); outline-offset: 2px;
+  }
+
+  .option-item:has(input:checked) {
+    border-color: var(--purple-deep);
+    background: var(--purple-pale);
+  }
+
+  .option-text {
+    font-size: 16px; color: var(--text-dark); line-height: 1.6;
+  }
+
+  .option-text strong {
+    font-weight: 700; color: var(--purple-mid); display: block;
+    margin-bottom: 2px;
+  }
+
+  /* ── Write-down textarea ── */
+  .write-prompt {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 17px; font-weight: 700;
+    color: var(--text-dark);
+    display: block; margin-bottom: 8px;
+  }
+
+  textarea {
+    width: 100%; min-height: 110px;
+    padding: 14px 16px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-size: 17px; color: var(--text-dark);
+    background: var(--answer-bg);
+    resize: vertical; line-height: 1.75;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    outline: none;
+  }
+
+  textarea::placeholder { color: var(--placeholder); }
+
+  textarea:focus {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(84, 0, 255, 0.15);
+    outline: 3px solid var(--border-focus);
+    outline-offset: 2px;
+  }
+
+  /* ── Anchor sentence ── */
+  .sentence-block {
+    background: var(--purple-whisper);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    margin-top: 44px;
+  }
+
+  .sentence-block h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px; font-weight: 700;
+    color: var(--text-dark); margin-bottom: 10px; line-height: 1.3;
+  }
+
+  .sentence-hint {
+    font-size: 17px; color: var(--text-muted);
+    margin-bottom: 20px; line-height: 1.7;
+  }
+
+  .sentence-prompt {
+    font-size: 17px; font-weight: 700;
+    color: var(--purple-deep);
+    margin-bottom: 4px; line-height: 1.5;
+    display: block;
+  }
+
+  .sentence-continuation {
+    font-size: 16px; color: var(--text-muted);
+    margin: 6px 0 10px; line-height: 1.6;
+  }
+
+  .burnout-note {
+    font-size: 17px; color: var(--text-dark); line-height: 1.7;
+    padding: 16px 20px;
+    background: var(--purple-pale);
+    border-radius: 10px;
+  }
+
+  .sentence-example {
+    background: white; border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 16px;
+    font-size: 16px; font-style: italic;
+    color: var(--text-muted); line-height: 1.7;
+    margin-top: 16px;
+  }
+
+  .sentence-example strong { font-style: normal; font-weight: 600; color: var(--text-muted); font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 6px; }
+
+  .sentence-block textarea { background: white; min-height: 90px; }
+
+  /* ── Controls ── */
+  .controls {
+    margin-top: 32px;
+    display: flex; align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap; gap: 16px;
+  }
+
+  .save-status {
+    font-size: 16px; color: var(--text-muted);
+    display: flex; align-items: center; gap: 8px; min-height: 44px;
+  }
+
+  .save-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--border); flex-shrink: 0;
+    transition: background 0.3s;
+  }
+
+  .save-status.saved { color: var(--saved-green); }
+  .save-status.saved .save-dot { background: var(--saved-green); }
+
+  .btn-group { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  .btn {
+    min-height: 48px; padding: 12px 22px;
+    border-radius: 8px; font-size: 16px; font-weight: 600;
+    cursor: pointer; border: none;
+    transition: all 0.15s ease;
+    font-family: inherit; line-height: 1;
+    display: inline-flex; align-items: center; gap: 8px;
+    text-decoration: none;
+  }
+
+  .btn:focus-visible, a:focus-visible {
+    outline: 3px solid var(--border-focus); outline-offset: 3px;
+  }
+
+  .btn-primary { background: var(--purple-deep); color: white; }
+  .btn-primary:hover { background: #222C93; }
+  .btn-primary:active { background: #1a2170; }
+
+  .btn-secondary {
+    background: transparent;
+    border: 2px solid var(--border);
+    color: var(--text-mid);
+  }
+  .btn-secondary:hover { border-color: var(--purple-soft); color: var(--purple-deep); }
+
+  .copy-flash {
+    position: fixed; bottom: 28px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--text-dark); color: white;
+    padding: 12px 22px; border-radius: 8px;
+    font-size: 16px; font-weight: 500;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0; pointer-events: none; z-index: 100;
+  }
+
+  .copy-flash.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  .footer-note {
+    margin-top: 44px; padding-top: 24px;
+    border-top: 2px solid var(--purple-pale);
+    font-size: 17px; color: var(--text-muted);
+    line-height: 1.7; text-align: center;
+  }
+
+  @media (max-width: 500px) {
+    body { font-size: 17px; }
+    .page-wrap { padding: 28px 18px 60px; }
+    h1 { font-size: 26px; }
+    .controls { flex-direction: column; align-items: stretch; }
+    .btn-group { flex-direction: column; }
+    .btn { justify-content: center; }
+    .lesson-badge { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<div class="page-wrap">
+
+  <header role="banner">
+    <div class="brand-header">
+      <div class="brand-mark" aria-hidden="true">
+        <img src="assets/NDW-Logo-Vector-Small-white.png" alt="" width="26" height="26" style="object-fit:contain;">
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">Neurodiversity Works</span>
+        <span class="brand-sub">Sustainable Careers</span>
+      </div>
+      <span class="lesson-badge" aria-label="Lesson 2">Lesson 2</span>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <!-- Lesson 1 recap -->
+    <div class="recap-block" id="recapBlock">
+      <h2>From your Lesson 1 reflection</h2>
+      <div class="recap-row">
+        <div class="recap-item">
+          <span class="recap-label">The situation</span>
+          <div class="recap-value" id="recap-situation"></div>
+        </div>
+        <div class="recap-item">
+          <span class="recap-label">What you had to push through, hide, or compensate for</span>
+          <div class="recap-value" id="recap-suppress"></div>
+        </div>
+        <div class="recap-item">
+          <span class="recap-label">The cost</span>
+          <div class="recap-value" id="recap-cost"></div>
+        </div>
+        <div class="recap-item">
+          <span class="recap-label">Your anchor sentence</span>
+          <div class="recap-value" id="recap-sentence"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Title -->
+    <div class="title-block">
+      <h1>Looking at Lesson 1 Through a New Lens</h1>
+      <div class="intro-text">
+        <p>You are not reflecting from scratch. You are going to look at what you have already identified and give it some names, using what you have just read.</p>
+      </div>
+    </div>
+
+    <!-- Steps -->
+    <div class="steps-section">
+
+      <!-- Step 1 -->
+      <div class="step-block" role="group" aria-labelledby="step1-title">
+        <div class="step-header">
+          <div class="step-number" aria-hidden="true">1</div>
+          <div class="step-title-wrap">
+            <span class="step-title" id="step1-title">Label what you had to suppress or hide</span>
+            <span class="step-intro">Look at what you wrote about what the situation required you to suppress, hide, tolerate, or over-perform. Which of these fits?</span>
+          </div>
+        </div>
+        <ul class="options-list" role="list">
+          <li class="option-item">
+            <label class="option-inner" for="s1-masking">
+              <input type="checkbox" id="s1-masking" name="step1" value="Masking">
+              <span class="option-text"><strong>Masking</strong>Managing how you came across, monitoring yourself, suppressing physical responses, translating communication.</span>
+            </label>
+          </li>
+          <li class="option-item">
+            <label class="option-inner" for="s1-pleasing">
+              <input type="checkbox" id="s1-pleasing" name="step1" value="People-pleasing or over-commitment">
+              <span class="option-text"><strong>People-pleasing or over-commitment</strong>Saying yes when you meant no, taking on more than was sustainable to stay safe or avoid conflict.</span>
+            </label>
+          </li>
+          <li class="option-item">
+            <label class="option-inner" for="s1-perfectionism">
+              <input type="checkbox" id="s1-perfectionism" name="step1" value="Perfectionism as a defence">
+              <span class="option-text"><strong>Perfectionism as a defence</strong>Working harder than the task required to stay one step ahead of criticism or rejection.</span>
+            </label>
+          </li>
+        </ul>
+        <div>
+          <label class="write-prompt" for="step1-text">Write down which you recognise:</label>
+          <textarea id="step1-text" name="step1-text" placeholder="In my own words…" rows="4"></textarea>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step-block" role="group" aria-labelledby="step2-title">
+        <div class="step-header">
+          <div class="step-number" aria-hidden="true">2</div>
+          <div class="step-title-wrap">
+            <span class="step-title" id="step2-title">Label the cost</span>
+            <span class="step-intro">Look at what you named as the cost. Does any of the following fit? More than one can apply.</span>
+          </div>
+        </div>
+        <ul class="options-list" role="list">
+          <li class="option-item">
+            <label class="option-inner" for="s2-shutdown">
+              <input type="checkbox" id="s2-shutdown" name="step2" value="Shutdown">
+              <span class="option-text"><strong>Shutdown</strong>Going quiet, flat, or unavailable after demands that should have been manageable.</span>
+            </label>
+          </li>
+          <li class="option-item">
+            <label class="option-inner" for="s2-avoidance">
+              <input type="checkbox" id="s2-avoidance" name="step2" value="Avoidance">
+              <span class="option-text"><strong>Avoidance</strong>Putting things off not because you couldn't do them, but because the anticipation was exhausting.</span>
+            </label>
+          </li>
+          <li class="option-item">
+            <label class="option-inner" for="s2-physical">
+              <input type="checkbox" id="s2-physical" name="step2" value="Physical symptoms">
+              <span class="option-text"><strong>Physical symptoms or illness</strong>Getting sick after busy periods, fatigue that didn't resolve, headaches, or existing conditions worsening during stressful stretches.</span>
+            </label>
+          </li>
+          <li class="option-item">
+            <label class="option-inner" for="s2-recovery">
+              <input type="checkbox" id="s2-recovery" name="step2" value="Recovery debt">
+              <span class="option-text"><strong>Recovery debt</strong>Evenings, weekends, annual leave spent getting back to baseline rather than actually resting.</span>
+            </label>
+          </li>
+          <li class="option-item">
+            <label class="option-inner" for="s2-identity">
+              <input type="checkbox" id="s2-identity" name="step2" value="Loss of identity">
+              <span class="option-text"><strong>Loss of identity</strong>Who you are outside of work becoming smaller over time.</span>
+            </label>
+          </li>
+        </ul>
+        <div>
+          <label class="write-prompt" for="step2-text">Write down what fits:</label>
+          <textarea id="step2-text" name="step2-text" placeholder="In my own words…" rows="4"></textarea>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step-block" role="group" aria-labelledby="step3-title">
+        <div class="step-header">
+          <div class="step-number" aria-hidden="true">3</div>
+          <div class="step-title-wrap">
+            <span class="step-title" id="step3-title">Recognise the cycle</span>
+            <span class="step-intro">Reading through what you wrote — do you recognise any of this?</span>
+          </div>
+        </div>
+        <ul class="options-list" role="list">
+          <li class="option-item">
+            <label class="option-inner" for="s3-trigger">
+              <input type="checkbox" id="s3-trigger" name="step3" value="Misunderstood or criticised — and it hit harder than it should have">
+              <span class="option-text">You were misunderstood, excluded, or criticised — and it hit harder than it should have.</span>
+            </label>
+          </li>
+          <li class="option-item">
+            <label class="option-inner" for="s3-blame">
+              <input type="checkbox" id="s3-blame" name="step3" value="Self-blame and resolving to try harder">
+              <span class="option-text">You responded by blaming yourself and resolving to try harder, mask more, or over-commit.</span>
+            </label>
+          </li>
+          <li class="option-item">
+            <label class="option-inner" for="s3-compensate">
+              <input type="checkbox" id="s3-compensate" name="step3" value="Compensation through more effort">
+              <span class="option-text">That worked until it didn't — and each time it happened, the reserve was a little smaller than before.</span>
+            </label>
+          </li>
+        </ul>
+        <p class="burnout-note">If any of that fits, you are looking at the <strong>burnout cycle</strong>. Not a personal failing. A pattern.</p>
+        <div>
+          <label class="write-prompt" for="step3-text">Write down what you recognise:</label>
+          <textarea id="step3-text" name="step3-text" placeholder="In my own words…" rows="4"></textarea>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Anchor sentence -->
+    <section class="sentence-block" aria-labelledby="anchor-heading">
+      <h2 id="anchor-heading">Naming the Pattern</h2>
+      <p class="sentence-hint">Go back to the sentence you wrote in Lesson 1. You do not need to rewrite it. Just add one more layer — now that you have language for what has been happening.</p>
+      <span class="sentence-prompt" id="anchor-prompt">"Work becomes unsustainable for me when…"</span>
+      <p class="sentence-continuation" id="anchor-continuation">…and I can now see that this is partly about:</p>
+      <textarea id="sentence" name="sentence"
+        aria-labelledby="anchor-prompt anchor-continuation"
+        placeholder="e.g. RSD and the over-commitment it drives, and years of recovery debt from pushing through without adequate support"
+        rows="3"></textarea>
+      <div class="sentence-example">
+        <strong>Example</strong>
+        "Work becomes unsustainable for me when I have to manage too much uncertainty — and I can now see that this is partly about RSD and the over-commitment it drives, and partly about recovery debt from years of pushing through without adequate support."
+      </div>
+    </section>
+
+    <!-- Controls -->
+    <div class="controls">
+      <div class="save-status" role="status" aria-live="polite" aria-atomic="true" id="saveStatus">
+        <div class="save-dot" aria-hidden="true"></div>
+        <span id="saveText">Your answers save automatically</span>
+      </div>
+      <div class="btn-group">
+        <a href="Lesson001-Your-First-Reflection.html" class="btn btn-secondary">← Back to Lesson 1</a>
+        <button class="btn btn-secondary" onclick="clearAll()" type="button">Clear all</button>
+        <button class="btn btn-primary" onclick="copyAnswers()" type="button">Copy my answers</button>
+      </div>
+    </div>
+
+    <p class="footer-note">
+      You now have language for what has been happening. That language matters. 💜
+    </p>
+
+  </main>
+</div>
+
+<div class="copy-flash" id="copyFlash" role="alert" aria-live="assertive" aria-atomic="true"></div>
+
+<script>
+  const STORAGE_KEY_L1 = 'ndw_lesson1_reflection_v2';
+  const STORAGE_KEY_L2 = 'ndw_lesson2_naming_v1';
+  const textFields = ['step1-text', 'step2-text', 'step3-text', 'sentence'];
+  const checkboxNames = ['step1', 'step2', 'step3'];
+  let saveTimer = null;
+
+  // ── Load Lesson 1 recap ──
+  // L1 answers shown in recap block; anchor prompt stays static
+  function loadRecap() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY_L1);
+      const data = saved ? JSON.parse(saved) : {};
+      setRecap('recap-situation', data.q1);
+      setRecap('recap-suppress', data.q2);
+      setRecap('recap-cost', data.q3);
+      setRecap('recap-sentence', data.sentence);
+    } catch(e) {}
+  }
+
+  function setRecap(id, val) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (val && val.trim()) {
+      el.textContent = val.trim();
+    } else {
+      el.textContent = 'Nothing saved from Lesson 1 — hold the situation in mind instead.';
+      el.classList.add('empty');
+    }
+  }
+
+  // ── Save / load Lesson 2 ──
+  function loadAnswers() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY_L2);
+      if (!saved) return;
+      const data = JSON.parse(saved);
+
+      textFields.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && data[id]) { el.value = data[id]; autoResize(el); }
+      });
+
+      checkboxNames.forEach(name => {
+        const vals = data[name] || [];
+        document.querySelectorAll(`input[name="${name}"]`).forEach(cb => {
+          cb.checked = vals.includes(cb.value);
+        });
+      });
+
+      if (data.savedAt) setSavedStatus(new Date(data.savedAt));
+    } catch(e) {}
+  }
+
+  function saveAnswers() {
+    try {
+      const data = { savedAt: new Date().toISOString() };
+      textFields.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) data[id] = el.value;
+      });
+      checkboxNames.forEach(name => {
+        data[name] = Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(cb => cb.value);
+      });
+      localStorage.setItem(STORAGE_KEY_L2, JSON.stringify(data));
+      setSavedStatus(new Date());
+    } catch(e) {}
+  }
+
+  function setSavedStatus(date) {
+    const status = document.getElementById('saveStatus');
+    const text = document.getElementById('saveText');
+    const timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    status.classList.add('saved');
+    text.textContent = 'Saved at ' + timeStr;
+    setTimeout(() => {
+      status.classList.remove('saved');
+      text.textContent = 'Your answers save automatically';
+    }, 4000);
+  }
+
+  function onInput(el) {
+    autoResize(el);
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveAnswers, 800);
+  }
+
+  function autoResize(el) {
+    el.style.height = 'auto';
+    el.style.height = Math.max(el.scrollHeight, 90) + 'px';
+  }
+
+  function clearAll() {
+    if (!confirm('Clear all your answers? This cannot be undone.')) return;
+    textFields.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) { el.value = ''; autoResize(el); }
+    });
+    checkboxNames.forEach(name => {
+      document.querySelectorAll(`input[name="${name}"]`).forEach(cb => { cb.checked = false; });
+    });
+    try { localStorage.removeItem(STORAGE_KEY_L2); } catch(e) {}
+    document.getElementById('saveText').textContent = 'Your answers save automatically';
+    document.getElementById('saveStatus').classList.remove('saved');
+  }
+
+  function copyAnswers() {
+    const step1Checked = Array.from(document.querySelectorAll('input[name="step1"]:checked')).map(c => c.value);
+    const step2Checked = Array.from(document.querySelectorAll('input[name="step2"]:checked')).map(c => c.value);
+    const step3Checked = Array.from(document.querySelectorAll('input[name="step3"]:checked')).map(c => c.value);
+
+    let output = 'Neurodiversity Works — Lesson 2: Naming the Pattern\n';
+    output += '─'.repeat(50) + '\n\n';
+    output += 'Step 1 — What I had to suppress or hide\n';
+    output += (step1Checked.length ? step1Checked.join(', ') : '(none selected)') + '\n';
+    const s1text = document.getElementById('step1-text').value.trim();
+    if (s1text) output += s1text + '\n';
+    output += '\n';
+    output += 'Step 2 — The cost\n';
+    output += (step2Checked.length ? step2Checked.join(', ') : '(none selected)') + '\n';
+    const s2text = document.getElementById('step2-text').value.trim();
+    if (s2text) output += s2text + '\n';
+    output += '\n';
+    output += 'Step 3 — The burnout cycle\n';
+    output += (step3Checked.length ? step3Checked.join(', ') : '(none selected)') + '\n';
+    const s3text = document.getElementById('step3-text').value.trim();
+    if (s3text) output += s3text + '\n';
+    output += '\n';
+    output += '─'.repeat(50) + '\n';
+    output += 'Naming the Pattern\n';
+    output += (document.getElementById('sentence').value.trim() || '(no answer)') + '\n';
+
+    const flash = document.getElementById('copyFlash');
+    navigator.clipboard.writeText(output).then(() => {
+      flash.textContent = 'Answers copied to clipboard';
+      flash.classList.add('show');
+      setTimeout(() => flash.classList.remove('show'), 2500);
+    }).catch(() => {
+      flash.textContent = 'Could not copy — try selecting your answers manually';
+      flash.classList.add('show');
+      setTimeout(() => flash.classList.remove('show'), 3500);
+    });
+  }
+
+  // Event listeners
+  textFields.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', () => onInput(el));
+      el.addEventListener('blur', saveAnswers);
+    }
+  });
+
+  checkboxNames.forEach(name => {
+    document.querySelectorAll(`input[name="${name}"]`).forEach(cb => {
+      cb.addEventListener('change', () => {
+        clearTimeout(saveTimer);
+        saveTimer = setTimeout(saveAnswers, 800);
+      });
+    });
+  });
+
+  loadRecap();
+  loadAnswers();
+</script>
+</body>
+</html>
