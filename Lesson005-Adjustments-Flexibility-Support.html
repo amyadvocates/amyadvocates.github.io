@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 5: Adjustments, Flexibility and Support — Neurodiversity Works</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --purple-deep:  #5400FF;
+      --purple-dark:  #222C93;
+      --purple-pale:  #EDE8FF;
+      --green:        #1A6640;
+      --green-pale:   #EAF5EE;
+      --teal:         #1A5C78;
+      --teal-pale:    #E8F2F8;
+      --amber:        #8A5200;
+      --amber-pale:   #FFF4E0;
+      --red:          #922820;
+      --red-pale:     #FFF0EE;
+      --bg:           #FAF8F4;
+      --surface:      #FFFFFF;
+      --text-dark:    #1A1A2E;
+      --text-muted:   #6060A0;
+      --border:       #E8E4DC;
+      --border-focus: #5400FF;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg); color: var(--text-dark);
+      min-height: 100vh; line-height: 1.6;
+    }
+    .skip-link {
+      position: absolute; top: -40px; left: 16px;
+      background: var(--purple-deep); color: #fff;
+      padding: 8px 16px; border-radius: 4px; font-size: 14px;
+      z-index: 9999; text-decoration: none; transition: top 0.2s;
+    }
+    .skip-link:focus { top: 8px; }
+
+    /* ── Layout ── */
+    #main { max-width: 740px; margin: 0 auto; padding: 32px 20px 64px; }
+
+    /* ── Progress ── */
+    .progress-wrap { margin-bottom: 28px; }
+    .progress-meta { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+    .progress-label { font-size: 13px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.04em; text-transform: uppercase; }
+    .progress-pct   { font-size: 13px; font-weight: 700; color: var(--purple-deep); }
+    .progress-track { height: 5px; background: var(--border); border-radius: 99px; overflow: hidden; }
+    .progress-fill  { height: 100%; background: var(--purple-deep); border-radius: 99px; transition: width 0.4s ease; }
+
+    /* ── Page header ── */
+    .lesson-eyebrow {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--purple-deep); margin-bottom: 8px;
+    }
+    .lesson-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(24px, 5vw, 34px);
+      font-weight: 700; line-height: 1.2;
+      color: var(--text-dark); margin-bottom: 8px;
+    }
+    .lesson-desc {
+      font-size: 16px; color: var(--text-muted);
+      line-height: 1.65; margin-bottom: 24px;
+    }
+
+    /* ── Collapsible categories panel ── */
+    .categories-toggle {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--purple-pale); border: 1.5px solid #C8BEFF;
+      border-radius: 10px; padding: 13px 18px;
+      font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700;
+      color: var(--purple-dark); cursor: pointer; width: 100%;
+      text-align: left; transition: background 0.15s;
+      margin-bottom: 12px;
+    }
+    .categories-toggle:hover { background: #E0D8FF; }
+    .categories-toggle .arrow {
+      display: inline-block; transition: transform 0.2s;
+      font-size: 12px; color: var(--purple-deep);
+    }
+    .categories-toggle.open .arrow { transform: rotate(90deg); }
+    .categories-toggle .badge {
+      margin-left: auto; font-size: 11px; font-weight: 600;
+      color: var(--purple-deep); letter-spacing: 0.04em;
+    }
+
+    .categories-panel {
+      display: none; border: 1.5px solid #C8BEFF;
+      border-radius: 10px; overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .categories-panel.open { display: block; }
+
+    .cat-item {
+      border-bottom: 1px solid #DED8FF;
+      padding: 12px 18px;
+    }
+    .cat-item:last-child { border-bottom: none; }
+    .cat-name {
+      font-size: 13px; font-weight: 700; color: var(--purple-dark);
+      margin-bottom: 4px;
+    }
+    .cat-examples {
+      font-size: 12px; color: var(--text-muted); line-height: 1.6;
+    }
+
+    /* ── Worksheet table ── */
+    .worksheet-desc {
+      font-size: 15px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.6;
+    }
+    .ws-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+    .ws-table thead th {
+      background: var(--text-dark); color: #fff;
+      font-size: 12px; font-weight: 700; letter-spacing: 0.05em;
+      padding: 11px 12px; text-align: left; border: none;
+    }
+    .ws-table thead th:first-child { border-radius: 8px 0 0 0; }
+    .ws-table thead th:last-child  { border-radius: 0 8px 0 0; width: 36px; }
+    .ws-table tbody tr { border-bottom: 1px solid var(--border); }
+    .ws-table tbody tr:last-child { border-bottom: none; }
+    .ws-table tbody td {
+      padding: 6px 6px; vertical-align: top;
+      background: var(--surface);
+    }
+    .ws-table tbody td:last-child { width: 36px; text-align: center; vertical-align: middle; }
+    .ws-table textarea {
+      width: 100%; border: none; outline: none; resize: none;
+      font-family: 'Inter', sans-serif; font-size: 13.5px;
+      color: var(--text-dark); background: transparent;
+      line-height: 1.55; padding: 7px 8px;
+      min-height: 60px; overflow: hidden;
+    }
+    .ws-table textarea:focus { background: var(--purple-pale); border-radius: 4px; }
+    .ws-table textarea::placeholder { color: #B8B0D0; font-style: italic; }
+    .ws-table tbody tr:hover td { background: #FAFAFE; }
+
+    /* Wording column gets slightly wider */
+    .ws-table th:nth-child(3),
+    .ws-table td:nth-child(3) { width: 40%; }
+
+    .row-del {
+      background: none; border: none; cursor: pointer;
+      color: #C0B8D8; font-size: 18px; line-height: 1;
+      border-radius: 4px; padding: 4px 6px;
+      transition: color 0.15s, background 0.15s;
+    }
+    .row-del:hover { color: var(--red); background: var(--red-pale); }
+    .add-row-btn {
+      background: none; border: 1.5px dashed var(--border);
+      color: var(--text-muted); border-radius: 8px;
+      padding: 10px 20px; font-size: 14px; font-weight: 600;
+      cursor: pointer; width: 100%; margin-top: 8px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .add-row-btn:hover { border-color: var(--purple-deep); color: var(--purple-deep); }
+
+    /* ── Starter list ── */
+    .starter-desc { font-size: 15px; color: var(--text-muted); margin-bottom: 18px; line-height: 1.6; }
+    .starter-inputs { display: flex; flex-direction: column; gap: 10px; margin-bottom: 8px; }
+    .starter-input-wrap { display: flex; align-items: center; gap: 10px; }
+    .starter-num {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: var(--purple-pale); color: var(--purple-deep);
+      font-size: 14px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .starter-field {
+      flex: 1; border: 1.5px solid var(--border); border-radius: 8px;
+      padding: 11px 14px; font-family: 'Inter', sans-serif;
+      font-size: 14px; color: var(--text-dark); background: var(--surface);
+      outline: none; transition: border-color 0.2s;
+    }
+    .starter-field:focus { border-color: var(--border-focus); }
+
+    /* ── Pull-through chips (answers from earlier work, tap to add) ── */
+    .pull-panel {
+      background: var(--green-pale); border: 1.5px solid #B2D9C0;
+      border-radius: 10px; padding: 14px 18px; margin-bottom: 18px;
+    }
+    .pull-panel-label {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.05em;
+      text-transform: uppercase; color: var(--green); margin-bottom: 8px;
+    }
+    .pull-chips-label {
+      font-size: 12px; font-weight: 600; color: var(--text-muted);
+      margin: 8px 0 6px;
+    }
+    .pull-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .pull-chip {
+      font-size: 13px; background: #fff; color: var(--green);
+      border: 1.5px solid #B2D9C0; border-radius: 99px;
+      padding: 5px 13px; cursor: pointer; font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.12s, background 0.12s;
+      max-width: 100%; text-align: left;
+    }
+    .pull-chip:hover { border-color: var(--green); background: var(--green-pale); }
+    .pull-chip:focus-visible { outline: 2px solid var(--border-focus); outline-offset: 2px; }
+    .pull-chip.purple {
+      color: var(--purple-dark); border-color: #C8BEFF; background: var(--purple-pale);
+    }
+    .pull-chip.purple:hover { border-color: var(--purple-deep); }
+
+    /* ── Disclosure ── */
+    .section-heading {
+      font-size: 16px; font-weight: 800; color: var(--text-dark);
+      margin: 28px 0 10px;
+    }
+    .disclosure-options { display: flex; flex-direction: column; gap: 8px; }
+    .disclosure-card {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 14px 16px; border: 1.5px solid var(--border);
+      border-radius: 10px; cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      background: var(--surface);
+    }
+    .disclosure-card:hover { border-color: var(--purple-deep); }
+    .disclosure-card.selected {
+      border-color: var(--purple-deep);
+      background: var(--purple-pale);
+    }
+    .disclosure-card input[type="radio"] { display: none; }
+    .disc-dot {
+      width: 18px; height: 18px; border-radius: 50%;
+      border: 2px solid var(--border); flex-shrink: 0;
+      margin-top: 2px; display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.15s;
+    }
+    .disclosure-card.selected .disc-dot {
+      border-color: var(--purple-deep); background: var(--purple-deep);
+    }
+    .disclosure-card.selected .disc-dot::after {
+      content: ''; width: 7px; height: 7px;
+      border-radius: 50%; background: white;
+    }
+    .disc-label { font-size: 14px; font-weight: 700; color: var(--text-dark); margin-bottom: 2px; }
+    .disc-hint  { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+
+    /* ── Paid bridge ── */
+    .paid-bridge {
+      background: var(--text-dark); color: #fff;
+      border-radius: 12px; padding: 22px 26px; margin-top: 28px;
+    }
+    .paid-bridge-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: #A0A8D8; margin-bottom: 8px;
+    }
+    .paid-bridge p {
+      font-size: 15px; line-height: 1.65; color: #E0E4F8; margin-bottom: 12px;
+    }
+    .paid-bridge strong { color: #fff; }
+
+    /* ── Community prompt ── */
+    .community-section { margin-top: 28px; }
+    .community-label {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.07em;
+      text-transform: uppercase; color: var(--purple-deep); margin-bottom: 8px;
+    }
+    .community-prompt {
+      background: var(--purple-pale); border-radius: 12px;
+      padding: 18px 22px; font-size: 15px; color: var(--purple-dark);
+      font-style: italic; line-height: 1.65; margin-bottom: 8px;
+    }
+
+    /* ── Reflection ── */
+    .obs-label { font-size: 15px; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; }
+    .obs-hint  { font-size: 13px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.5; }
+    .obs-area {
+      width: 100%; border: 1.5px solid var(--border); border-radius: 10px;
+      padding: 14px; font-family: 'Inter', sans-serif;
+      font-size: 15px; color: var(--text-dark); background: var(--surface);
+      outline: none; resize: none; line-height: 1.65;
+      transition: border-color 0.2s;
+    }
+    .obs-area:focus { border-color: var(--border-focus); }
+
+    /* ── Nav ── */
+    .nav-buttons {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 12px; margin-top: 32px;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 13px 26px; border-radius: 99px;
+      font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700;
+      cursor: pointer; border: none; transition: all 0.18s; line-height: 1;
+    }
+    .btn-primary { background: var(--purple-deep); color: #fff; }
+    .btn-primary:hover { background: var(--purple-dark); transform: translateY(-1px); }
+    .btn-ghost {
+      background: transparent; color: var(--text-dark);
+      border: 1.5px solid var(--border);
+    }
+    .btn-ghost:hover { border-color: var(--purple-deep); color: var(--purple-deep); }
+    .btn-sm { padding: 9px 18px; font-size: 13px; }
+    .save-badge { font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 12px; }
+
+    hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+    /* ── Print ── */
+    @media print {
+      @page { margin: 16mm 14mm; }
+      body { background: white; }
+      .nav-buttons, .save-badge, .add-row-btn, .row-del,
+      .categories-toggle, .categories-panel, .paid-bridge { display: none !important; }
+      #main { padding: 0; max-width: 100%; }
+      .ws-table textarea { min-height: 40px; }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .ws-table { font-size: 13px; }
+      .ws-table thead th { padding: 8px; font-size: 11px; }
+      .ws-table textarea { font-size: 12px; min-height: 52px; }
+    }
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<div style="max-width:740px;margin:0 auto;padding:16px 20px 0;display:flex;justify-content:flex-end;">
+  <a href="workbook.html" style="font-size:13px;font-weight:600;color:var(--purple-deep);text-decoration:underline;text-underline-offset:3px;white-space:nowrap;">📖 My workbook</a>
+</div>
+<main id="main">
+  <div id="app"></div>
+</main>
+
+<script>
+/* ── Data ───────────────────────────────────────────────────────────────── */
+const STORAGE_KEY = 'ndw_lesson5_v1';
+const SCREENS = ['worksheet', 'summary'];
+const SCREEN_LABELS = { worksheet: 'Need → Support → Wording', summary: 'Your Starter List' };
+
+const CATEGORIES = [
+  {
+    name: 'Communication',
+    examples: 'Written follow-ups, agendas, clear deadlines, explicit expectations, fewer ambiguous requests, asynchronous options.',
+  },
+  {
+    name: 'Executive Function',
+    examples: 'Task breakdowns, prioritisation support, shared project boards, reminders, check-ins, templates, reduced admin burden.',
+  },
+  {
+    name: 'Sensory',
+    examples: 'Remote work, quiet space, headphones, lighting changes, desk location, camera-off options, reduced travel.',
+  },
+  {
+    name: 'Time & Flexibility',
+    examples: 'Flexible hours, protected focus time, recovery time after intense meetings, part-time, phased return, deadline clarity.',
+  },
+  {
+    name: 'Social Load',
+    examples: 'Meeting limits, role clarity, predictable feedback, scripts, conflict support, reduced networking expectations.',
+  },
+  {
+    name: 'Emotional Regulation',
+    examples: 'Feedback in writing, clear reassurance about expectations, repair pathways, manager check-ins, no surprise criticism.',
+  },
+  {
+    name: 'Work Design',
+    examples: 'More of the work that uses your strengths; less of the work that repeatedly triggers shutdown, panic, avoidance, or burnout.',
+  },
+];
+
+const ROW_PLACEHOLDERS = [
+  {
+    need:    'e.g. I process better in writing',
+    support: 'e.g. Written instructions / meeting notes',
+    wording: 'e.g. "A written summary helps me make sure I\'ve understood and can prioritise properly."',
+  },
+  {
+    need:    'e.g. I get overloaded by back-to-back meetings',
+    support: 'e.g. Buffer time between meetings',
+    wording: 'e.g. "I work better when I have transition time between meetings, especially before detailed work."',
+  },
+  {
+    need:    'e.g. I struggle with unclear priorities',
+    support: 'e.g. Weekly priority check-in',
+    wording: 'e.g. "A short priority check-in would help me focus on the work that matters most."',
+  },
+];
+
+const DISCLOSURE_OPTIONS = [
+  { value: 'full',      label: 'Full disclosure',           hint: 'I\'ve shared or plan to share my diagnosis or neurodivergent identity with my employer.' },
+  { value: 'partial',   label: 'Partial disclosure',        hint: 'I\'ve shared some information but not everything — e.g. a specific difficulty, not a diagnosis.' },
+  { value: 'needs',     label: 'Needs-based disclosure',    hint: 'I focus on what I need rather than why — sharing the adjustment without the underlying reason.' },
+  { value: 'not_yet',   label: 'Not disclosing yet',        hint: 'I\'m not ready or it doesn\'t feel safe or relevant — and that\'s a legitimate choice.' },
+];
+
+/* ── State ──────────────────────────────────────────────────────────────── */
+function defaultState() {
+  return {
+    screen: 'worksheet',
+    categoriesOpen: false,
+    rows: [
+      { need: '', support: '', wording: '' },
+      { need: '', support: '', wording: '' },
+      { need: '', support: '', wording: '' },
+    ],
+    starterList: ['', '', ''],
+    disclosure: '',
+    reflection: '',
+  };
+}
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return Object.assign(defaultState(), JSON.parse(raw));
+  } catch(e) {}
+  return defaultState();
+}
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+
+let state = loadState();
+
+/* ── Navigation ─────────────────────────────────────────────────────────── */
+function captureValues() {
+  document.querySelectorAll('[data-row][data-field]').forEach(ta => {
+    const r = parseInt(ta.dataset.row);
+    const f = ta.dataset.field;
+    if (state.rows[r]) state.rows[r][f] = ta.value;
+  });
+  document.querySelectorAll('[data-starter]').forEach((inp, i) => {
+    state.starterList[i] = inp.value;
+  });
+  const obs = document.getElementById('reflection');
+  if (obs) state.reflection = obs.value;
+  saveState();
+}
+
+function goTo(screen) {
+  captureValues();
+  state.screen = screen;
+  saveState();
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ── Progress ────────────────────────────────────────────────────────────── */
+function renderProgress(screenId) {
+  const idx = SCREENS.indexOf(screenId);
+  const pct = Math.round(((idx + 1) / SCREENS.length) * 100);
+  return `
+    <div class="progress-wrap" role="progressbar" aria-valuenow="${idx+1}" aria-valuemin="1" aria-valuemax="${SCREENS.length}">
+      <div class="progress-meta">
+        <span class="progress-label">${idx+1} of ${SCREENS.length} — ${SCREEN_LABELS[screenId]}</span>
+        <span class="progress-pct">${pct}%</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+    </div>`;
+}
+
+/* ── Categories panel ────────────────────────────────────────────────────── */
+function renderCategoriesPanel() {
+  const isOpen = state.categoriesOpen;
+  return `
+    <button class="categories-toggle ${isOpen ? 'open' : ''}" id="btn-categories" aria-expanded="${isOpen}" aria-controls="categories-panel">
+      <span class="arrow">▶</span>
+      Adjustment categories — what might help?
+      <span class="badge">${isOpen ? 'Close ↑' : 'Open ↓'}</span>
+    </button>
+    <div class="categories-panel ${isOpen ? 'open' : ''}" id="categories-panel" role="region" aria-label="Adjustment categories">
+      ${CATEGORIES.map(c => `
+        <div class="cat-item">
+          <p class="cat-name">${c.name}</p>
+          <p class="cat-examples">${c.examples}</p>
+        </div>`).join('')}
+    </div>`;
+}
+
+/* ── Worksheet rows ──────────────────────────────────────────────────────── */
+function renderRow(row, i) {
+  const ph = ROW_PLACEHOLDERS[i] || {};
+  return `
+    <tr>
+      <td><textarea data-row="${i}" data-field="need"
+        placeholder="${escHtml(ph.need || 'What do you need to work sustainably?')}"
+        aria-label="Need, row ${i+1}">${escHtml(row.need)}</textarea></td>
+      <td><textarea data-row="${i}" data-field="support"
+        placeholder="${escHtml(ph.support || 'Possible support or adjustment')}"
+        aria-label="Possible support, row ${i+1}">${escHtml(row.support)}</textarea></td>
+      <td><textarea data-row="${i}" data-field="wording"
+        placeholder="${escHtml(ph.wording || 'Low-pressure way to ask for this')}"
+        aria-label="Low-pressure wording, row ${i+1}">${escHtml(row.wording)}</textarea></td>
+      <td><button class="row-del" data-del="${i}" aria-label="Remove row ${i+1}" title="Remove">×</button></td>
+    </tr>`;
+}
+
+/* ── Pull-through: needs from Lesson 4 ───────────────────────────────────── */
+function lesson4NeedCandidates() {
+  try {
+    const d = JSON.parse(localStorage.getItem('ndw_lesson4_v1') || 'null');
+    if (!d) return [];
+    const used = state.rows.map(r => (r.need || '').trim().toLowerCase()).filter(Boolean);
+    const seen = new Set(used);
+    const out = [];
+    const add = (need, reduce) => {
+      need = (need || '').trim();
+      if (!need || seen.has(need.toLowerCase())) return;
+      seen.add(need.toLowerCase());
+      out.push({ need, reduce: (reduce || '').trim() });
+    };
+    (d.top3Needs || []).forEach(n => {
+      const match = (d.needs || []).find(r => (r.need || '').trim().toLowerCase() === (n || '').trim().toLowerCase());
+      add(n, match ? match.reduce : '');
+    });
+    (d.needs || []).forEach(r => add(r.need, r.reduce));
+    return out;
+  } catch(e) { return []; }
+}
+
+function renderLesson4Panel() {
+  const candidates = lesson4NeedCandidates();
+  if (!candidates.length) return '';
+  return `
+    <div class="pull-panel" role="region" aria-label="Needs from Lesson 4">
+      <p class="pull-panel-label">From your Lesson 4 needs — tap to add to the worksheet</p>
+      <div class="pull-chips">
+        ${candidates.map((c, i) => `<button type="button" class="pull-chip" data-l4-need="${i}">+ ${escHtml(c.need)}</button>`).join('')}
+      </div>
+    </div>`;
+}
+
+/* ── Screen: Worksheet ───────────────────────────────────────────────────── */
+function renderWorksheet() {
+  return `
+    ${renderProgress('worksheet')}
+    <p class="lesson-eyebrow">Lesson 5</p>
+    <h1 class="lesson-title">Need → Support → Wording</h1>
+    <p class="lesson-desc">For each access need you've identified, note what kind of support or adjustment would help — and a low-pressure way to ask for it. Use the category reference below if you need prompts.</p>
+
+    ${renderLesson4Panel()}
+
+    ${renderCategoriesPanel()}
+
+    <table class="ws-table" role="grid" aria-label="Need, support and wording worksheet">
+      <thead>
+        <tr>
+          <th scope="col">My access need</th>
+          <th scope="col">Possible support or adjustment</th>
+          <th scope="col">Low-pressure wording</th>
+          <th scope="col" aria-label="Remove row"></th>
+        </tr>
+      </thead>
+      <tbody id="ws-tbody">
+        ${state.rows.map((row, i) => renderRow(row, i)).join('')}
+      </tbody>
+    </table>
+    <button class="add-row-btn" id="btn-add-row">+ Add another need</button>
+
+    <div class="nav-buttons">
+      <span></span>
+      <button class="btn btn-primary" id="btn-next">My starter list <span aria-hidden="true">→</span></button>
+    </div>
+    <p class="save-badge">💾 Saves automatically</p>`;
+}
+
+/* ── Screen: Summary ─────────────────────────────────────────────────────── */
+function renderSummary() {
+  const filledCount = state.rows.filter(r => r.need.trim()).length;
+  return `
+    ${renderProgress('summary')}
+    <p class="lesson-eyebrow">Lesson 5 — Your Starter List</p>
+    <h1 class="lesson-title">Your Starter List</h1>
+
+    <p class="starter-desc">Looking at your worksheet, identify the 2–3 supports that would make the most immediate difference. These don't have to be the hardest to get — start with what would help most right now.</p>
+
+    ${(() => {
+      const picked = state.starterList.map(v => v.trim().toLowerCase()).filter(Boolean);
+      const cands = state.rows.map(r => (r.support || '').trim())
+        .filter(s => s && !picked.includes(s.toLowerCase()));
+      return cands.length ? `
+      <p class="pull-chips-label">From your worksheet — tap to add:</p>
+      <div class="pull-chips" style="margin-bottom:14px">
+        ${cands.map(c => `<button type="button" class="pull-chip purple" data-starter-chip="${escHtml(c)}">${escHtml(c)}</button>`).join('')}
+      </div>` : '';
+    })()}
+
+    <div class="starter-inputs">
+      ${state.starterList.map((v, i) => `
+        <div class="starter-input-wrap">
+          <span class="starter-num" aria-hidden="true">${i + 1}</span>
+          <input class="starter-field" type="text" data-starter="${i}"
+            value="${escHtml(v)}"
+            placeholder="Type or paste from your worksheet"
+            aria-label="Priority support ${i + 1}">
+        </div>`).join('')}
+    </div>
+
+    <hr>
+
+    <h2 class="section-heading">Where are you with disclosure?</h2>
+    <p style="font-size:15px;color:var(--text-muted);margin-bottom:14px;line-height:1.6">
+      There's no right answer here — and your position can change. This is just a useful place to know where you are right now.</p>
+    <div class="disclosure-options" role="radiogroup" aria-label="Disclosure position">
+      ${DISCLOSURE_OPTIONS.map(opt => `
+        <label class="disclosure-card ${state.disclosure === opt.value ? 'selected' : ''}">
+          <input type="radio" name="disclosure" value="${opt.value}" ${state.disclosure === opt.value ? 'checked' : ''}>
+          <span class="disc-dot" aria-hidden="true"></span>
+          <span>
+            <span class="disc-label">${opt.label}</span>
+            <span class="disc-hint">${opt.hint}</span>
+          </span>
+        </label>`).join('')}
+    </div>
+
+    <hr>
+
+    <div style="margin-bottom:8px">
+      <p class="obs-label">What feels most important to focus on first?</p>
+      <p class="obs-hint">One sentence is enough. You don't have to have a plan yet.</p>
+      <textarea id="reflection" class="obs-area" rows="3"
+        placeholder="e.g. 'Getting written instructions in place feels like the most immediate thing.'">${escHtml(state.reflection)}</textarea>
+    </div>
+
+    <div class="community-section">
+      <p class="community-label">Community prompt</p>
+      <div class="community-prompt">"What is one adjustment you know would help — but that you've never asked for? You don't have to explain why."</div>
+      <p style="font-size:14px;color:var(--text-muted)">Share as much or as little as you like in the Skool community.</p>
+    </div>
+
+    <div class="paid-bridge" role="complementary" aria-label="Premium content">
+      <p class="paid-bridge-label">Want to go further?</p>
+      <p>In <strong>Work That Works Premium</strong>, we go deeper into how to ask for adjustments, what to disclose and when, what to put in writing, and how to prepare for conversations with managers, HR, or occupational health — including scripts, templates, and real examples.</p>
+    </div>
+
+    <div class="nav-buttons" style="justify-content:center;margin-top:28px">
+      <a href="Lesson006-Choose-Your-Pathway.html" class="btn btn-primary" style="text-decoration:none">Next: Choose Your Pathway →</a>
+    </div>
+    <div class="nav-buttons" style="justify-content:center;gap:10px;flex-wrap:wrap;margin-top:14px">
+      <button class="btn btn-ghost btn-sm" id="btn-back">← Back to worksheet</button>
+      <button class="btn btn-ghost btn-sm" id="btn-pdf">⬇ Save as PDF</button>
+      <a href="workbook.html" class="btn btn-ghost btn-sm" style="text-decoration:none">📖 View my full workbook</a>
+      <button class="btn btn-ghost btn-sm" id="btn-restart">Clear all &amp; start again</button>
+    </div>
+    <p class="save-badge">💾 Everything is saved automatically</p>`;
+}
+
+/* ── Render ──────────────────────────────────────────────────────────────── */
+function render() {
+  const app = document.getElementById('app');
+  app.innerHTML = state.screen === 'summary' ? renderSummary() : renderWorksheet();
+  attachListeners();
+  autoResizeAll();
+}
+
+/* ── Auto-resize ─────────────────────────────────────────────────────────── */
+function autoResize(ta) { ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; }
+function autoResizeAll() { document.querySelectorAll('textarea').forEach(autoResize); }
+
+/* ── Listeners ───────────────────────────────────────────────────────────── */
+function attachListeners() {
+  /* Nav */
+  const btnNext = document.getElementById('btn-next');
+  if (btnNext) btnNext.addEventListener('click', () => goTo('summary'));
+
+  const btnBack = document.getElementById('btn-back');
+  if (btnBack) btnBack.addEventListener('click', () => goTo('worksheet'));
+
+  /* Categories toggle */
+  const btnCat = document.getElementById('btn-categories');
+  if (btnCat) {
+    btnCat.addEventListener('click', () => {
+      state.categoriesOpen = !state.categoriesOpen;
+      saveState();
+      btnCat.classList.toggle('open', state.categoriesOpen);
+      btnCat.setAttribute('aria-expanded', state.categoriesOpen);
+      const badge = btnCat.querySelector('.badge');
+      if (badge) badge.textContent = state.categoriesOpen ? 'Close ↑' : 'Open ↓';
+      const panel = document.getElementById('categories-panel');
+      if (panel) panel.classList.toggle('open', state.categoriesOpen);
+    });
+  }
+
+  /* Worksheet textareas */
+  document.querySelectorAll('[data-row][data-field]').forEach(ta => {
+    ta.addEventListener('input', () => {
+      autoResize(ta);
+      const r = parseInt(ta.dataset.row);
+      const f = ta.dataset.field;
+      if (state.rows[r]) { state.rows[r][f] = ta.value; saveState(); }
+    });
+  });
+
+  /* Add row */
+  const btnAdd = document.getElementById('btn-add-row');
+  if (btnAdd) {
+    btnAdd.addEventListener('click', () => {
+      captureValues();
+      state.rows.push({ need: '', support: '', wording: '' });
+      saveState();
+      const tbody = document.getElementById('ws-tbody');
+      const i = state.rows.length - 1;
+      tbody.insertAdjacentHTML('beforeend', renderRow(state.rows[i], i));
+      tbody.querySelectorAll(`[data-row="${i}"]`).forEach(ta => {
+        ta.addEventListener('input', () => {
+          autoResize(ta);
+          state.rows[i][ta.dataset.field] = ta.value;
+          saveState();
+        });
+      });
+      attachDelListeners();
+      const newTa = tbody.querySelector(`[data-row="${i}"][data-field="need"]`);
+      if (newTa) { autoResize(newTa); newTa.focus(); }
+    });
+  }
+
+  attachDelListeners();
+
+  /* Lesson 4 pull-through chips — add a worksheet row */
+  document.querySelectorAll('[data-l4-need]').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const candidates = lesson4NeedCandidates();
+      const c = candidates[parseInt(chip.dataset.l4Need)];
+      if (!c) return;
+      captureValues();
+      // Fill the first row with an empty need, otherwise add a new row
+      let row = state.rows.find(r => !(r.need || '').trim());
+      if (!row) { row = { need: '', support: '', wording: '' }; state.rows.push(row); }
+      row.need = c.need;
+      if (!(row.support || '').trim() && c.reduce) row.support = c.reduce;
+      saveState();
+      render();
+    });
+  });
+
+  /* Starter list chips — fill the first empty priority slot */
+  document.querySelectorAll('[data-starter-chip]').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const idx = state.starterList.findIndex(v => !v.trim());
+      if (idx === -1) return;
+      captureValues();
+      state.starterList[idx] = chip.dataset.starterChip;
+      saveState();
+      render();
+    });
+  });
+
+  /* Starter list inputs */
+  document.querySelectorAll('[data-starter]').forEach((inp, i) => {
+    inp.addEventListener('input', () => {
+      state.starterList[i] = inp.value;
+      saveState();
+    });
+  });
+
+  /* Disclosure radio */
+  document.querySelectorAll('input[name="disclosure"]').forEach(input => {
+    input.addEventListener('change', e => {
+      state.disclosure = e.target.value;
+      saveState();
+      document.querySelectorAll('.disclosure-card').forEach(c =>
+        c.classList.toggle('selected', c.querySelector('input') === e.target)
+      );
+    });
+  });
+
+  /* Reflection */
+  const obs = document.getElementById('reflection');
+  if (obs) {
+    obs.addEventListener('input', () => {
+      autoResize(obs); state.reflection = obs.value; saveState();
+    });
+  }
+
+  /* PDF */
+  const btnPdf = document.getElementById('btn-pdf');
+  if (btnPdf) btnPdf.addEventListener('click', () => { captureValues(); window.print(); });
+
+  /* Restart */
+  const btnRestart = document.getElementById('btn-restart');
+  if (btnRestart) {
+    btnRestart.addEventListener('click', () => {
+      if (confirm('This will clear all your responses. Are you sure?')) {
+        localStorage.removeItem(STORAGE_KEY);
+        state = defaultState();
+        render();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+  }
+}
+
+function attachDelListeners() {
+  document.querySelectorAll('[data-del]').forEach(btn => {
+    btn.onclick = null;
+    btn.addEventListener('click', () => {
+      captureValues();
+      const i = parseInt(btn.dataset.del);
+      if (state.rows.length <= 1) return;
+      state.rows.splice(i, 1);
+      saveState();
+      const tbody = document.getElementById('ws-tbody');
+      tbody.innerHTML = state.rows.map((row, idx) => renderRow(row, idx)).join('');
+      autoResizeAll();
+      attachListeners();
+    });
+  });
+}
+
+/* ── Utility ─────────────────────────────────────────────────────────────── */
+function escHtml(str) {
+  return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ── Init ────────────────────────────────────────────────────────────────── */
+render();
+</script>
+</body>
+</html>

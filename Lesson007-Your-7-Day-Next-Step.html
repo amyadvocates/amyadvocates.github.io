@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 7 — Your 7-Day Next Step</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --purple-deep: #5400FF;
+      --purple-dark: #222C93;
+      --purple-soft: #EDE9FF;
+      --teal:        #0F6B6B;
+      --teal-soft:   #E6F4F4;
+      --amber:       #8A5200;
+      --amber-soft:  #FFF8E6;
+      --green:       #1A6640;
+      --green-soft:  #EAF5EE;
+      --bg:          #FAF8F4;
+      --card:        #FFFFFF;
+      --text:        #1A1A2E;
+      --text-muted:  #6060A0;
+      --border:      #E2DED8;
+      --shadow:      0 2px 16px rgba(84,0,255,.07);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 60px;
+    }
+    #app {
+      width: 100%;
+      max-width: 680px;
+      background: var(--card);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 32px 28px 36px;
+    }
+
+    /* Progress */
+    .progress-wrap { display:flex; gap:6px; margin-bottom:28px; }
+    .progress-dot {
+      flex:1; height:5px; border-radius:99px;
+      background: var(--border); transition: background .25s;
+    }
+    .progress-dot.done { background: var(--purple-deep); }
+    .progress-dot.active { background: var(--purple-dark); opacity:.55; }
+
+    /* Eyebrow / title */
+    .lesson-eyebrow {
+      font-size: 11px; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px;
+    }
+    .lesson-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 26px; line-height: 1.25; color: var(--text); margin-bottom: 8px;
+    }
+    .lesson-desc {
+      font-size: 15px; line-height: 1.65; color: var(--text-muted); margin-bottom: 24px;
+    }
+
+    /* Option cards */
+    .option-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+    .option-card {
+      border: 2px solid var(--border);
+      border-radius: 14px; padding: 14px 16px;
+      cursor: pointer; transition: border-color .15s, background .15s;
+      user-select: none;
+    }
+    .option-card:hover { border-color: var(--purple-dark); background: var(--purple-soft); }
+    .option-card.selected { border-color: var(--purple-deep); background: var(--purple-soft); }
+    .option-card[aria-checked="true"] { border-color: var(--purple-deep); background: var(--purple-soft); }
+    .option-label { font-size: 15px; font-weight: 600; color: var(--text); }
+    .option-hint  { font-size: 13px; color: var(--text-muted); margin-top: 3px; }
+
+    /* Text areas / inputs */
+    .field-label {
+      font-size: 13px; font-weight: 700; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: .05em;
+      margin-bottom: 5px; margin-top: 18px; display: block;
+    }
+    .field-hint {
+      font-size: 13px; color: var(--text-muted); font-style: italic;
+      margin-bottom: 6px; line-height: 1.5;
+    }
+    .obs-area {
+      width: 100%; border: 2px solid var(--border); border-radius: 12px;
+      padding: 12px 14px; font-size: 14px; font-family: 'Inter', sans-serif;
+      color: var(--text); background: #FAFAFA; resize: vertical;
+      transition: border-color .15s; line-height: 1.6;
+    }
+    .obs-area:focus { outline: none; border-color: var(--purple-dark); }
+
+    /* Callout */
+    .callout {
+      border-radius: 12px; padding: 14px 16px; margin-bottom: 20px;
+      font-size: 14px; line-height: 1.6;
+    }
+    .callout-teal  { background: var(--teal-soft);  border-left: 4px solid var(--teal); }
+    .callout-amber { background: var(--amber-soft);  border-left: 4px solid var(--amber); }
+    .callout-purple { background: var(--purple-soft); border-left: 4px solid var(--purple-deep); }
+    .callout strong { display: block; margin-bottom: 4px; }
+
+    /* Examples list */
+    .examples-label {
+      font-size: 12px; font-weight: 700; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: .05em;
+      margin: 14px 0 6px;
+    }
+    .examples-grid {
+      display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px;
+    }
+    .example-chip {
+      font-size: 12px; background: var(--purple-soft); border-radius: 99px;
+      padding: 4px 12px; color: var(--purple-dark); cursor: pointer;
+      border: 1.5px solid transparent; transition: border-color .12s;
+    }
+    .example-chip:hover { border-color: var(--purple-dark); }
+
+    /* Toggle pills — all options shown; selected ones are highlighted */
+    .toggle-chip {
+      font-size: 12px; background: #fff; border-radius: 99px;
+      padding: 4px 12px; color: var(--text-muted); cursor: pointer;
+      border: 1.5px solid var(--border);
+      transition: border-color .12s, background .12s, color .12s;
+      user-select: none;
+    }
+    .toggle-chip:hover { border-color: var(--purple-dark); color: var(--purple-dark); }
+    .toggle-chip.selected {
+      background: var(--purple-soft); border-color: var(--purple-deep);
+      color: var(--purple-dark); font-weight: 600;
+    }
+    .toggle-chip:focus-visible { outline: 2px solid var(--purple-deep); outline-offset: 2px; }
+
+    /* Map screen */
+    .map-section {
+      background: var(--purple-soft); border-radius: 14px;
+      padding: 16px 18px; margin-bottom: 12px;
+    }
+    .map-section-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .06em; color: var(--purple-dark); margin-bottom: 4px;
+    }
+    .map-section-hint {
+      font-size: 12px; color: var(--text-muted); font-style: italic;
+      margin-bottom: 8px;
+    }
+    .map-value {
+      font-size: 15px; font-weight: 600; color: var(--text); line-height: 1.5;
+    }
+    .map-value-muted { color: var(--text-muted); font-style: italic; font-weight: 400; }
+
+    /* Pathway badge */
+    .pathway-badge {
+      display: inline-block; padding: 6px 16px; border-radius: 99px;
+      font-size: 14px; font-weight: 700; margin-top: 4px;
+    }
+    .badge-giw { background: var(--teal-soft);   color: var(--teal); }
+    .badge-sw  { background: var(--green-soft);  color: var(--green); }
+    .badge-rd  { background: var(--purple-soft); color: var(--purple-dark); }
+    .badge-stabilise { background: var(--amber-soft); color: var(--amber); }
+    .badge-unsure { background: #F5F5F5; color: #666; }
+
+    /* CTA */
+    .cta-section { margin-top: 28px; }
+    .cta-item {
+      border: 2px solid var(--border); border-radius: 14px;
+      padding: 16px 18px; margin-bottom: 10px;
+    }
+    .cta-item-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .cta-item-desc  { font-size: 13px; color: var(--text-muted); line-height: 1.55; }
+
+    /* Community section */
+    .community-section { background: var(--purple-soft); border-radius: 14px; padding: 18px; margin-top: 24px; }
+    .community-label   { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--purple-dark); margin-bottom: 8px; }
+    .community-prompt  { font-size: 15px; font-style: italic; color: var(--text); line-height: 1.6; margin-bottom: 6px; }
+
+    /* Navigation */
+    .nav-buttons { display:flex; gap:10px; margin-top:28px; flex-wrap:wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 12px 22px; border-radius: 99px; font-size: 15px;
+      font-weight: 600; cursor: pointer; border: none;
+      font-family: 'Inter', sans-serif; transition: opacity .15s, transform .1s;
+    }
+    .btn:active { transform: scale(.97); }
+    .btn:disabled { opacity: .4; cursor: not-allowed; }
+    .btn-primary { background: var(--purple-deep); color: #FFF; flex:1; justify-content:center; }
+    .btn-ghost   { background: transparent; border: 2px solid var(--border); color: var(--text); }
+    .btn-sm      { padding: 9px 18px; font-size: 13px; }
+    .save-badge  { font-size: 12px; color: var(--text-muted); text-align:center; margin-top:10px; }
+
+    hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  </style>
+</head>
+<body>
+<div style="width:100%;max-width:680px;display:flex;justify-content:flex-end;margin-bottom:10px;">
+  <a href="workbook.html" style="font-size:13px;font-weight:600;color:var(--purple-deep);text-decoration:underline;text-underline-offset:3px;white-space:nowrap;">📖 My workbook</a>
+</div>
+<div id="app"></div>
+<script>
+/* ── Constants ────────────────────────────────────────────────────────────── */
+const STORAGE_KEY = 'ndw_lesson7_v1';
+const SCREENS = ['step1', 'step2', 'step3', 'map'];
+
+const PATHWAY_LABELS = {
+  giw:       'Getting Into Work',
+  sw:        'Staying Well at Work',
+  rd:        'Redesigning Your Career',
+  stabilise: 'Stabilise First',
+  unsure:    'Still figuring out',
+};
+
+const PATHWAY_BADGE = {
+  giw:       'badge-giw',
+  sw:        'badge-sw',
+  rd:        'badge-rd',
+  stabilise: 'badge-stabilise',
+  unsure:    'badge-unsure',
+};
+
+const PATHWAY_OPTIONS = [
+  { value: 'giw',       label: 'Getting Into Work',       hint: 'Finding work that fits and building a sustainable job search' },
+  { value: 'sw',        label: 'Staying Well at Work',    hint: 'Building support, adjustments, and protection in my current role' },
+  { value: 'rd',        label: 'Redesigning Your Career', hint: 'Something more fundamental needs to change — the direction, not just the details' },
+  { value: 'stabilise', label: 'Stabilise First',         hint: 'My capacity is too low right now for bigger career decisions' },
+  { value: 'unsure',    label: 'Still figuring out',      hint: 'I\'m not sure yet — and that\'s okay' },
+];
+
+const EXAMPLES_BY_PATHWAY = {
+  giw: [
+    'Add "written instructions" to my job-search criteria',
+    'Identify three roles that suit my working style',
+    'Draft one paragraph of a covering letter',
+    'Research one company\'s accessibility or flexibility policies',
+  ],
+  sw: [
+    'Draft one paragraph of an adjustments request',
+    'Book a 15-minute conversation with my manager',
+    'Identify one task to reduce, delegate, or remove',
+    'Block one hour of protected focus time this week',
+  ],
+  rd: [
+    'List five things I\'d want in a redesigned role',
+    'Identify one transferable strength I haven\'t used recently',
+    'Research one career direction I\'ve been curious about',
+    'Talk to one person who has made a similar change',
+  ],
+  stabilise: [
+    'Identify one demand I can reduce or remove this week',
+    'Protect one block of genuine rest time',
+    'Track what\'s costing me most energy for three days',
+    'Post one question in the community',
+  ],
+  unsure: [
+    'Re-read my Lesson 6 pathway result',
+    'Post a question in the community',
+    'Book a triage call',
+    'Track my energy levels for three days',
+  ],
+};
+
+/* ── State ────────────────────────────────────────────────────────────────── */
+function defaultState() {
+  return {
+    screen:      'step1',
+    pathway:     '',
+    biggestIssue:'',
+    nextStep:    '',
+    whySmall:    '',
+    support:     '',
+    barrier:     '',
+    backup:      '',
+    willKnow:    '',
+    conditions:  '',
+    frictionPts: '',
+    accessNeeds: '',
+    autoFilled:  {},
+  };
+}
+
+let state = defaultState();
+try {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) state = Object.assign(defaultState(), JSON.parse(saved));
+} catch(e) {}
+
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+
+/* ── Pull-through from earlier lessons ────────────────────────────────────── */
+const L3_DOMAINS = {
+  1:'Energy and Capacity', 2:'Sensory Environment', 3:'Executive Function',
+  4:'Communication and Processing', 5:'Social and Emotional Load',
+  6:'Predictability and Uncertainty', 7:'Autonomy and Control',
+  8:'Values and Motivation', 9:'Recovery and Regulation', 10:'Support and Safety',
+};
+
+function readKey(key) {
+  try { return JSON.parse(localStorage.getItem(key) || 'null'); } catch(e) { return null; }
+}
+
+// Lesson 3 domains matching the given ratings, in the order the ratings are listed
+function lesson3Domains(ratingValues) {
+  const d = readKey('ndw_lesson3_audit_v1');
+  if (!d || !d.ratings) return [];
+  const out = [];
+  ratingValues.forEach(rv => {
+    Object.keys(L3_DOMAINS).forEach(id => {
+      if (d.ratings[id] === rv) out.push(L3_DOMAINS[id]);
+    });
+  });
+  return out;
+}
+
+// Access needs gathered from Lesson 4 (top 3 needs) and Lesson 5 (starter list)
+function pulledAccessNeeds() {
+  const out = [];
+  const seen = new Set();
+  const add = v => {
+    v = (v || '').trim();
+    if (v && !seen.has(v.toLowerCase())) { seen.add(v.toLowerCase()); out.push(v); }
+  };
+  const l4 = readKey('ndw_lesson4_v1');
+  if (l4) (l4.top3Needs || []).forEach(add);
+  const l5 = readKey('ndw_lesson5_v1');
+  if (l5) (l5.starterList || []).forEach(add);
+  return out;
+}
+
+// Suggested pathway from the Lesson 6 result
+function lesson6SuggestedPathway() {
+  const d = readKey('ndw_lesson6_v1');
+  const r = d && d.savedResult;
+  if (!r) return null;
+  if (r.stabiliseFirst) return 'stabilise';
+  if (r.primary === 'unclear') return 'unsure';
+  return ['giw','sw','rd'].includes(r.primary) ? r.primary : null;
+}
+
+// Pre-fill from earlier lessons. Each field is only auto-filled once —
+// if the user edits or clears it afterwards, their version is kept.
+let pathwayPrefilled = false;
+function applyPrefills() {
+  if (!state.autoFilled) state.autoFilled = {};
+  if (!state.pathway) {
+    const suggested = lesson6SuggestedPathway();
+    if (suggested) { state.pathway = suggested; pathwayPrefilled = true; saveState(); }
+  }
+  const prefillField = (key, candidates, max) => {
+    if (state.autoFilled[key] || (state[key] || '').trim()) return;
+    const vals = (candidates || []).slice(0, max);
+    if (!vals.length) return;
+    state[key] = vals.join(', ');
+    state.autoFilled[key] = true;
+    saveState();
+  };
+  prefillField('biggestIssue', lesson3Domains(['unsustainable','costly']), 1);
+  prefillField('conditions',   lesson3Domains(['works_well','manageable']), 3);
+  prefillField('frictionPts',  lesson3Domains(['unsustainable','costly']), 3);
+  prefillField('accessNeeds',  pulledAccessNeeds(), 3);
+}
+applyPrefills();
+
+// All ten audit domains, most relevant first (by the given rating priority)
+function allDomainsOrdered(priorityRatings) {
+  const d = readKey('ndw_lesson3_audit_v1');
+  const ratings = (d && d.ratings) ? d.ratings : {};
+  const rank = r => { const i = priorityRatings.indexOf(r); return i === -1 ? priorityRatings.length : i; };
+  return Object.keys(L3_DOMAINS)
+    .map(id => ({ name: L3_DOMAINS[id], r: ratings[id] }))
+    .sort((a, b) => rank(a.r) - rank(b.r))
+    .map(x => x.name);
+}
+
+// Toggle pills for a textarea field: every option is shown, the ones already
+// in the field are highlighted, and tapping adds or removes them. The field
+// itself stays free text.
+function renderTogglePills(fieldKey, candidates, label) {
+  const cands = (candidates || []).filter(Boolean);
+  if (!cands.length) return '';
+  const current = (state[fieldKey] || '').toLowerCase();
+  return `
+    <p class="examples-label">${escHtml(label)}</p>
+    <div class="examples-grid">
+      ${cands.map(c => {
+        const sel = current.includes(c.toLowerCase());
+        return `<span class="toggle-chip${sel ? ' selected' : ''}" role="button" tabindex="0" aria-pressed="${sel}"
+          data-toggle-chip="${escHtml(fieldKey)}" data-chip-val="${escHtml(c)}">${sel ? '✓' : '+'} ${escHtml(c)}</span>`;
+      }).join('')}
+    </div>`;
+}
+
+// Add or remove a pill's value from the field, preserving anything
+// the user has typed around it
+function togglePillValue(key, val) {
+  const cur = state[key] || '';
+  const idx = cur.toLowerCase().indexOf(val.toLowerCase());
+  if (idx >= 0) {
+    state[key] = (cur.slice(0, idx) + cur.slice(idx + val.length))
+      .replace(/\s*,\s*,\s*/g, ', ')
+      .replace(/^\s*,\s*/, '')
+      .replace(/\s*,\s*$/, '')
+      .trim();
+  } else {
+    const base = cur.trim().replace(/[,;]\s*$/, '');
+    state[key] = base ? base + ', ' + val : val;
+  }
+  saveState();
+  render();
+}
+
+/* ── Helpers ──────────────────────────────────────────────────────────────── */
+function escHtml(s) {
+  return String(s || '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function captureValues() {
+  ['biggestIssue','nextStep','whySmall','support','barrier','backup','willKnow','conditions','frictionPts','accessNeeds']
+    .forEach(k => {
+      const el = document.getElementById('field-' + k);
+      if (el) state[k] = el.value;
+    });
+}
+
+function goTo(screen) {
+  captureValues();
+  state.screen = screen;
+  saveState();
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ── Progress ─────────────────────────────────────────────────────────────── */
+function renderProgress(current) {
+  return `<div class="progress-wrap" role="progressbar" aria-label="Progress">
+    ${SCREENS.map(s => {
+      const idx = SCREENS.indexOf(s);
+      const cur = SCREENS.indexOf(current);
+      const cls = idx < cur ? 'done' : idx === cur ? 'active' : '';
+      return `<div class="progress-dot ${cls}"></div>`;
+    }).join('')}
+  </div>`;
+}
+
+/* ── Screen: Step 1 ───────────────────────────────────────────────────────── */
+function renderStep1() {
+  return `
+    ${renderProgress('step1')}
+    <p class="lesson-eyebrow">Lesson 7 — Your 7-Day Next Step</p>
+    <h1 class="lesson-title">Your starting point</h1>
+    <p class="lesson-desc">Two quick questions to anchor your action plan.</p>
+
+    <p class="field-label">My pathway is…</p>
+    ${pathwayPrefilled && state.pathway ? `
+    <div class="callout callout-purple">
+      <strong>Pulled through from Lesson 6</strong>
+      Your pathway result was <em>${escHtml(PATHWAY_LABELS[state.pathway] || '')}</em> — it's pre-selected below. Change it if it no longer fits.
+    </div>` : ''}
+    <div class="option-grid" id="options-pathway" role="radiogroup" aria-label="Your pathway">
+      ${PATHWAY_OPTIONS.map(o => `
+        <div class="option-card${state.pathway === o.value ? ' selected' : ''}"
+             role="radio" aria-checked="${state.pathway === o.value}"
+             data-value="${o.value}" tabindex="0">
+          <p class="option-label">${escHtml(o.label)}</p>
+          <p class="option-hint">${escHtml(o.hint)}</p>
+        </div>`).join('')}
+    </div>
+
+    <label class="field-label" for="field-biggestIssue">My biggest sustainability issue right now is…</label>
+    <p class="field-hint">The area from your Lesson 3 audit that is costing you most — one domain or one sentence.${state.autoFilled && state.autoFilled.biggestIssue ? ' Pre-filled from your audit — edit it freely or write your own.' : ''}</p>
+    <textarea id="field-biggestIssue" class="obs-area" rows="3"
+      placeholder="e.g. 'Sensory overload in the open-plan office — it leaves me with nothing left by 3pm.'">${escHtml(state.biggestIssue)}</textarea>
+    ${renderTogglePills('biggestIssue', allDomainsOrdered(['unsustainable','costly']), 'The audit domains, highest-cost first — tap to add or remove')}
+
+    <div class="nav-buttons">
+      <button class="btn btn-primary" id="btn-next" ${!state.pathway ? 'disabled' : ''}>
+        Next →
+      </button>
+    </div>
+    <p class="save-badge">💾 Everything is saved automatically</p>`;
+}
+
+/* ── Screen: Step 2 ───────────────────────────────────────────────────────── */
+function renderStep2() {
+  const examples = EXAMPLES_BY_PATHWAY[state.pathway] || EXAMPLES_BY_PATHWAY.unsure;
+  return `
+    ${renderProgress('step2')}
+    <p class="lesson-eyebrow">Lesson 7 — Your 7-Day Next Step</p>
+    <h1 class="lesson-title">Your next step</h1>
+    <p class="lesson-desc">Small and specific beats ambitious and vague. What's one thing you could actually try this week?</p>
+
+    <div class="callout callout-teal">
+      <strong>Keep it small</strong>
+      The step should be doable within seven days without requiring more energy than you have this week.
+      If it needs optimal conditions or significant preparation — it's too big.
+    </div>
+
+    <label class="field-label" for="field-nextStep">My next step is…</label>
+    <p class="field-hint">One specific, concrete action. Not a project — a step.</p>
+    <textarea id="field-nextStep" class="obs-area" rows="3"
+      placeholder="e.g. 'Draft one paragraph of an adjustments request letter.'">${escHtml(state.nextStep)}</textarea>
+
+    <p class="examples-label">Ideas based on your pathway (tap to copy)</p>
+    <div class="examples-grid">
+      ${examples.map((ex, i) => `<span class="example-chip" data-example="${escHtml(ex)}">${escHtml(ex)}</span>`).join('')}
+    </div>
+
+    <label class="field-label" for="field-whySmall">This step is small enough because…</label>
+    <p class="field-hint">Explain to yourself why this is accessible given your current capacity.</p>
+    <textarea id="field-whySmall" class="obs-area" rows="2"
+      placeholder="e.g. 'It takes less than 20 minutes and doesn't need anyone else to be involved.'">${escHtml(state.whySmall)}</textarea>
+
+    <div class="nav-buttons">
+      <button class="btn btn-ghost btn-sm" id="btn-back">← Back</button>
+      <button class="btn btn-primary" id="btn-next">Next →</button>
+    </div>
+    <p class="save-badge">💾 Everything is saved automatically</p>`;
+}
+
+/* ── Screen: Step 3 ───────────────────────────────────────────────────────── */
+function renderStep3() {
+  return `
+    ${renderProgress('step3')}
+    <p class="lesson-eyebrow">Lesson 7 — Your 7-Day Next Step</p>
+    <h1 class="lesson-title">Planning it</h1>
+    <p class="lesson-desc">A step is more likely to happen if you've thought through what might get in the way — and what you'll do if it does.</p>
+
+    <label class="field-label" for="field-support">The support I need is…</label>
+    <p class="field-hint">What would make this easier? A quiet hour, a reminder, someone to be accountable to, nothing?</p>
+    <textarea id="field-support" class="obs-area" rows="2"
+      placeholder="e.g. 'A reminder on Wednesday morning. Somewhere quiet.'">${escHtml(state.support)}</textarea>
+
+    <label class="field-label" for="field-barrier">The likely barrier is…</label>
+    <p class="field-hint">Be honest. What usually gets in the way?</p>
+    <textarea id="field-barrier" class="obs-area" rows="2"
+      placeholder="e.g. 'Running out of energy by the end of the day. Avoidance when it feels scary.'">${escHtml(state.barrier)}</textarea>
+
+    <label class="field-label" for="field-backup">My backup plan if the barrier appears is…</label>
+    <p class="field-hint">A smaller version, a later date, or a different approach.</p>
+    <textarea id="field-backup" class="obs-area" rows="2"
+      placeholder="e.g. 'If I don't have capacity this week, I'll just open the document and write one sentence.'">${escHtml(state.backup)}</textarea>
+
+    <label class="field-label" for="field-willKnow">I will know this helped if…</label>
+    <p class="field-hint">Not 'everything is fixed' — just slightly better. What would that look like?</p>
+    <textarea id="field-willKnow" class="obs-area" rows="2"
+      placeholder="e.g. 'I have a draft I can come back to. Something has started.'">${escHtml(state.willKnow)}</textarea>
+
+    <div class="nav-buttons">
+      <button class="btn btn-ghost btn-sm" id="btn-back">← Back</button>
+      <button class="btn btn-primary" id="btn-next">See my map →</button>
+    </div>
+    <p class="save-badge">💾 Everything is saved automatically</p>`;
+}
+
+/* ── Screen: Map ──────────────────────────────────────────────────────────── */
+function renderMap() {
+  const pwLabel = PATHWAY_LABELS[state.pathway] || '';
+  const pwBadge = PATHWAY_BADGE[state.pathway] || 'badge-unsure';
+
+  return `
+    ${renderProgress('map')}
+    <p class="lesson-eyebrow">Lesson 7 — Your 7-Day Next Step</p>
+    <h1 class="lesson-title">My Work That Works Map</h1>
+    <p class="lesson-desc">Your one-page summary. Fill in the three sections from your earlier lessons — your Lesson 3 audit and your Lesson 4/5 strengths work.</p>
+
+    <div class="map-section">
+      <p class="map-section-title">My top 3 sustainable conditions</p>
+      <p class="map-section-hint">From your Lesson 3 audit — the domains that are working or closest to working.${state.autoFilled && state.autoFilled.conditions ? ' Pre-filled for you — edit, swap, or add your own.' : ''}</p>
+      <textarea id="field-conditions" class="obs-area" rows="3"
+        placeholder="e.g. Autonomy and control, Values and motivation, Recovery and regulation">${escHtml(state.conditions)}</textarea>
+      ${renderTogglePills('conditions', allDomainsOrdered(['works_well','manageable']), 'The audit domains, most supportive first — tap to add or remove')}
+    </div>
+
+    <div class="map-section">
+      <p class="map-section-title">My top 3 friction points</p>
+      <p class="map-section-hint">From your Lesson 3 audit — the domains costing you most.${state.autoFilled && state.autoFilled.frictionPts ? ' Pre-filled for you — edit, swap, or add your own.' : ''}</p>
+      <textarea id="field-frictionPts" class="obs-area" rows="3"
+        placeholder="e.g. Sensory environment, Predictability and uncertainty, Social and emotional load">${escHtml(state.frictionPts)}</textarea>
+      ${renderTogglePills('frictionPts', allDomainsOrdered(['unsustainable','costly']), 'The audit domains, highest-cost first — tap to add or remove')}
+    </div>
+
+    <div class="map-section">
+      <p class="map-section-title">My top 3 access needs</p>
+      <p class="map-section-hint">From your Lesson 4/5 work — the things that would make the most difference.${state.autoFilled && state.autoFilled.accessNeeds ? ' Pre-filled for you — edit, swap, or add your own.' : ''}</p>
+      <textarea id="field-accessNeeds" class="obs-area" rows="3"
+        placeholder="e.g. Written instructions, Quiet workspace, Flexible start time">${escHtml(state.accessNeeds)}</textarea>
+      ${renderTogglePills('accessNeeds', pulledAccessNeeds(), 'From your Lesson 4 needs and Lesson 5 starter list — tap to add or remove')}
+    </div>
+
+    <div class="map-section">
+      <p class="map-section-title">My likely pathway</p>
+      ${pwLabel
+        ? `<span class="pathway-badge ${pwBadge}">${escHtml(pwLabel)}</span>`
+        : `<p class="map-value map-value-muted">Not selected — go back and choose your pathway.</p>`}
+    </div>
+
+    <div class="map-section">
+      <p class="map-section-title">My 7-day next step</p>
+      ${state.nextStep
+        ? `<p class="map-value">${escHtml(state.nextStep)}</p>`
+        : `<p class="map-value map-value-muted">Not filled in — go back and add your next step.</p>`}
+    </div>
+
+    <hr>
+
+    <div class="cta-section">
+      <p style="font-size:13px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:14px">What's next?</p>
+
+      <div class="cta-item">
+        <p class="cta-item-title">💬 Post your next step in the community</p>
+        <p class="cta-item-desc">Share what you're trying this week in the Skool group. Even one sentence. Saying it out loud makes it more likely to happen — and other people are doing the same.</p>
+      </div>
+      <div class="cta-item">
+        <p class="cta-item-title">🔑 Upgrade for the full programme</p>
+        <p class="cta-item-desc">Work That Works Premium goes deeper into each pathway — with specific tools, scripts, frameworks, and weekly live sessions. If you know your pathway and want structured support to act on it, that's where to go next.</p>
+      </div>
+      <div class="cta-item">
+        <p class="cta-item-title">🤝 Join Implementation Club</p>
+        <p class="cta-item-desc">Peer support turning your map into a real plan. Accountability, problem-solving, and community — without the pressure.</p>
+      </div>
+      <div class="cta-item">
+        <p class="cta-item-title">📞 Book a triage session</p>
+        <p class="cta-item-desc">One-to-one support to think through your situation, plan a conversation, or decide on your next step.</p>
+      </div>
+    </div>
+
+    <div class="community-section">
+      <p class="community-label">Community prompt</p>
+      <div class="community-prompt">"What's your one next step? Post it here."</div>
+      <p style="font-size:14px;color:var(--text-muted);margin-top:6px">You don't have to explain it or justify it. Just name it.</p>
+    </div>
+
+    <div class="nav-buttons" style="justify-content:center;margin-top:28px">
+      <a href="workbook.html" class="btn btn-primary" style="text-decoration:none">📖 View my full workbook →</a>
+    </div>
+    <div class="nav-buttons" style="justify-content:center;gap:10px;flex-wrap:wrap;margin-top:14px">
+      <button class="btn btn-ghost btn-sm" id="btn-back">← Back to plan</button>
+      <button class="btn btn-ghost btn-sm" id="btn-pdf">⬇ Save as PDF</button>
+      <button class="btn btn-ghost btn-sm" id="btn-restart">Clear all &amp; start again</button>
+    </div>
+    <p class="save-badge">💾 Everything is saved automatically</p>`;
+}
+
+/* ── Render ───────────────────────────────────────────────────────────────── */
+function render() {
+  const app = document.getElementById('app');
+  switch (state.screen) {
+    case 'step2': app.innerHTML = renderStep2(); break;
+    case 'step3': app.innerHTML = renderStep3(); break;
+    case 'map':   app.innerHTML = renderMap();   break;
+    default:      app.innerHTML = renderStep1();
+  }
+  attachListeners();
+
+  // Persist any textarea changes on input
+  ['biggestIssue','nextStep','whySmall','support','barrier','backup','willKnow','conditions','frictionPts','accessNeeds']
+    .forEach(k => {
+      const el = document.getElementById('field-' + k);
+      if (el) el.addEventListener('input', () => { state[k] = el.value; saveState(); });
+    });
+}
+
+/* ── Listeners ────────────────────────────────────────────────────────────── */
+function attachListeners() {
+  // Pathway radio cards
+  const pathwayContainer = document.getElementById('options-pathway');
+  if (pathwayContainer) {
+    pathwayContainer.querySelectorAll('.option-card').forEach(card => {
+      card.addEventListener('click', () => {
+        state.pathway = card.dataset.value;
+        saveState();
+        pathwayContainer.querySelectorAll('.option-card').forEach(c => {
+          const sel = c.dataset.value === state.pathway;
+          c.classList.toggle('selected', sel);
+          c.setAttribute('aria-checked', sel);
+        });
+        const btn = document.getElementById('btn-next');
+        if (btn) btn.disabled = false;
+      });
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
+      });
+    });
+  }
+
+  // Example chips
+  document.querySelectorAll('.example-chip[data-example]').forEach(chip => {
+    chip.addEventListener('click', () => {
+      captureValues();
+      state.nextStep = chip.dataset.example;
+      saveState();
+      const el = document.getElementById('field-nextStep');
+      if (el) { el.value = state.nextStep; el.focus(); }
+    });
+  });
+
+  // Toggle pills — add or remove the value from their field
+  document.querySelectorAll('[data-toggle-chip]').forEach(chip => {
+    const activate = () => {
+      captureValues();
+      togglePillValue(chip.dataset.toggleChip, chip.dataset.chipVal);
+    };
+    chip.addEventListener('click', activate);
+    chip.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
+    });
+  });
+
+  // Navigation
+  const btnNext = document.getElementById('btn-next');
+  if (btnNext) {
+    btnNext.addEventListener('click', () => {
+      captureValues();
+      const idx = SCREENS.indexOf(state.screen);
+      if (idx < SCREENS.length - 1) goTo(SCREENS[idx + 1]);
+    });
+  }
+
+  const btnBack = document.getElementById('btn-back');
+  if (btnBack) {
+    btnBack.addEventListener('click', () => {
+      captureValues();
+      const idx = SCREENS.indexOf(state.screen);
+      if (idx > 0) goTo(SCREENS[idx - 1]);
+    });
+  }
+
+  const btnPdf = document.getElementById('btn-pdf');
+  if (btnPdf) btnPdf.addEventListener('click', () => window.print());
+
+  const btnRestart = document.getElementById('btn-restart');
+  if (btnRestart) {
+    btnRestart.addEventListener('click', () => {
+      if (confirm('This will clear all your answers. Are you sure?')) {
+        localStorage.removeItem(STORAGE_KEY);
+        state = defaultState();
+        applyPrefills();
+        render();
+      }
+    });
+  }
+}
+
+render();
+</script>
+</body>
+</html>

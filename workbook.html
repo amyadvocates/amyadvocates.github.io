@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Workbook — Work That Works — Neurodiversity Works</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: light;
+    --purple-deep:    #5400FF;   /* Signature Purple */
+    --purple-mid:     #222C93;   /* Strong Purple */
+    --purple-soft:    #C6C1D2;   /* Lavender Accent */
+    --purple-pale:    #EDE8F7;
+    --purple-whisper: #F4F1FB;
+    --text-dark:      #1F3D37;   /* Deep Green */
+    --text-muted:     #3D6164;
+    --bg:             #FAF8F4;   /* Calm Background */
+    --border:         #C6C1D2;
+    --surface:        #FFFFFF;
+    /* Rating colours (match Lesson 3) */
+    --r-green:        #1A6640;
+    --r-green-bg:     #EAF5EE;
+    --r-green-border: #97CBB0;
+    --r-teal:         #1A5C78;
+    --r-teal-bg:      #E8F2F8;
+    --r-teal-border:  #92C0D4;
+    --r-amber:        #8A5200;
+    --r-amber-bg:     #FFF4E0;
+    --r-amber-border: #E0BB80;
+    --r-red:          #922820;
+    --r-red-bg:       #FFF0EE;
+    --r-red-border:   #D9928C;
+    --r-grey:         #3C3C4E;
+    --r-grey-bg:      #F0F0F5;
+    --r-grey-border:  #A8A8BC;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .skip-link {
+    position: absolute; top: -999px; left: 8px;
+    background: var(--purple-deep); color: #fff;
+    padding: 10px 16px; border-radius: 0 0 6px 6px;
+    font-family: inherit; font-size: 16px; font-weight: 600;
+    text-decoration: none; z-index: 999;
+  }
+  .skip-link:focus { top: 0; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text-dark);
+    line-height: 1.7;
+    min-height: 100vh;
+    font-size: 17px;
+  }
+
+  .page-wrap { max-width: 780px; margin: 0 auto; padding: 40px 28px 80px; }
+
+  /* ── Brand header ── */
+  .brand-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 36px; padding-bottom: 20px;
+    border-bottom: 2px solid var(--purple-pale);
+  }
+  .brand-mark {
+    width: 40px; height: 40px;
+    background: var(--purple-deep); border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .brand-text { display: flex; flex-direction: column; }
+  .brand-name {
+    font-size: 13px; font-weight: 700; color: var(--purple-deep);
+    letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.3;
+  }
+  .brand-sub { font-size: 13px; color: var(--text-muted); }
+  .back-link {
+    margin-left: auto; font-size: 13px; font-weight: 600;
+    color: var(--purple-deep); text-decoration: underline;
+    text-underline-offset: 3px; white-space: nowrap; flex-shrink: 0;
+  }
+  .header-badge {
+    background: var(--purple-pale); color: var(--purple-deep);
+    font-size: 13px; font-weight: 700;
+    padding: 6px 12px; border-radius: 20px;
+    white-space: nowrap; flex-shrink: 0;
+  }
+
+  /* ── Cover ── */
+  .cover { margin-bottom: 40px; }
+  .cover-eyebrow {
+    font-size: 13px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--purple-deep); margin-bottom: 10px;
+  }
+  h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 38px; font-weight: 800;
+    color: var(--text-dark); line-height: 1.2; margin-bottom: 12px;
+  }
+  .cover-sub { font-size: 18px; color: var(--text-muted); line-height: 1.7; margin-bottom: 6px; }
+  .cover-date { font-size: 14px; color: var(--text-muted); margin-bottom: 26px; }
+
+  .toolbar { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
+  .btn {
+    min-height: 48px; padding: 12px 24px; border-radius: 10px;
+    font-size: 16px; font-weight: 700; cursor: pointer; border: none;
+    font-family: inherit; line-height: 1;
+    display: inline-flex; align-items: center; gap: 8px;
+    text-decoration: none; transition: background 0.15s, border-color 0.15s, color 0.15s;
+  }
+  .btn:focus-visible, a:focus-visible { outline: 3px solid var(--purple-deep); outline-offset: 3px; }
+  .btn-primary { background: var(--purple-deep); color: #fff; }
+  .btn-primary:hover { background: var(--purple-mid); }
+  .btn-ghost { background: transparent; border: 2px solid var(--border); color: var(--text-dark); }
+  .btn-ghost:hover { border-color: var(--purple-deep); color: var(--purple-deep); }
+  .btn-sm { min-height: 40px; padding: 9px 16px; font-size: 14px; }
+  .toolbar-note { font-size: 13px; color: var(--text-muted); }
+
+  /* ── Overview grid ── */
+  .overview {
+    background: var(--surface); border: 2px solid var(--purple-pale);
+    border-radius: 16px; padding: 22px 26px; margin-bottom: 44px;
+  }
+  .overview-title {
+    font-size: 13px; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--text-muted); margin-bottom: 14px;
+  }
+  .overview-grid { display: flex; flex-direction: column; gap: 6px; }
+  .overview-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 8px 12px; border-radius: 8px;
+    text-decoration: none; color: inherit;
+    transition: background 0.12s;
+  }
+  .overview-row:hover { background: var(--purple-whisper); }
+  .overview-num {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--purple-deep); color: #fff;
+    font-size: 13px; font-weight: 700; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .overview-num.empty { background: var(--purple-soft); }
+  .overview-name { font-size: 15px; font-weight: 600; flex: 1; }
+  .overview-status { font-size: 13px; font-weight: 600; white-space: nowrap; }
+  .overview-status.done { color: var(--r-green); }
+  .overview-status.todo { color: var(--text-muted); }
+
+  /* ── Lesson sections ── */
+  .wb-section {
+    background: var(--surface);
+    border: 2px solid var(--purple-pale);
+    border-radius: 18px;
+    padding: 32px 34px;
+    margin-bottom: 36px;
+  }
+  .wb-section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 6px; }
+  .wb-lesson-chip {
+    background: var(--purple-pale); color: var(--purple-deep);
+    font-size: 12px; font-weight: 800; letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 5px 14px; border-radius: 20px; white-space: nowrap;
+  }
+  .wb-edit-link {
+    margin-left: auto; font-size: 13px; font-weight: 600;
+    color: var(--purple-deep); text-decoration: underline;
+    text-underline-offset: 3px; white-space: nowrap;
+  }
+  h2.wb-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 26px; font-weight: 800;
+    color: var(--text-dark); line-height: 1.25;
+    margin: 10px 0 22px;
+  }
+  .wb-section-intro { font-size: 15px; color: var(--text-muted); line-height: 1.65; margin: -12px 0 22px; }
+
+  /* Q&A blocks */
+  .qa-block { margin-bottom: 20px; break-inside: avoid; }
+  .qa-label {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.05em;
+    text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px;
+  }
+  .qa-value {
+    font-size: 16px; color: var(--text-dark);
+    background: var(--bg); border: 1px solid var(--purple-pale);
+    border-radius: 10px; padding: 12px 16px; line-height: 1.65;
+    white-space: pre-wrap; word-wrap: break-word;
+  }
+  .qa-value.empty { color: var(--text-muted); font-style: italic; }
+
+  /* Pills for selected options */
+  .pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+  .pill {
+    font-size: 13px; font-weight: 600;
+    background: var(--purple-pale); color: var(--purple-mid);
+    border-radius: 99px; padding: 4px 13px;
+  }
+
+  /* Anchor sentence highlight */
+  .anchor-box {
+    background: var(--purple-whisper); border: 2px solid var(--purple-soft);
+    border-radius: 14px; padding: 22px 26px; margin-top: 6px;
+    break-inside: avoid;
+  }
+  .anchor-box-label {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--purple-deep); margin-bottom: 10px;
+  }
+  .anchor-box-text {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 19px; font-style: italic; color: var(--text-dark); line-height: 1.6;
+  }
+  .anchor-box-text strong { color: var(--purple-deep); font-style: normal; }
+  .anchor-box-text .empty { font-family: 'Inter', sans-serif; font-size: 15px; font-style: italic; color: var(--text-muted); }
+
+  /* Heat map rows (Lesson 3) */
+  .hm-grid { display: flex; flex-direction: column; gap: 6px; margin: 14px 0 20px; }
+  .hm-row {
+    display: grid; grid-template-columns: 28px 1fr auto;
+    align-items: center; gap: 10px;
+    padding: 10px 14px; border-radius: 8px;
+    border: 1px solid var(--border); background: white;
+    break-inside: avoid;
+  }
+  .hm-num { font-size: 13px; font-weight: 700; color: var(--text-muted); }
+  .hm-name { font-size: 15px; font-weight: 600; color: var(--text-dark); }
+  .hm-badge { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
+  .hm-notes-row { grid-column: 2 / -1; font-size: 13px; color: var(--text-muted); font-style: italic; margin-top: -4px; padding-bottom: 2px; }
+  .hm-row.rc-green  { border-color: var(--r-green-border);  background: var(--r-green-bg); }
+  .hm-row.rc-teal   { border-color: var(--r-teal-border);   background: var(--r-teal-bg); }
+  .hm-row.rc-amber  { border-color: var(--r-amber-border);  background: var(--r-amber-bg); }
+  .hm-row.rc-red    { border-color: var(--r-red-border);    background: var(--r-red-bg); }
+  .hm-row.rc-grey   { border-color: var(--r-grey-border);   background: var(--r-grey-bg); }
+  .badge-green  { background: var(--r-green-bg);  color: var(--r-green);  border: 1px solid var(--r-green-border); }
+  .badge-teal   { background: var(--r-teal-bg);   color: var(--r-teal);   border: 1px solid var(--r-teal-border); }
+  .badge-amber  { background: var(--r-amber-bg);  color: var(--r-amber);  border: 1px solid var(--r-amber-border); }
+  .badge-red    { background: var(--r-red-bg);    color: var(--r-red);    border: 1px solid var(--r-red-border); }
+  .badge-grey   { background: var(--r-grey-bg);   color: var(--r-grey);   border: 1px solid var(--r-grey-border); }
+
+  .summary-box { border-radius: 12px; padding: 18px 22px; margin-bottom: 14px; break-inside: avoid; }
+  .summary-box.risk-box { background: var(--r-red-bg); border: 2px solid var(--r-red-border); }
+  .summary-box.support-box { background: var(--r-green-bg); border: 2px solid var(--r-green-border); }
+  .summary-box-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+  .risk-box .summary-box-title { color: var(--r-red); }
+  .support-box .summary-box-title { color: var(--r-green); }
+  .summary-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .summary-list li { font-size: 15px; font-weight: 600; color: var(--text-dark); display: flex; align-items: flex-start; gap: 8px; }
+  .risk-box .summary-list li::before { content: '⚠'; font-size: 13px; flex-shrink: 0; }
+  .support-box .summary-list li::before { content: '✓'; font-weight: 900; color: var(--r-green); flex-shrink: 0; }
+
+  .context-tag {
+    display: inline-block; background: var(--purple-pale); color: var(--purple-mid);
+    font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px;
+    margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.05em;
+  }
+
+  .chart-wrap { margin: 4px 0 18px; break-inside: avoid; }
+  .radar-svg-wrap { max-width: 460px; margin: 0 auto; }
+  .radar-svg-wrap svg { width: 100%; height: auto; display: block; }
+
+  /* Worksheet tables (Lessons 4–5) */
+  .wb-table { width: 100%; border-collapse: collapse; margin: 6px 0 20px; break-inside: avoid; }
+  .wb-table thead th {
+    background: var(--text-dark); color: #fff;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.04em;
+    padding: 9px 12px; text-align: left;
+  }
+  .wb-table thead th:first-child { border-radius: 8px 0 0 0; }
+  .wb-table thead th:last-child  { border-radius: 0 8px 0 0; }
+  .wb-table tbody td {
+    padding: 10px 12px; vertical-align: top;
+    background: var(--surface); border-bottom: 1px solid var(--purple-pale);
+    font-size: 14px; line-height: 1.6;
+  }
+
+  /* Numbered top-3 lists */
+  .top3-list { list-style: none; display: flex; flex-direction: column; gap: 8px; margin: 6px 0 20px; break-inside: avoid; }
+  .top3-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 15px; }
+  .top3-list .n {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--purple-pale); color: var(--purple-deep);
+    font-size: 13px; font-weight: 800; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; margin-top: 1px;
+  }
+  .top3-list .empty { color: var(--text-muted); font-style: italic; }
+
+  /* Pathway result (Lesson 6) */
+  .pathway-box { border-radius: 14px; padding: 20px 24px; margin-bottom: 14px; border: 2px solid; break-inside: avoid; }
+  .pathway-box.giw { background: var(--r-teal-bg);  border-color: var(--r-teal-border); }
+  .pathway-box.sw  { background: var(--r-green-bg); border-color: var(--r-green-border); }
+  .pathway-box.rd  { background: var(--r-amber-bg); border-color: var(--r-amber-border); }
+  .pathway-box.stabilise { background: #FFF8E6; border-color: #E8A200; }
+  .pathway-box.unclear   { background: var(--purple-whisper); border-color: var(--purple-soft); }
+  .pathway-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
+  .pathway-name { font-family: 'Playfair Display', Georgia, serif; font-size: 21px; font-weight: 700; margin-bottom: 8px; line-height: 1.3; }
+  .pathway-box.giw .pathway-name { color: var(--r-teal); }
+  .pathway-box.sw  .pathway-name { color: var(--r-green); }
+  .pathway-box.rd  .pathway-name { color: var(--r-amber); }
+  .pathway-box.stabilise .pathway-name { color: #5C3D00; }
+  .pathway-desc { font-size: 14.5px; color: var(--text-dark); line-height: 1.6; margin-bottom: 10px; }
+  .covers-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+  .covers-list li { font-size: 13.5px; color: var(--text-dark); line-height: 1.5; padding-left: 18px; position: relative; }
+  .covers-list li::before { content: '→'; position: absolute; left: 0; color: var(--text-muted); font-size: 12px; }
+
+  /* Map sections (Lesson 7) */
+  .map-section {
+    background: var(--purple-whisper); border-radius: 12px;
+    padding: 16px 20px; margin-bottom: 12px; break-inside: avoid;
+  }
+  .map-section-title {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--purple-mid); margin-bottom: 6px;
+  }
+  .map-value { font-size: 15px; font-weight: 600; color: var(--text-dark); line-height: 1.55; white-space: pre-wrap; }
+  .map-value.empty { color: var(--text-muted); font-style: italic; font-weight: 400; }
+
+  /* Unstarted lesson — slim row */
+  .wb-section-row {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--surface); border: 2px dashed var(--purple-soft);
+    border-radius: 14px; padding: 14px 22px; margin-bottom: 14px;
+  }
+  .wb-row-name { font-size: 15px; font-weight: 600; color: var(--text-muted); flex: 1; }
+  .wb-row-link {
+    font-size: 14px; font-weight: 700; color: var(--purple-deep);
+    text-decoration: underline; text-underline-offset: 3px; white-space: nowrap;
+  }
+
+  /* Whole-workbook empty state */
+  .wb-empty-all {
+    background: var(--surface); border: 2px dashed var(--purple-soft);
+    border-radius: 18px; padding: 30px 32px;
+    font-size: 16px; color: var(--text-dark); line-height: 1.7;
+  }
+  .wb-empty-all h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 24px; font-weight: 800; color: var(--text-dark);
+    line-height: 1.3; margin-bottom: 12px;
+  }
+  .wb-empty-all p { margin-bottom: 14px; }
+  .wb-empty-all p:last-child { margin-bottom: 0; }
+  .wb-empty-all ul { margin: 0 0 14px 22px; }
+  .wb-empty-all li { margin-bottom: 8px; }
+  .wb-empty-all a { color: var(--purple-deep); font-weight: 700; }
+
+  /* Footer */
+  .wb-footer {
+    margin-top: 44px; padding-top: 24px;
+    border-top: 2px solid var(--purple-pale);
+    font-size: 16px; color: var(--text-muted);
+    line-height: 1.7; text-align: center;
+  }
+
+  hr.wb-divider { border: none; border-top: 1px solid var(--purple-pale); margin: 22px 0; }
+
+  @media (max-width: 560px) {
+    .page-wrap { padding: 28px 18px 60px; }
+    h1 { font-size: 30px; }
+    .wb-section { padding: 24px 20px; }
+    .wb-table { font-size: 13px; }
+    .wb-table thead th { padding: 7px 9px; font-size: 11px; }
+    .wb-table tbody td { padding: 8px 9px; font-size: 13px; }
+    .header-badge { display: none; }
+  }
+
+  /* ── Print: a clean, branded PDF ── */
+  @media print {
+    @page { margin: 16mm 14mm; }
+    body { background: white; font-size: 13px; }
+    .page-wrap { max-width: 100%; padding: 0; }
+    .toolbar, .toolbar-note, .wb-edit-link, .skip-link, .back-link, .wb-section-row, .overview-row:hover { display: none !important; }
+    .overview-row { padding: 4px 0; }
+    .wb-section {
+      border: none; border-radius: 0; padding: 0;
+      margin-bottom: 0; break-before: page;
+    }
+    .wb-section-header { margin-top: 6mm; }
+    h1 { font-size: 30px; }
+    h2.wb-title { font-size: 22px; }
+    .qa-value, .hm-row, .wb-table tbody td { font-size: 12px; }
+    .overview { break-inside: avoid; }
+    a { text-decoration: none; color: inherit; }
+  }
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<div class="page-wrap">
+
+  <header role="banner">
+    <div class="brand-header">
+      <div class="brand-mark" aria-hidden="true">
+        <img src="assets/NDW-Logo-Vector-Small-white.png" alt="" width="26" height="26" style="object-fit:contain;">
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">Neurodiversity Works</span>
+        <span class="brand-sub">Work That Works</span>
+      </div>
+      <!-- TODO (Amy): replace "#" below with your Skool course URL when it's ready -->
+      <a class="back-link" href="#">← Back to the course</a>
+      <span class="header-badge">Your Workbook</span>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <div id="app"></div>
+  </main>
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════════════════════
+   The Work That Works Workbook
+   Reads every lesson's saved answers from this browser and lays them out
+   as one cohesive document, ready to print or save as a PDF.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ── Read saved data ──────────────────────────────────────────────────── */
+function readKey(key) {
+  try { return JSON.parse(localStorage.getItem(key) || 'null'); } catch(e) { return null; }
+}
+const L1 = readKey('ndw_lesson1_reflection_v2');
+const L2 = readKey('ndw_lesson2_naming_v1');
+const L3 = readKey('ndw_lesson3_audit_v1');
+const L4 = readKey('ndw_lesson4_v1');
+const L5 = readKey('ndw_lesson5_v1');
+const L6 = readKey('ndw_lesson6_v1');
+const L7 = readKey('ndw_lesson7_v1');
+
+/* ── Helpers ──────────────────────────────────────────────────────────── */
+function esc(str) {
+  return String(str == null ? '' : str)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function hasText(v) { return typeof v === 'string' && v.trim().length > 0; }
+
+function qa(label, value, emptyText) {
+  const filled = hasText(value);
+  return `
+    <div class="qa-block">
+      <p class="qa-label">${esc(label)}</p>
+      <div class="qa-value${filled ? '' : ' empty'}">${filled ? esc(value.trim()) : esc(emptyText || 'Not filled in yet')}</div>
+    </div>`;
+}
+
+function pills(values) {
+  const v = (values || []).filter(hasText);
+  if (!v.length) return '';
+  return `<div class="pill-row">${v.map(x => `<span class="pill">${esc(x)}</span>`).join('')}</div>`;
+}
+
+function top3(values) {
+  const v = values || [];
+  return `
+    <ul class="top3-list">
+      ${[0,1,2].map(i => `
+        <li><span class="n" aria-hidden="true">${i+1}</span>
+          <span class="${hasText(v[i]) ? '' : 'empty'}">${hasText(v[i]) ? esc(v[i].trim()) : 'Not filled in yet'}</span>
+        </li>`).join('')}
+    </ul>`;
+}
+
+function collapsedSection(num) {
+  const m = LESSON_META[num - 1];
+  return `
+    <section class="wb-section-row" id="lesson${num}" aria-label="Lesson ${num}: ${esc(m.name)} — not started yet">
+      <span class="wb-lesson-chip">Lesson ${num}</span>
+      <span class="wb-row-name">${esc(m.name)} — not started yet</span>
+      <a class="wb-row-link" href="${m.file}">Start lesson →</a>
+    </section>`;
+}
+
+function sectionShell(num, title, href, bodyHtml, intro) {
+  return `
+    <section class="wb-section" id="lesson${num}" aria-labelledby="lesson${num}-title">
+      <div class="wb-section-header">
+        <span class="wb-lesson-chip">Lesson ${num}</span>
+        <a class="wb-edit-link" href="${href}">Edit my answers →</a>
+      </div>
+      <h2 class="wb-title" id="lesson${num}-title">${esc(title)}</h2>
+      ${intro ? `<p class="wb-section-intro">${esc(intro)}</p>` : ''}
+      ${bodyHtml}
+    </section>`;
+}
+
+/* ── Completion checks ────────────────────────────────────────────────── */
+const started = {
+  1: !!(L1 && ['q1','q2','q3','q4','sentence'].some(k => hasText(L1[k]))),
+  2: !!(L2 && (['step1','step2','step3'].some(k => (L2[k] || []).length) ||
+               ['step1-text','step2-text','step3-text','sentence'].some(k => hasText(L2[k])))),
+  3: !!(L3 && L3.ratings && Object.keys(L3.ratings).length),
+  4: !!(L4 && ((L4.strengths || []).some(r => hasText(r.capacity)) ||
+               (L4.needs || []).some(r => hasText(r.need)) ||
+               (L4.top3Strengths || []).some(hasText) ||
+               (L4.top3Needs || []).some(hasText) ||
+               (L4.top3Frictions || []).some(hasText))),
+  5: !!(L5 && ((L5.rows || []).some(r => hasText(r.need)) ||
+               (L5.starterList || []).some(hasText) || hasText(L5.disclosure))),
+  6: !!(L6 && (L6.q1 || L6.q2 || (L6.q3 || []).length || L6.q4)),
+  7: !!(L7 && ['pathway','biggestIssue','nextStep','conditions','frictionPts','accessNeeds'].some(k => hasText(L7[k]))),
+};
+
+const LESSON_META = [
+  { num: 1, name: 'Your First Reflection',                file: 'Lesson001-Your-First-Reflection.html' },
+  { num: 2, name: 'Naming the Pattern',                   file: 'Lesson002-Naming-The-Pattern.html' },
+  { num: 3, name: 'The Sustainability Audit',             file: 'Lesson003-Sustainability-Audit.html' },
+  { num: 4, name: 'Strengths, Needs and Friction Points', file: 'Lesson004-Strengths-Needs-Friction.html' },
+  { num: 5, name: 'Adjustments, Flexibility and Support', file: 'Lesson005-Adjustments-Flexibility-Support.html' },
+  { num: 6, name: 'Choose Your Pathway',                  file: 'Lesson006-Choose-Your-Pathway.html' },
+  { num: 7, name: 'Your 7-Day Next Step',                 file: 'Lesson007-Your-7-Day-Next-Step.html' },
+];
+
+/* ── Cover & overview ─────────────────────────────────────────────────── */
+const doneCount = Object.values(started).filter(Boolean).length;
+const allEmpty = doneCount === 0;
+
+function renderCover() {
+  const today = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  const toolbar = allEmpty ? `
+      <div class="toolbar">
+        <a class="btn btn-primary" href="${LESSON_META[0].file}">Start Lesson 1 →</a>
+        <button class="btn btn-ghost btn-sm" id="btn-restore" type="button">⤴ Restore a backup</button>
+      </div>
+      <p class="toolbar-note">Your answers are stored privately in your browser — nothing is sent anywhere.</p>` : `
+      <div class="toolbar">
+        <button class="btn btn-primary" id="btn-pdf" type="button">⬇ Print or save as PDF</button>
+        <button class="btn btn-ghost btn-sm" id="btn-backup" type="button">⤵ Save a backup</button>
+        <button class="btn btn-ghost btn-sm" id="btn-restore" type="button">⤴ Restore a backup</button>
+        <button class="btn btn-ghost btn-sm" id="btn-refresh" type="button">↻ Refresh my answers</button>
+      </div>
+      <p class="toolbar-note">In the print dialog, choose "Save as PDF". Your answers are stored privately in this browser — nothing is sent anywhere. "Save a backup" downloads a small file you can use to keep a copy, or to open your workbook on another device.</p>
+      <p class="toolbar-note" id="backup-status" role="status" aria-live="polite"></p>`;
+  return `
+    <div class="cover">
+      <p class="cover-eyebrow">Work That Works — Free Course</p>
+      <h1>Your Workbook</h1>
+      <p class="cover-sub">Everything you've written across the course, gathered in one place. Support that works with your brain, not against it.</p>
+      <p class="cover-date">Compiled ${esc(today)} · ${doneCount} of 7 lessons started</p>
+      ${toolbar}
+    </div>
+    ${allEmpty ? '' : `
+    <nav class="overview" aria-label="Workbook contents">
+      <p class="overview-title">In this workbook</p>
+      <div class="overview-grid">
+        ${LESSON_META.map(m => `
+          <a class="overview-row" href="#lesson${m.num}">
+            <span class="overview-num${started[m.num] ? '' : ' empty'}" aria-hidden="true">${m.num}</span>
+            <span class="overview-name">${esc(m.name)}</span>
+            <span class="overview-status ${started[m.num] ? 'done' : 'todo'}">${started[m.num] ? '✓ Answers saved' : 'Not started yet'}</span>
+          </a>`).join('')}
+      </div>
+    </nav>`}`;
+}
+
+function renderEmptyAll() {
+  return `
+    <div class="wb-empty-all">
+      <h2>Nothing saved in this browser yet</h2>
+      <p>Your workbook fills in automatically as you work through the lessons — and your answers are stored privately in the browser you use, never sent anywhere.</p>
+      <p>If you've already started the course but this page looks empty, you're probably in a different browser or on a different device. Three ways forward:</p>
+      <ul>
+        <li><strong>Open this page in the same browser</strong> you used for the lessons — your answers will be there.</li>
+        <li><strong>Restore a backup</strong> using the button above, if you saved one from your other device.</li>
+        <li><strong>New here?</strong> Begin with <a href="${LESSON_META[0].file}">Lesson 1: Your First Reflection →</a></li>
+      </ul>
+    </div>`;
+}
+
+/* ── Lesson 1 ─────────────────────────────────────────────────────────── */
+function renderL1() {
+  if (!started[1]) return collapsedSection(1);
+  const body = `
+    ${qa('1 · The situation', L1.q1)}
+    ${qa('2 · What I had to push through, hide, manage, or compensate for', L1.q2)}
+    ${qa('3 · The cost', L1.q3)}
+    ${qa('4 · What might have made it 10% more sustainable', L1.q4)}
+    <div class="anchor-box">
+      <p class="anchor-box-label">My anchor sentence</p>
+      <p class="anchor-box-text"><strong>"Work becomes unsustainable for me when…"</strong><br>
+        ${hasText(L1.sentence) ? esc(L1.sentence.trim()) : '<span class="empty">Not filled in yet</span>'}</p>
+    </div>`;
+  return sectionShell(1, 'Your First Reflection', LESSON_META[0].file, body,
+    'One situation that looked fine from the outside — but cost more than it should have.');
+}
+
+/* ── Lesson 2 ─────────────────────────────────────────────────────────── */
+function renderL2() {
+  if (!started[2]) return collapsedSection(2);
+  const body = `
+    <div class="qa-block">
+      <p class="qa-label">Step 1 · What I had to suppress or hide</p>
+      ${pills(L2.step1)}
+      <div class="qa-value${hasText(L2['step1-text']) ? '' : ' empty'}">${hasText(L2['step1-text']) ? esc(L2['step1-text'].trim()) : 'Nothing written yet'}</div>
+    </div>
+    <div class="qa-block">
+      <p class="qa-label">Step 2 · The cost</p>
+      ${pills(L2.step2)}
+      <div class="qa-value${hasText(L2['step2-text']) ? '' : ' empty'}">${hasText(L2['step2-text']) ? esc(L2['step2-text'].trim()) : 'Nothing written yet'}</div>
+    </div>
+    <div class="qa-block">
+      <p class="qa-label">Step 3 · The burnout cycle</p>
+      ${pills(L2.step3)}
+      <div class="qa-value${hasText(L2['step3-text']) ? '' : ' empty'}">${hasText(L2['step3-text']) ? esc(L2['step3-text'].trim()) : 'Nothing written yet'}</div>
+    </div>
+    <div class="anchor-box">
+      <p class="anchor-box-label">Naming the pattern</p>
+      <p class="anchor-box-text">
+        <strong>"Work becomes unsustainable for me when…"</strong>
+        ${L1 && hasText(L1.sentence) ? esc(L1.sentence.trim()) : ''}<br>
+        <strong>…and I can now see that this is partly about:</strong>
+        ${hasText(L2.sentence) ? esc(L2.sentence.trim()) : '<span class="empty">Not filled in yet</span>'}
+      </p>
+    </div>`;
+  return sectionShell(2, 'Naming the Pattern', LESSON_META[1].file, body,
+    'The Lesson 1 reflection, seen through a new lens — with language for what has been happening.');
+}
+
+/* ── Lesson 3 ─────────────────────────────────────────────────────────── */
+const L3_DOMAINS = [
+  { id: 1,  name: 'Energy and Capacity' },
+  { id: 2,  name: 'Sensory Environment' },
+  { id: 3,  name: 'Executive Function' },
+  { id: 4,  name: 'Communication and Processing' },
+  { id: 5,  name: 'Social and Emotional Load' },
+  { id: 6,  name: 'Predictability and Uncertainty' },
+  { id: 7,  name: 'Autonomy and Control' },
+  { id: 8,  name: 'Values and Motivation' },
+  { id: 9,  name: 'Recovery and Regulation' },
+  { id: 10, name: 'Support and Safety' },
+];
+const L3_RATINGS = {
+  works_well:    { label: 'Works well',    cls: 'rc-green', badge: 'badge-green' },
+  manageable:    { label: 'Manageable',    cls: 'rc-teal',  badge: 'badge-teal'  },
+  costly:        { label: 'Costly',        cls: 'rc-amber', badge: 'badge-amber' },
+  unsustainable: { label: 'Unsustainable', cls: 'rc-red',   badge: 'badge-red'   },
+  unknown:       { label: 'Unknown',       cls: 'rc-grey',  badge: 'badge-grey'  },
+};
+const L3_CONTEXTS = {
+  current: 'My current job', previous: 'A previous job',
+  ideal: 'An imagined ideal role', jobsearch: 'Job search criteria',
+};
+
+function renderL3Radar() {
+  const N = L3_DOMAINS.length, cx = 250, cy = 255, maxR = 155, labelR = 200;
+  const valMap = { works_well: 1, manageable: 2, costly: 3, unsustainable: 4 };
+  const getVal = id => {
+    const r = L3.ratings[id];
+    return (r && r !== 'unknown') ? valMap[r] : 1.5;
+  };
+  const ang = i => (i * 2 * Math.PI / N) - Math.PI / 2;
+  const pt = (i, v) => {
+    const r = (v / 4) * maxR, a = ang(i);
+    return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
+  };
+  const fmt = n => n.toFixed(1);
+
+  const ringMeta = [
+    { lvl: 1, color: '#97CBB0', dash: '5 3', opacity: '0.6',  fill: 'rgba(151,203,176,0.07)', width: '1.5' },
+    { lvl: 2, color: '#92C0D4', dash: '5 3', opacity: '0.55', fill: 'none',                   width: '1.5' },
+    { lvl: 3, color: '#E0BB80', dash: '5 3', opacity: '0.6',  fill: 'none',                   width: '1.5' },
+    { lvl: 4, color: '#222C93', dash: 'none', opacity: '0.7', fill: 'rgba(34,44,147,0.04)',   width: '2'   },
+  ];
+  const rings = ringMeta.map(({ lvl, color, dash, opacity, fill, width }) => {
+    const pts = Array.from({ length: N }, (_, i) => { const p = pt(i, lvl); return `${fmt(p.x)},${fmt(p.y)}`; }).join(' ');
+    return `<polygon points="${pts}" fill="${fill}" stroke="${color}" stroke-width="${width}" stroke-dasharray="${dash === 'none' ? '' : dash}" opacity="${opacity}"/>`;
+  }).join('');
+
+  const levelNames = ['Works well', 'Manageable', 'Costly', 'Unsustainable'];
+  const levelLabels = [1,2,3,4].map((lvl, ri) => {
+    const r = (lvl / 4) * maxR;
+    return `<text x="${cx + 7}" y="${fmt(cy - r + 3)}" font-size="9" font-family="Inter, sans-serif" fill="#8090A8">${levelNames[ri]}</text>`;
+  }).join('');
+
+  const axes = Array.from({ length: N }, (_, i) => {
+    const o = pt(i, 4);
+    return `<line x1="${cx}" y1="${cy}" x2="${fmt(o.x)}" y2="${fmt(o.y)}" stroke="#C6C1D2" stroke-width="1.5"/>`;
+  }).join('');
+
+  const dataPts = L3_DOMAINS.map((d, i) => { const p = pt(i, getVal(d.id)); return `${fmt(p.x)},${fmt(p.y)}`; }).join(' ');
+  const polygon = `<polygon points="${dataPts}" fill="rgba(84,0,255,0.12)" stroke="#5400FF" stroke-width="3" stroke-linejoin="round"/>`;
+
+  const dotColors = { works_well: '#1A6640', manageable: '#1A5C78', costly: '#8A5200', unsustainable: '#922820', unknown: '#6060A0' };
+  const dots = L3_DOMAINS.map((d, i) => {
+    const rating = L3.ratings[d.id] || 'unknown';
+    const p = pt(i, getVal(d.id));
+    return `<circle cx="${fmt(p.x)}" cy="${fmt(p.y)}" r="6" fill="${dotColors[rating] || dotColors.unknown}" stroke="white" stroke-width="2.5"/>`;
+  }).join('');
+
+  const numLabels = L3_DOMAINS.map((d, i) => {
+    const a = ang(i);
+    const lx = cx + labelR * Math.cos(a), ly = cy + labelR * Math.sin(a);
+    const anchor = lx < cx - 8 ? 'end' : lx > cx + 8 ? 'start' : 'middle';
+    return `<text x="${fmt(lx)}" y="${fmt(ly)}" text-anchor="${anchor}" dominant-baseline="middle" font-size="12.5" font-family="Inter, sans-serif" font-weight="700" fill="#1F3D37">${d.id}</text>`;
+  }).join('');
+
+  return `
+    <div class="chart-wrap" role="img" aria-label="Radar chart of the sustainability audit. Closer to the edge means higher risk.">
+      <div class="radar-svg-wrap">
+        <svg viewBox="0 0 500 510" xmlns="http://www.w3.org/2000/svg">
+          <title>Sustainability radar — larger shape means higher-risk areas</title>
+          ${rings}${axes}${levelLabels}${polygon}${dots}${numLabels}
+        </svg>
+      </div>
+    </div>`;
+}
+
+function renderL3() {
+  if (!started[3]) return collapsedSection(3);
+
+  const riskOrder = ['unsustainable', 'costly'];
+  const supportOrder = ['works_well', 'manageable'];
+  const risks = L3_DOMAINS
+    .filter(d => riskOrder.includes(L3.ratings[d.id]))
+    .sort((a,b) => riskOrder.indexOf(L3.ratings[a.id]) - riskOrder.indexOf(L3.ratings[b.id]))
+    .slice(0, 3);
+  const supports = L3_DOMAINS
+    .filter(d => supportOrder.includes(L3.ratings[d.id]))
+    .sort((a,b) => supportOrder.indexOf(L3.ratings[a.id]) - supportOrder.indexOf(L3.ratings[b.id]))
+    .slice(0, 3);
+
+  const body = `
+    ${L3.context ? `<span class="context-tag">${esc(L3_CONTEXTS[L3.context] || L3.context)}</span>` : ''}
+    ${renderL3Radar()}
+    <div class="hm-grid" role="list">
+      ${L3_DOMAINS.map(d => {
+        const r = L3_RATINGS[L3.ratings[d.id]] || null;
+        const cls = r ? r.cls : 'rc-grey';
+        const badge = r ? r.badge : 'badge-grey';
+        const label = r ? r.label : 'Not rated';
+        const note = (L3.notes && L3.notes[d.id]) ? L3.notes[d.id] : '';
+        return `
+        <div class="hm-row ${cls}" role="listitem">
+          <span class="hm-num">${d.id}</span>
+          <span class="hm-name">${esc(d.name)}</span>
+          <span class="hm-badge ${badge}">${label}</span>
+          ${hasText(note) ? `<span class="hm-notes-row">${esc(note.trim())}</span>` : ''}
+        </div>`;
+      }).join('')}
+    </div>
+    ${risks.length ? `
+    <div class="summary-box risk-box">
+      <p class="summary-box-title">Top risk areas</p>
+      <ul class="summary-list">${risks.map(d => `<li><span>${esc(d.name)}</span></li>`).join('')}</ul>
+    </div>` : ''}
+    ${supports.length ? `
+    <div class="summary-box support-box">
+      <p class="summary-box-title">Conditions that support you</p>
+      <ul class="summary-list">${supports.map(d => `<li><span>${esc(d.name)}</span></li>`).join('')}</ul>
+    </div>` : ''}
+    ${qa('What this tells me', L3.observation, 'No observation written yet')}`;
+  return sectionShell(3, 'The Sustainability Audit', LESSON_META[2].file, body,
+    'Ten areas of a working environment, rated for how sustainable they are right now.');
+}
+
+/* ── Lesson 4 ─────────────────────────────────────────────────────────── */
+function renderL4() {
+  if (!started[4]) return collapsedSection(4);
+
+  const sRows = (L4.strengths || []).filter(r => hasText(r.capacity) || hasText(r.worksWell) || hasText(r.becomesCostly));
+  const nRows = (L4.needs || []).filter(r => hasText(r.need) || hasText(r.friction) || hasText(r.reduce));
+
+  const body = `
+    ${sRows.length ? `
+    <p class="qa-label">My strengths and capacities</p>
+    <table class="wb-table">
+      <thead><tr><th>Strength / capacity</th><th>When it works well</th><th>When it becomes costly</th></tr></thead>
+      <tbody>
+        ${sRows.map(r => `<tr><td>${esc(r.capacity)}</td><td>${esc(r.worksWell)}</td><td>${esc(r.becomesCostly)}</td></tr>`).join('')}
+      </tbody>
+    </table>` : ''}
+    ${nRows.length ? `
+    <p class="qa-label">My needs and friction points</p>
+    <table class="wb-table">
+      <thead><tr><th>Need</th><th>Friction point</th><th>What would reduce the friction</th></tr></thead>
+      <tbody>
+        ${nRows.map(r => `<tr><td>${esc(r.need)}</td><td>${esc(r.friction)}</td><td>${esc(r.reduce)}</td></tr>`).join('')}
+      </tbody>
+    </table>` : ''}
+    <p class="qa-label">My top 3 strengths</p>
+    ${top3(L4.top3Strengths)}
+    <p class="qa-label">My top 3 needs</p>
+    ${top3(L4.top3Needs)}
+    <p class="qa-label">My top 3 friction points</p>
+    ${top3(L4.top3Frictions)}
+    ${qa('What this tells me', L4.reflection, 'No reflection written yet')}`;
+  return sectionShell(4, 'Strengths, Needs and Friction Points', LESSON_META[3].file, body,
+    'What your brain genuinely does well, what it needs, and where friction comes from the mismatch — not from you.');
+}
+
+/* ── Lesson 5 ─────────────────────────────────────────────────────────── */
+const L5_DISCLOSURE = {
+  full: 'Full disclosure', partial: 'Partial disclosure',
+  needs: 'Needs-based disclosure', not_yet: 'Not disclosing yet',
+};
+function renderL5() {
+  if (!started[5]) return collapsedSection(5);
+
+  const rows = (L5.rows || []).filter(r => hasText(r.need) || hasText(r.support) || hasText(r.wording));
+  const body = `
+    ${rows.length ? `
+    <p class="qa-label">Need → Support → Wording</p>
+    <table class="wb-table">
+      <thead><tr><th>My access need</th><th>Possible support or adjustment</th><th>Low-pressure wording</th></tr></thead>
+      <tbody>
+        ${rows.map(r => `<tr><td>${esc(r.need)}</td><td>${esc(r.support)}</td><td>${esc(r.wording)}</td></tr>`).join('')}
+      </tbody>
+    </table>` : ''}
+    <p class="qa-label">My starter list — the supports to begin with</p>
+    ${top3(L5.starterList)}
+    ${qa('Where I am with disclosure', L5_DISCLOSURE[L5.disclosure] || '', 'Not chosen yet')}
+    ${qa('What feels most important to focus on first', L5.reflection, 'Nothing written yet')}`;
+  return sectionShell(5, 'Adjustments, Flexibility and Support', LESSON_META[4].file, body,
+    'The supports and adjustments that would help — and low-pressure ways to ask for them.');
+}
+
+/* ── Lesson 6 ─────────────────────────────────────────────────────────── */
+const L6_Q1 = {
+  'employed': "I'm in paid work — employed or self-employed",
+  'returning-same': "I'm returning to the same job after sick leave, burnout, or time out",
+  'returning-search': "I'm returning to the job market after time out",
+  'seeking': "I'm not in work and I'm actively looking",
+  'unsure-work': "I'm in work but I'm not sure for how much longer",
+  'between': "I'm in between — studying, caring, or figuring it out",
+};
+const L6_Q2 = {
+  'basically-right': "Basically right — I just need more support or adjustments to do it sustainably",
+  'costly': "Managing, but it's costing more than I can sustain long-term",
+  'wrong-fit': "Wrong fit — the role or environment doesn't really suit me",
+  'burnout': "Burnt out or very close to it",
+  'not-in-work': "Not in work right now — so this is about what I'm looking for",
+};
+const L6_Q3 = {
+  'adjustments': "Support and adjustments at my current job",
+  'applications': "Job searching, applications, or interviews",
+  'work-type': "Working out what kind of work would actually suit me",
+  'burnout-rec': "Burnout, recovery, or protecting my energy",
+  'role-fit': "Role fit — whether the type of work is right for me",
+  'workplace-convs': "Workplace conversations — manager, HR, or colleagues",
+  'direction': "Career direction and longer-term fit",
+  'confidence': "Confidence and self-belief",
+  'access-needs': "Understanding my access needs and disability support",
+};
+const L6_Q4 = {
+  'good-capacity': "I have capacity to think, plan, and start making changes",
+  'stretched': "Stretched — I can manage one or two steps but not a lot more",
+  'depleted': "Quite depleted — I need to stabilise before I can think ahead",
+  'in-burnout': "In burnout — big decisions aren't possible right now",
+};
+const L6_PATHWAYS = {
+  giw: {
+    cls: 'giw', name: 'Getting Into Work',
+    desc: 'Looking for work that actually fits — building a search strategy based on sustainability, not just availability.',
+    covers: [
+      'Job search criteria built around sustainability, not just job title',
+      'Identifying environments and cultures that are likely to be a good fit',
+      'Application and interview barriers for neurodivergent people',
+      'Strengths-based positioning for CVs and interviews',
+      'Red flags to look for in job descriptions and workplace cultures',
+    ],
+  },
+  sw: {
+    cls: 'sw', name: 'Staying Well at Work',
+    desc: 'In work, or returning to it — building enough support and protection to make the work sustainable.',
+    covers: [
+      'Getting adjustments and support in place — formally or informally',
+      'Role redesign and workload boundaries',
+      'Manager, HR, and workplace conversations',
+      'Energy protection and reducing masking and overcommitment',
+      'Preventing burnout escalation',
+    ],
+  },
+  rd: {
+    cls: 'rd', name: 'Redesigning Your Career',
+    desc: 'Something more fundamental needs to change — understanding what a better-fit path might look like, without a dramatic leap.',
+    covers: [
+      'Recognising when the current path is structurally wrong, not just hard',
+      'Identifying transferable strengths that work across contexts',
+      'Values and nervous-system fit — what kind of work your brain thrives in',
+      'What to keep, reduce, change, or leave behind',
+      'Testing options before making a big change',
+    ],
+  },
+};
+
+// Mirror of the Lesson 6 scoring, used as a fallback if the saved result
+// isn't present (e.g. the user answered but never opened the result screen).
+function computeL6Result() {
+  if (L6 && L6.savedResult) return L6.savedResult;
+  if (!L6 || !L6.q1) return null;
+  const Q1W = {
+    'employed': {sw:2, rd:1}, 'returning-same': {sw:3}, 'returning-search': {giw:2, sw:1, rd:1},
+    'seeking': {giw:3}, 'unsure-work': {sw:1, rd:2}, 'between': {giw:1, rd:1},
+  };
+  const Q2W = {
+    'basically-right': {sw:3}, 'costly': {sw:2, rd:1}, 'wrong-fit': {sw:1, rd:2},
+    'burnout': {sw:3}, 'not-in-work': {giw:2, rd:1},
+  };
+  const Q3W = {
+    'adjustments': {sw:2}, 'applications': {giw:2}, 'work-type': {giw:2, rd:1},
+    'burnout-rec': {sw:2}, 'role-fit': {rd:2}, 'workplace-convs': {sw:2},
+    'direction': {rd:2}, 'confidence': {}, 'access-needs': {giw:1, sw:1},
+  };
+  const Q4W = { 'good-capacity': {giw:1, rd:1}, 'stretched': {sw:1}, 'depleted': {sw:3}, 'in-burnout': {sw:4} };
+  const scores = { giw: 0, sw: 0, rd: 0 };
+  const addW = w => { if (!w) return; if (w.giw) scores.giw += w.giw; if (w.sw) scores.sw += w.sw; if (w.rd) scores.rd += w.rd; };
+  addW(Q1W[L6.q1]); addW(Q2W[L6.q2]);
+  (L6.q3 || []).forEach(v => addW(Q3W[v]));
+  addW(Q4W[L6.q4]);
+
+  const stabiliseFirst = L6.q4 === 'in-burnout' || (L6.q4 === 'depleted' && L6.q2 === 'burnout');
+  let primary, secondary = null;
+  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  if (stabiliseFirst) {
+    primary = 'stabilise';
+  } else {
+    const allEqual = sorted[0][1] > 0 && sorted[0][1] === sorted[1][1] && sorted[1][1] === sorted[2][1];
+    if (allEqual) { primary = 'unclear'; }
+    else if (sorted[0][1] === sorted[1][1]) {
+      const pair = [sorted[0][0], sorted[1][0]].sort().join('-');
+      if (pair === 'giw-rd') {
+        const notInWork = ['seeking', 'between', 'returning-search'].includes(L6.q1);
+        primary = notInWork ? 'giw' : 'rd'; secondary = notInWork ? 'rd' : 'giw';
+      } else if (pair === 'rd-sw') {
+        const swFavour = ['burnout', 'costly'].includes(L6.q2) || L6.q4 === 'depleted';
+        primary = swFavour ? 'sw' : 'rd'; secondary = swFavour ? 'rd' : 'sw';
+      } else { primary = 'sw'; secondary = 'giw'; }
+    } else {
+      primary = sorted[0][0]; secondary = sorted[1][0];
+    }
+    if (secondary) {
+      const p = scores[primary] || 0, s = scores[secondary] || 0;
+      if (s < 2 || s < p * 0.3) secondary = null;
+    }
+  }
+  return { primary, secondary, stabiliseFirst };
+}
+
+function renderL6PathwayBox(id, label) {
+  const pw = L6_PATHWAYS[id];
+  if (!pw) return '';
+  return `
+    <div class="pathway-box ${pw.cls}">
+      <p class="pathway-label">${esc(label)}</p>
+      <p class="pathway-name">${esc(pw.name)}</p>
+      <p class="pathway-desc">${esc(pw.desc)}</p>
+      <ul class="covers-list">${pw.covers.map(c => `<li>${esc(c)}</li>`).join('')}</ul>
+    </div>`;
+}
+
+function renderL6() {
+  if (!started[6]) return collapsedSection(6);
+
+  const result = computeL6Result();
+  let resultHtml = '';
+  if (result) {
+    if (result.stabiliseFirst || result.primary === 'stabilise') {
+      resultHtml = `
+        <div class="pathway-box stabilise">
+          <p class="pathway-label">Suggested starting point</p>
+          <p class="pathway-name">Stabilise First</p>
+          <p class="pathway-desc">Capacity is very low right now — so the first step is reducing pressure, protecting recovery time, and getting support in place, before any bigger career decisions.</p>
+        </div>`;
+    } else if (result.primary === 'unclear') {
+      resultHtml = `
+        <div class="pathway-box unclear">
+          <p class="pathway-label">Result</p>
+          <p class="pathway-name" style="color:var(--purple-mid)">No clear pathway yet</p>
+          <p class="pathway-desc">The answers pointed in several directions equally — often a sign of a transition point. Worth revisiting once things settle.</p>
+        </div>`;
+    } else {
+      resultHtml = renderL6PathwayBox(result.primary, 'Suggested starting pathway');
+      if (result.secondary) resultHtml += renderL6PathwayBox(result.secondary, 'Also relevant');
+    }
+  }
+
+  const body = `
+    ${qa('Where I am right now', L6_Q1[L6.q1] || '', 'Not answered yet')}
+    ${qa('How it feels', L6_Q2[L6.q2] || '', 'Not answered yet')}
+    <div class="qa-block">
+      <p class="qa-label">The main things to work on</p>
+      ${(L6.q3 || []).length ? pills((L6.q3 || []).map(v => L6_Q3[v] || v)) : '<div class="qa-value empty">Not answered yet</div>'}
+    </div>
+    ${qa('My capacity right now', L6_Q4[L6.q4] || '', 'Not answered yet')}
+    <hr class="wb-divider">
+    ${resultHtml}
+    ${qa('My smallest useful experiment', L6.experiment, 'Nothing written yet')}`;
+  return sectionShell(6, 'Choose Your Pathway', LESSON_META[5].file, body,
+    'Four questions, one suggested starting point — a useful place to focus first, not a fixed label.');
+}
+
+/* ── Lesson 7 ─────────────────────────────────────────────────────────── */
+const L7_PATHWAYS = {
+  giw: 'Getting Into Work', sw: 'Staying Well at Work', rd: 'Redesigning Your Career',
+  stabilise: 'Stabilise First', unsure: 'Still figuring out',
+};
+function renderL7() {
+  if (!started[7]) return collapsedSection(7);
+
+  const mapRow = (title, value) => `
+    <div class="map-section">
+      <p class="map-section-title">${esc(title)}</p>
+      <p class="map-value${hasText(value) ? '' : ' empty'}">${hasText(value) ? esc(value.trim()) : 'Not filled in yet'}</p>
+    </div>`;
+
+  const body = `
+    <p class="qa-label" style="margin-bottom:10px">My Work That Works Map</p>
+    ${mapRow('My top 3 sustainable conditions', L7.conditions)}
+    ${mapRow('My top 3 friction points', L7.frictionPts)}
+    ${mapRow('My top 3 access needs', L7.accessNeeds)}
+    ${mapRow('My pathway', L7_PATHWAYS[L7.pathway] || '')}
+    ${mapRow('My 7-day next step', L7.nextStep)}
+    <hr class="wb-divider">
+    <p class="qa-label" style="margin-bottom:10px">The detail behind my next step</p>
+    ${qa('My biggest sustainability issue right now', L7.biggestIssue)}
+    ${qa('This step is small enough because…', L7.whySmall)}
+    ${qa('The support I need', L7.support)}
+    ${qa('The likely barrier', L7.barrier)}
+    ${qa('My backup plan if the barrier appears', L7.backup)}
+    ${qa('I will know this helped if…', L7.willKnow)}`;
+  return sectionShell(7, 'Your 7-Day Next Step', LESSON_META[6].file, body,
+    'One small, specific step for this week — and the one-page map of everything the course surfaced.');
+}
+
+/* ── Backup & restore ─────────────────────────────────────────────────── */
+function downloadBackup() {
+  const data = {};
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.indexOf('ndw_') === 0) data[k] = localStorage.getItem(k);
+  }
+  const payload = { format: 'ndw-workbook-backup', version: 1, exported: new Date().toISOString(), data };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  const stamp = new Date().toISOString().slice(0, 10);
+  a.href = URL.createObjectURL(blob);
+  a.download = `work-that-works-backup-${stamp}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+  const status = document.getElementById('backup-status');
+  if (status) status.textContent = '✓ Backup saved to your downloads. Keep it somewhere safe — you can restore it on any device.';
+}
+
+function restoreBackup(file) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    let count = 0;
+    try {
+      const parsed = JSON.parse(reader.result);
+      const data = (parsed && parsed.data && typeof parsed.data === 'object') ? parsed.data : parsed;
+      if (data && typeof data === 'object') {
+        Object.keys(data).forEach(k => {
+          if (k.indexOf('ndw_') !== 0) return;
+          const v = data[k];
+          localStorage.setItem(k, typeof v === 'string' ? v : JSON.stringify(v));
+          count++;
+        });
+      }
+    } catch (e) { /* falls through to the count check */ }
+    if (count) {
+      window.location.reload();
+    } else {
+      alert("That file doesn't look like a Work That Works backup. Look for a file named work-that-works-backup-….json and try again.");
+    }
+  };
+  reader.readAsText(file);
+}
+
+/* ── Render ───────────────────────────────────────────────────────────── */
+function render() {
+  const lessons = allEmpty
+    ? renderEmptyAll()
+    : `${renderL1()}${renderL2()}${renderL3()}${renderL4()}${renderL5()}${renderL6()}${renderL7()}`;
+  document.getElementById('app').innerHTML = `
+    ${renderCover()}
+    ${lessons}
+    <p class="wb-footer">This workbook is yours — it grows as you work through the course, and you can come back and download it again any time. 💜</p>
+  `;
+  const btnPdf = document.getElementById('btn-pdf');
+  if (btnPdf) btnPdf.addEventListener('click', () => window.print());
+  const btnRefresh = document.getElementById('btn-refresh');
+  if (btnRefresh) btnRefresh.addEventListener('click', () => window.location.reload());
+  const btnBackup = document.getElementById('btn-backup');
+  if (btnBackup) btnBackup.addEventListener('click', downloadBackup);
+  const btnRestore = document.getElementById('btn-restore');
+  if (btnRestore) {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json,application/json';
+    input.style.display = 'none';
+    input.addEventListener('change', () => { if (input.files && input.files[0]) restoreBackup(input.files[0]); });
+    document.body.appendChild(input);
+    btnRestore.addEventListener('click', () => input.click());
+  }
+}
+
+render();
+</script>
+</body>
+</html>

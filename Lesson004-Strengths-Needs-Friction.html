@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 4: Strengths, Needs and Friction Points — Neurodiversity Works</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --purple-deep:  #5400FF;
+      --purple-dark:  #222C93;
+      --purple-pale:  #EDE8FF;
+      --green:        #1A6640;
+      --green-pale:   #EAF5EE;
+      --teal:         #1A5C78;
+      --teal-pale:    #E8F2F8;
+      --amber:        #8A5200;
+      --amber-pale:   #FFF4E0;
+      --red:          #922820;
+      --red-pale:     #FFF0EE;
+      --bg:           #FAF8F4;
+      --surface:      #FFFFFF;
+      --text-dark:    #1A1A2E;
+      --text-muted:   #6060A0;
+      --border:       #E8E4DC;
+      --border-focus: #5400FF;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text-dark);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    a { color: var(--purple-deep); }
+    .skip-link {
+      position: absolute; top: -40px; left: 16px;
+      background: var(--purple-deep); color: #fff;
+      padding: 8px 16px; border-radius: 4px; font-size: 14px;
+      z-index: 9999; text-decoration: none;
+      transition: top 0.2s;
+    }
+    .skip-link:focus { top: 8px; }
+
+    /* ── Layout ── */
+    #main { max-width: 740px; margin: 0 auto; padding: 32px 20px 64px; }
+
+    /* ── Progress ── */
+    .progress-wrap { margin-bottom: 28px; }
+    .progress-meta {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 8px;
+    }
+    .progress-label { font-size: 13px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.04em; text-transform: uppercase; }
+    .progress-pct   { font-size: 13px; font-weight: 700; color: var(--purple-deep); }
+    .progress-track { height: 5px; background: var(--border); border-radius: 99px; overflow: hidden; }
+    .progress-fill  { height: 100%; background: var(--purple-deep); border-radius: 99px; transition: width 0.4s ease; }
+
+    /* ── Lesson header ── */
+    .lesson-eyebrow {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--purple-deep); margin-bottom: 8px;
+    }
+    .lesson-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(26px, 5vw, 36px);
+      font-weight: 700; line-height: 1.2;
+      color: var(--text-dark); margin-bottom: 20px;
+    }
+
+    /* ── Teaching content ── */
+    .lesson-body {
+      font-size: 17px; color: var(--text-dark);
+      line-height: 1.75; margin-bottom: 18px;
+    }
+    .callout {
+      background: var(--purple-pale); border-left: 4px solid var(--purple-deep);
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px; margin: 20px 0;
+      font-size: 16px; color: var(--purple-dark);
+      font-weight: 600; line-height: 1.55;
+    }
+    .callout.green  { background: var(--green-pale);  border-color: var(--green);  color: var(--green); }
+    .callout.amber  { background: var(--amber-pale);  border-color: var(--amber);  color: var(--amber); }
+    .callout.attuned {
+      background: var(--purple-pale); border-color: var(--purple-dark);
+      color: var(--purple-dark); font-style: italic;
+    }
+    .callout.attuned::before {
+      content: 'From a coaching perspective: ';
+      font-style: normal; font-weight: 700; display: block; margin-bottom: 4px;
+      font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .section-heading {
+      font-size: 18px; font-weight: 800; color: var(--text-dark);
+      margin: 30px 0 12px; letter-spacing: -0.01em;
+    }
+    .strength-list {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin: 14px 0;
+    }
+    .strength-chip {
+      background: var(--green-pale); color: var(--green);
+      border: 1.5px solid #97CBB0;
+      border-radius: 20px; padding: 5px 13px;
+      font-size: 14px; font-weight: 600;
+    }
+
+    /* ── Worksheet tables ── */
+    .worksheet-section { margin-top: 8px; }
+    .worksheet-desc {
+      font-size: 15px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6;
+    }
+    .ws-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+    .ws-table thead th {
+      background: var(--text-dark); color: #fff;
+      font-size: 13px; font-weight: 700; letter-spacing: 0.04em;
+      padding: 11px 14px; text-align: left; border: none;
+    }
+    .ws-table thead th:first-child { border-radius: 8px 0 0 0; }
+    .ws-table thead th:last-child  { border-radius: 0 8px 0 0; width: 36px; }
+    .ws-table tbody tr { border-bottom: 1px solid var(--border); }
+    .ws-table tbody tr:last-child { border-bottom: none; }
+    .ws-table tbody td {
+      padding: 6px 8px; vertical-align: top;
+      background: var(--surface);
+    }
+    .ws-table tbody td:last-child {
+      width: 36px; text-align: center; vertical-align: middle;
+    }
+    .ws-table textarea {
+      width: 100%; border: none; outline: none; resize: none;
+      font-family: 'Inter', sans-serif; font-size: 14px;
+      color: var(--text-dark); background: transparent;
+      line-height: 1.5; padding: 6px 6px;
+      min-height: 56px; overflow: hidden;
+    }
+    .ws-table textarea:focus { background: var(--purple-pale); border-radius: 4px; }
+    .ws-table textarea::placeholder { color: #B0B0C8; font-style: italic; }
+    .ws-table tbody tr:hover td { background: #FAFAFE; }
+    .row-del {
+      background: none; border: none; cursor: pointer;
+      color: #C0B8D8; font-size: 18px; line-height: 1;
+      border-radius: 4px; padding: 4px 6px;
+      transition: color 0.15s, background 0.15s;
+    }
+    .row-del:hover { color: var(--red); background: var(--red-pale); }
+    .add-row-btn {
+      background: none; border: 1.5px dashed var(--border);
+      color: var(--text-muted); border-radius: 8px;
+      padding: 10px 20px; font-size: 14px; font-weight: 600;
+      cursor: pointer; width: 100%; margin-top: 8px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .add-row-btn:hover { border-color: var(--purple-deep); color: var(--purple-deep); }
+
+    /* ── Summary / Top 3 ── */
+    .top3-group { margin-bottom: 28px; }
+    .top3-label {
+      font-size: 15px; font-weight: 700; color: var(--text-dark);
+      margin-bottom: 10px;
+    }
+    .top3-inputs { display: flex; flex-direction: column; gap: 8px; }
+    .top3-input-wrap { display: flex; align-items: center; gap: 10px; }
+    .top3-num {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--purple-pale); color: var(--purple-deep);
+      font-size: 13px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .top3-num.green { background: var(--green-pale); color: var(--green); }
+    .top3-num.amber { background: var(--amber-pale); color: var(--amber); }
+    .top3-field {
+      flex: 1; border: 1.5px solid var(--border); border-radius: 8px;
+      padding: 10px 14px; font-family: 'Inter', sans-serif;
+      font-size: 14px; color: var(--text-dark); background: var(--surface);
+      outline: none; transition: border-color 0.2s;
+    }
+    .top3-field:focus { border-color: var(--border-focus); }
+
+    /* ── Pull-through chips (your own answers, tap to add) ── */
+    .pull-chips-label {
+      font-size: 12px; font-weight: 600; color: var(--text-muted);
+      margin: 8px 0 6px;
+    }
+    .pull-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+    .pull-chip {
+      font-size: 13px; background: var(--purple-pale); color: var(--purple-dark);
+      border: 1.5px solid transparent; border-radius: 99px;
+      padding: 5px 13px; cursor: pointer; font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.12s, background 0.12s;
+      max-width: 100%; text-align: left;
+    }
+    .pull-chip:hover { border-color: var(--purple-deep); }
+    .pull-chip:focus-visible { outline: 2px solid var(--border-focus); outline-offset: 2px; }
+
+    /* ── Reflection ── */
+    .obs-label  { font-size: 15px; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; }
+    .obs-hint   { font-size: 14px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.5; }
+    .obs-area {
+      width: 100%; border: 1.5px solid var(--border); border-radius: 10px;
+      padding: 14px; font-family: 'Inter', sans-serif;
+      font-size: 15px; color: var(--text-dark); background: var(--surface);
+      outline: none; resize: none; line-height: 1.65;
+      transition: border-color 0.2s;
+    }
+    .obs-area:focus { border-color: var(--border-focus); }
+
+    /* ── Community prompt ── */
+    .community-section { margin-top: 32px; }
+    .community-label {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.07em;
+      text-transform: uppercase; color: var(--purple-deep); margin-bottom: 8px;
+    }
+    .community-prompt {
+      background: var(--purple-pale); border-radius: 12px;
+      padding: 20px 24px; font-size: 16px; color: var(--purple-dark);
+      font-style: italic; line-height: 1.65; margin-bottom: 10px;
+    }
+
+    /* ── Closing ── */
+    .closing-line {
+      margin-top: 28px; font-size: 18px; font-weight: 600;
+      color: var(--text-dark); line-height: 1.6; text-align: center;
+    }
+
+    /* ── Navigation ── */
+    .nav-buttons {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 12px; margin-top: 32px;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 13px 26px; border-radius: 99px;
+      font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700;
+      cursor: pointer; border: none; transition: all 0.18s;
+      text-decoration: none; line-height: 1;
+    }
+    .btn-primary {
+      background: var(--purple-deep); color: #fff;
+    }
+    .btn-primary:hover { background: var(--purple-dark); transform: translateY(-1px); }
+    .btn-ghost {
+      background: transparent; color: var(--text-dark);
+      border: 1.5px solid var(--border);
+    }
+    .btn-ghost:hover { border-color: var(--purple-deep); color: var(--purple-deep); }
+    .btn-sm { padding: 9px 18px; font-size: 13px; }
+
+    /* ── Save badge ── */
+    .save-badge {
+      font-size: 12px; color: var(--text-muted); text-align: center;
+      margin-top: 12px;
+    }
+
+    /* ── Divider ── */
+    hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+    /* ── Print ── */
+    @media print {
+      @page { margin: 16mm 14mm; }
+      body { background: white; }
+      .nav-buttons, .save-badge, .add-row-btn, .row-del, .progress-wrap { display: none !important; }
+      #main { padding: 0; max-width: 100%; }
+      .ws-table textarea { border: none; min-height: 40px; }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .ws-table { font-size: 13px; }
+      .ws-table thead th { padding: 9px 10px; font-size: 12px; }
+      .ws-table textarea { font-size: 13px; min-height: 48px; }
+      .lesson-title { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<div style="max-width:740px;margin:0 auto;padding:16px 20px 0;display:flex;justify-content:flex-end;">
+  <a href="workbook.html" style="font-size:13px;font-weight:600;color:var(--purple-deep);text-decoration:underline;text-underline-offset:3px;white-space:nowrap;">📖 My workbook</a>
+</div>
+<main id="main">
+  <div id="app"></div>
+</main>
+
+<script>
+/* ── Constants ──────────────────────────────────────────────────────────── */
+const STORAGE_KEY = 'ndw_lesson4_v1';
+const SCREENS = ['strengths', 'needs', 'summary'];
+const SCREEN_LABELS = {
+  strengths: 'Strengths Worksheet',
+  needs:     'Needs & Friction',
+  summary:   'Your Summary',
+};
+
+const STRENGTH_PLACEHOLDERS = [
+  { capacity: 'e.g. Deep focus',        worksWell: 'e.g. Complex research, writing, analysis', becomesCostly: 'e.g. Impossible if constantly interrupted' },
+  { capacity: 'e.g. Empathy',           worksWell: 'e.g. Client work, advocacy, support roles', becomesCostly: 'e.g. Burnout if there are no boundaries' },
+  { capacity: 'e.g. Detail orientation',worksWell: 'e.g. Quality control, spotting errors',    becomesCostly: 'e.g. Paralysis if perfection is expected' },
+];
+const NEED_PLACEHOLDERS = [
+  { need: 'e.g. Written clarity',    friction: 'e.g. Verbal-only instructions',    reduce: 'e.g. Follow-up email or checklist' },
+  { need: 'e.g. Predictability',     friction: 'e.g. Last-minute meetings',        reduce: 'e.g. Agenda shared in advance' },
+  { need: 'e.g. Low sensory input',  friction: 'e.g. Open-plan office',            reduce: 'e.g. Remote work or quiet room access' },
+];
+
+/* ── State ──────────────────────────────────────────────────────────────── */
+function defaultState() {
+  return {
+    screen: 'strengths',
+    strengths: [
+      { capacity: '', worksWell: '', becomesCostly: '' },
+      { capacity: '', worksWell: '', becomesCostly: '' },
+      { capacity: '', worksWell: '', becomesCostly: '' },
+    ],
+    needs: [
+      { need: '', friction: '', reduce: '' },
+      { need: '', friction: '', reduce: '' },
+      { need: '', friction: '', reduce: '' },
+    ],
+    top3Strengths: ['', '', ''],
+    top3Needs:     ['', '', ''],
+    top3Frictions: ['', '', ''],
+    reflection: '',
+  };
+}
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return Object.assign(defaultState(), JSON.parse(raw));
+  } catch (e) {}
+  return defaultState();
+}
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+
+let state = loadState();
+
+/* ── Navigation ─────────────────────────────────────────────────────────── */
+function goTo(screen) {
+  // Snapshot textarea values before navigating away
+  captureTableValues();
+  state.screen = screen;
+  saveState();
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function captureTableValues() {
+  // Strengths table
+  document.querySelectorAll('[data-srow]').forEach(ta => {
+    const r = parseInt(ta.dataset.srow);
+    const f = ta.dataset.sfield;
+    if (state.strengths[r]) state.strengths[r][f] = ta.value;
+  });
+  // Needs table
+  document.querySelectorAll('[data-nrow]').forEach(ta => {
+    const r = parseInt(ta.dataset.nrow);
+    const f = ta.dataset.nfield;
+    if (state.needs[r]) state.needs[r][f] = ta.value;
+  });
+  // Top 3
+  ['s','n','f'].forEach(type => {
+    document.querySelectorAll(`[data-top3="${type}"]`).forEach((inp, i) => {
+      if (type === 's') state.top3Strengths[i] = inp.value;
+      if (type === 'n') state.top3Needs[i] = inp.value;
+      if (type === 'f') state.top3Frictions[i] = inp.value;
+    });
+  });
+  const obsEl = document.getElementById('reflection');
+  if (obsEl) state.reflection = obsEl.value;
+  saveState();
+}
+
+/* ── Progress ────────────────────────────────────────────────────────────── */
+function renderProgress(screenId) {
+  const idx = SCREENS.indexOf(screenId);
+  const pct = Math.round(((idx + 1) / SCREENS.length) * 100);
+  return `
+    <div class="progress-wrap" role="progressbar" aria-valuenow="${idx+1}" aria-valuemin="1" aria-valuemax="${SCREENS.length}">
+      <div class="progress-meta">
+        <span class="progress-label">${idx+1} of ${SCREENS.length} — ${SCREEN_LABELS[screenId]}</span>
+        <span class="progress-pct">${pct}%</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+    </div>`;
+}
+
+/* ── Render: Intro ───────────────────────────────────────────────────────── */
+function renderIntro() {
+  return `
+    ${renderProgress('intro')}
+    <p class="lesson-eyebrow">Lesson 4</p>
+    <h1 class="lesson-title">Strengths, Needs and Friction Points</h1>
+
+    <p class="lesson-body">Most of the difficulty neurodivergent people experience at work isn't a personal failing. It's the result of a specific brain encountering a specific environment — and the two not matching well.</p>
+    <p class="lesson-body">This lesson is about getting clearer on what you're actually working with: what's genuinely a strength, what's a real need, and where friction is being created by the mismatch — not by you.</p>
+
+    <hr>
+
+    <h2 class="section-heading">Strengths aren't just "things employers like"</h2>
+    <p class="lesson-body">When people talk about neurodivergent strengths, they often default to a short list of workplace-acceptable traits. But strengths can include anything your brain does well — including things that don't look impressive on a CV.</p>
+    <div class="strength-list" aria-label="Examples of neurodivergent strengths">
+      ${[
+        'Pattern recognition','Persistence','Justice sensitivity','Depth of focus',
+        'Creativity','Honesty','System-spotting','Crisis problem-solving',
+        'Emotional sensitivity','Practical workarounds','Lateral thinking',
+        'Hyperfocus','Detail orientation','Long-term memory','Loyalty',
+      ].map(s => `<span class="strength-chip">${s}</span>`).join('')}
+    </div>
+    <p class="lesson-body">Some of these may not feel like strengths right now. That's worth noting, not dismissing.</p>
+
+    <hr>
+
+    <h2 class="section-heading">Coping strategies aren't the same as sustainable strengths</h2>
+    <p class="lesson-body">This is an important distinction. You may be praised for something that's actually costing you significantly — reliability that comes from chronic anxiety, attention to detail that's really hypervigilance, patience that's masking.</p>
+    <div class="callout amber">When a strategy looks like a strength to others but feels like damage to you, that's worth examining carefully. Sustainable strengths don't leave you depleted.</div>
+    <p class="lesson-body">The worksheet in the next section asks you to identify not just <em>when</em> something works well — but also when it becomes costly. Both answers matter.</p>
+
+    <hr>
+
+    <h2 class="section-heading">Survival is success</h2>
+    <div class="callout attuned">In solution-focused coaching, survival counts as success. The strategies that got you here — even the ones you dismiss as inadequate — contain real evidence of your resourcefulness, adaptability, and capability.</div>
+    <p class="lesson-body">Look at what you've managed to do. The systems you built, the workarounds you invented, the things you figured out without any support or manual. Those aren't evidence of failure. They're evidence of a brain doing its best in conditions that weren't built for it.</p>
+
+    <hr>
+
+    <h2 class="section-heading">Friction points usually come from a mismatch</h2>
+    <p class="lesson-body">When a real need meets an incompatible environment, friction is the result. That friction is information — it tells you something about what the environment is missing, not what's wrong with you.</p>
+    <p class="lesson-body">Someone who needs written instructions to process information accurately isn't incapable. They're in an environment that defaults to verbal communication and doesn't accommodate a legitimate need.</p>
+
+    <hr>
+
+    <h2 class="section-heading">Conditions of worth</h2>
+    <div class="callout attuned">Many people carry beliefs like "I must try harder," "I need to be perfect," or "showing my needs is weakness." These often develop over years as a response to environments that required them — they're protective strategies, not character flaws.</div>
+    <p class="lesson-body">Noticing these beliefs — and recognising them as learned, not fixed — is part of how this kind of work starts to shift. For now, just keep them in mind as you work through the next two worksheets.</p>
+
+    <div class="nav-buttons">
+      <span></span>
+      <button class="btn btn-primary" id="btn-next">Go to the worksheets <span aria-hidden="true">→</span></button>
+    </div>
+    <p class="save-badge">💾 Your responses save automatically as you go.</p>`;
+}
+
+/* ── Render: Strengths Worksheet ─────────────────────────────────────────── */
+function renderStrengthRow(row, i) {
+  const ph = STRENGTH_PLACEHOLDERS[i] || {};
+  return `
+    <tr>
+      <td><textarea data-srow="${i}" data-sfield="capacity"
+        placeholder="${ph.capacity || 'Strength or capacity'}"
+        aria-label="Strength or capacity, row ${i+1}">${escHtml(row.capacity)}</textarea></td>
+      <td><textarea data-srow="${i}" data-sfield="worksWell"
+        placeholder="${ph.worksWell || 'When does this work well for you?'}"
+        aria-label="When it works well, row ${i+1}">${escHtml(row.worksWell)}</textarea></td>
+      <td><textarea data-srow="${i}" data-sfield="becomesCostly"
+        placeholder="${ph.becomesCostly || 'When does it become draining or costly?'}"
+        aria-label="When it becomes costly, row ${i+1}">${escHtml(row.becomesCostly)}</textarea></td>
+      <td><button class="row-del" data-del-s="${i}" aria-label="Remove row ${i+1}" title="Remove this row">×</button></td>
+    </tr>`;
+}
+
+function renderStrengths() {
+  return `
+    ${renderProgress('strengths')}
+    <p class="lesson-eyebrow">Lesson 4 — Worksheet 1 of 2</p>
+    <h1 class="lesson-title">Your Strengths and Capacities</h1>
+
+    <div class="worksheet-section">
+      <p class="worksheet-desc">List strengths, capacities, or things you know your brain does well — including things you might dismiss or that you've been told "don't count." For each one, note when it genuinely supports you and when it becomes a cost.</p>
+      <p class="worksheet-desc" style="color: var(--amber); font-weight:600">There's no right number of rows. Start with what comes easily. You can always come back.</p>
+
+      <table class="ws-table" role="grid" aria-label="Strengths and capacities worksheet">
+        <thead>
+          <tr>
+            <th scope="col">Strength / Capacity</th>
+            <th scope="col">When it works well</th>
+            <th scope="col">When it becomes costly</th>
+            <th scope="col" aria-label="Remove row"></th>
+          </tr>
+        </thead>
+        <tbody id="strengths-tbody">
+          ${state.strengths.map((row, i) => renderStrengthRow(row, i)).join('')}
+        </tbody>
+      </table>
+      <button class="add-row-btn" id="btn-add-strength" aria-label="Add another strength row">+ Add another</button>
+    </div>
+
+    <div class="nav-buttons">
+      <span></span>
+      <button class="btn btn-primary" id="btn-next">Needs & Friction <span aria-hidden="true">→</span></button>
+    </div>
+    <p class="save-badge">💾 Saves automatically</p>`;
+}
+
+/* ── Render: Needs Worksheet ─────────────────────────────────────────────── */
+function renderNeedRow(row, i) {
+  const ph = NEED_PLACEHOLDERS[i] || {};
+  return `
+    <tr>
+      <td><textarea data-nrow="${i}" data-nfield="need"
+        placeholder="${ph.need || 'What do you need to work well?'}"
+        aria-label="Need, row ${i+1}">${escHtml(row.need)}</textarea></td>
+      <td><textarea data-nrow="${i}" data-nfield="friction"
+        placeholder="${ph.friction || 'What creates friction when this need isn\'t met?'}"
+        aria-label="Friction point, row ${i+1}">${escHtml(row.friction)}</textarea></td>
+      <td><textarea data-nrow="${i}" data-nfield="reduce"
+        placeholder="${ph.reduce || 'What would reduce or remove this friction?'}"
+        aria-label="What would reduce the friction, row ${i+1}">${escHtml(row.reduce)}</textarea></td>
+      <td><button class="row-del" data-del-n="${i}" aria-label="Remove row ${i+1}" title="Remove this row">×</button></td>
+    </tr>`;
+}
+
+function renderNeeds() {
+  return `
+    ${renderProgress('needs')}
+    <p class="lesson-eyebrow">Lesson 4 — Worksheet 2 of 2</p>
+    <h1 class="lesson-title">Needs and Friction Points</h1>
+
+    <div class="worksheet-section">
+      <p class="worksheet-desc">A friction point is what happens when a real need meets an incompatible environment. For each need you can identify, note what creates the friction — and what would help reduce it.</p>
+      <p class="worksheet-desc">Needs aren't demands. They're conditions that allow you to function well. You're allowed to know what they are.</p>
+
+      <table class="ws-table" role="grid" aria-label="Needs and friction points worksheet">
+        <thead>
+          <tr>
+            <th scope="col">Need</th>
+            <th scope="col">Friction point</th>
+            <th scope="col">What would reduce the friction?</th>
+            <th scope="col" aria-label="Remove row"></th>
+          </tr>
+        </thead>
+        <tbody id="needs-tbody">
+          ${state.needs.map((row, i) => renderNeedRow(row, i)).join('')}
+        </tbody>
+      </table>
+      <button class="add-row-btn" id="btn-add-need" aria-label="Add another need row">+ Add another</button>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="btn btn-ghost" id="btn-back">← Back</button>
+      <button class="btn btn-primary" id="btn-next">See my summary <span aria-hidden="true">→</span></button>
+    </div>
+    <p class="save-badge">💾 Saves automatically</p>`;
+}
+
+/* ── Render: Summary ─────────────────────────────────────────────────────── */
+function renderTop3Group(label, numClass, values, dataType, candidates) {
+  // Offer the user's own worksheet answers as tap-to-add chips,
+  // excluding any already picked into the top 3.
+  const picked = values.map(v => v.trim().toLowerCase()).filter(Boolean);
+  const chips = (candidates || []).filter(c => !picked.includes(c.trim().toLowerCase()));
+  const chipsHtml = chips.length ? `
+      <p class="pull-chips-label">From your worksheet — tap to add:</p>
+      <div class="pull-chips">
+        ${chips.map(c => `<button type="button" class="pull-chip" data-chip-type="${dataType}" data-chip-val="${escHtml(c)}">${escHtml(c)}</button>`).join('')}
+      </div>` : '';
+  return `
+    <div class="top3-group">
+      <p class="top3-label">${label}</p>
+      ${chipsHtml}
+      <div class="top3-inputs">
+        ${values.map((v, i) => `
+          <div class="top3-input-wrap">
+            <span class="top3-num ${numClass}" aria-hidden="true">${i+1}</span>
+            <input class="top3-field" type="text" data-top3="${dataType}"
+              value="${escHtml(v)}"
+              placeholder="Type, or tap one of your answers above"
+              aria-label="${label}, item ${i+1}">
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function renderSummary() {
+  const sCount = state.strengths.filter(r => r.capacity.trim()).length;
+  const nCount = state.needs.filter(r => r.need.trim()).length;
+
+  const sCand = state.strengths.map(r => r.capacity.trim()).filter(Boolean);
+  const nCand = state.needs.map(r => r.need.trim()).filter(Boolean);
+  const fCand = state.needs.map(r => r.friction.trim()).filter(Boolean);
+
+  return `
+    ${renderProgress('summary')}
+    <p class="lesson-eyebrow">Lesson 4 — Summary</p>
+    <h1 class="lesson-title">Your Summary</h1>
+
+    ${sCount > 0 || nCount > 0 ? `
+    <div class="callout green">
+      You identified ${sCount > 0 ? `<strong>${sCount} strength${sCount !== 1 ? 's' : ''}</strong>` : 'some strengths'}${nCount > 0 ? ` and <strong>${nCount} need${nCount !== 1 ? 's' : ''}</strong>` : ''}. That's the work done — identifying them accurately is the first step.
+    </div>` : ''}
+
+    <p class="lesson-body">Looking at everything you've noted, identify your three most significant in each category. There's no scoring system — just what feels most true right now.</p>
+
+    ${renderTop3Group('My top 3 strengths', 'green', state.top3Strengths, 's', sCand)}
+    ${renderTop3Group('My top 3 needs',     'amber', state.top3Needs,     'n', nCand)}
+    ${renderTop3Group('My top 3 friction points', '', state.top3Frictions, 'f', fCand)}
+
+    <hr>
+
+    <div class="observation-section" style="margin-top:8px">
+      <p class="obs-label">What does this tell you?</p>
+      <p class="obs-hint">Write one sentence — not a solution, just what you notice when you look at this.</p>
+      <textarea id="reflection" class="obs-area" rows="3"
+        placeholder="e.g. 'I hadn\'t realised how many of my &quot;weaknesses&quot; are actually unmet needs'">${escHtml(state.reflection)}</textarea>
+    </div>
+
+    <div class="community-section">
+      <p class="community-label">Community prompt</p>
+      <div class="community-prompt">"What is one thing you thought was a weakness that might actually be a need, a mismatch, or an unsupported strength?"</div>
+      <p style="font-size:15px;color:var(--text-muted)">Share as much or as little as you like in the Skool community.</p>
+    </div>
+
+    <p class="closing-line">You now know what you're working with. That matters. 💜</p>
+
+    <div class="nav-buttons" style="justify-content:center">
+      <a href="Lesson005-Adjustments-Flexibility-Support.html" class="btn btn-primary">Next: Adjustments, Flexibility &amp; Support →</a>
+    </div>
+    <div class="nav-buttons" style="justify-content:center;gap:12px;flex-wrap:wrap;margin-top:14px">
+      <button class="btn btn-ghost btn-sm" id="btn-back">← Back to needs</button>
+      <button class="btn btn-ghost btn-sm" id="btn-pdf">⬇ Save as PDF</button>
+      <a href="workbook.html" class="btn btn-ghost btn-sm">📖 View my full workbook</a>
+      <button class="btn btn-ghost btn-sm" id="btn-restart">Clear all &amp; start again</button>
+    </div>
+    <p class="save-badge">💾 Everything is saved automatically</p>`;
+}
+
+/* ── Main render ─────────────────────────────────────────────────────────── */
+function render() {
+  const app = document.getElementById('app');
+  switch (state.screen) {
+    case 'strengths': app.innerHTML = renderStrengths(); break;
+    case 'needs':     app.innerHTML = renderNeeds();     break;
+    case 'summary':   app.innerHTML = renderSummary();   break;
+    default:          app.innerHTML = renderStrengths();
+  }
+  attachListeners();
+  autoResizeAll();
+}
+
+/* ── Auto-resize textareas ───────────────────────────────────────────────── */
+function autoResize(ta) {
+  ta.style.height = 'auto';
+  ta.style.height = ta.scrollHeight + 'px';
+}
+function autoResizeAll() {
+  document.querySelectorAll('textarea').forEach(autoResize);
+}
+
+/* ── Listeners ───────────────────────────────────────────────────────────── */
+function attachListeners() {
+  const screen = state.screen;
+
+  /* Navigation */
+  const btnNext = document.getElementById('btn-next');
+  if (btnNext) {
+    btnNext.addEventListener('click', () => {
+      captureTableValues();
+      const idx = SCREENS.indexOf(screen);
+      if (idx < SCREENS.length - 1) goTo(SCREENS[idx + 1]);
+    });
+  }
+  const btnBack = document.getElementById('btn-back');
+  if (btnBack) {
+    btnBack.addEventListener('click', () => {
+      captureTableValues();
+      const idx = SCREENS.indexOf(screen);
+      if (idx > 0) goTo(SCREENS[idx - 1]);
+    });
+  }
+
+  /* Live-save textareas */
+  document.querySelectorAll('[data-srow]').forEach(ta => {
+    ta.addEventListener('input', () => {
+      autoResize(ta);
+      const r = parseInt(ta.dataset.srow);
+      const f = ta.dataset.sfield;
+      if (state.strengths[r]) { state.strengths[r][f] = ta.value; saveState(); }
+    });
+  });
+  document.querySelectorAll('[data-nrow]').forEach(ta => {
+    ta.addEventListener('input', () => {
+      autoResize(ta);
+      const r = parseInt(ta.dataset.nrow);
+      const f = ta.dataset.nfield;
+      if (state.needs[r]) { state.needs[r][f] = ta.value; saveState(); }
+    });
+  });
+
+  /* Top 3 inputs */
+  document.querySelectorAll('[data-top3]').forEach((inp, i) => {
+    inp.addEventListener('input', () => {
+      const type = inp.dataset.top3;
+      const idx = Array.from(document.querySelectorAll(`[data-top3="${type}"]`)).indexOf(inp);
+      if (type === 's') state.top3Strengths[idx] = inp.value;
+      if (type === 'n') state.top3Needs[idx]     = inp.value;
+      if (type === 'f') state.top3Frictions[idx] = inp.value;
+      saveState();
+    });
+  });
+
+  /* Reflection textarea */
+  const obsEl = document.getElementById('reflection');
+  if (obsEl) {
+    obsEl.addEventListener('input', () => {
+      autoResize(obsEl);
+      state.reflection = obsEl.value;
+      saveState();
+    });
+  }
+
+  /* Pull-through chips — fill the first empty top-3 slot */
+  document.querySelectorAll('.pull-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const type = chip.dataset.chipType;
+      const val  = chip.dataset.chipVal;
+      const arr  = type === 's' ? state.top3Strengths : type === 'n' ? state.top3Needs : state.top3Frictions;
+      const idx  = arr.findIndex(v => !v.trim());
+      if (idx === -1) return; // all three slots are full
+      captureTableValues();
+      arr[idx] = val;
+      saveState();
+      render();
+    });
+  });
+
+  /* Add row — strengths */
+  const btnAddS = document.getElementById('btn-add-strength');
+  if (btnAddS) {
+    btnAddS.addEventListener('click', () => {
+      captureTableValues();
+      state.strengths.push({ capacity: '', worksWell: '', becomesCostly: '' });
+      saveState();
+      const tbody = document.getElementById('strengths-tbody');
+      const i = state.strengths.length - 1;
+      tbody.insertAdjacentHTML('beforeend', renderStrengthRow(state.strengths[i], i));
+      // Attach listeners to new row
+      tbody.querySelectorAll(`[data-srow="${i}"]`).forEach(ta => {
+        ta.addEventListener('input', () => {
+          autoResize(ta);
+          state.strengths[i][ta.dataset.sfield] = ta.value;
+          saveState();
+        });
+      });
+      attachDelListeners();
+      const newTa = tbody.querySelector(`[data-srow="${i}"][data-sfield="capacity"]`);
+      if (newTa) newTa.focus();
+    });
+  }
+
+  /* Add row — needs */
+  const btnAddN = document.getElementById('btn-add-need');
+  if (btnAddN) {
+    btnAddN.addEventListener('click', () => {
+      captureTableValues();
+      state.needs.push({ need: '', friction: '', reduce: '' });
+      saveState();
+      const tbody = document.getElementById('needs-tbody');
+      const i = state.needs.length - 1;
+      tbody.insertAdjacentHTML('beforeend', renderNeedRow(state.needs[i], i));
+      tbody.querySelectorAll(`[data-nrow="${i}"]`).forEach(ta => {
+        ta.addEventListener('input', () => {
+          autoResize(ta);
+          state.needs[i][ta.dataset.nfield] = ta.value;
+          saveState();
+        });
+      });
+      attachDelListeners();
+      const newTa = tbody.querySelector(`[data-nrow="${i}"][data-nfield="need"]`);
+      if (newTa) newTa.focus();
+    });
+  }
+
+  attachDelListeners();
+
+  /* PDF */
+  const btnPdf = document.getElementById('btn-pdf');
+  if (btnPdf) btnPdf.addEventListener('click', () => { captureTableValues(); window.print(); });
+
+  /* Restart */
+  const btnRestart = document.getElementById('btn-restart');
+  if (btnRestart) {
+    btnRestart.addEventListener('click', () => {
+      if (confirm('This will clear all your responses. Are you sure?')) {
+        localStorage.removeItem(STORAGE_KEY);
+        state = defaultState();
+        render();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+  }
+}
+
+function attachDelListeners() {
+  /* Delete strength rows */
+  document.querySelectorAll('[data-del-s]').forEach(btn => {
+    btn.onclick = null;
+    btn.addEventListener('click', () => {
+      captureTableValues();
+      const i = parseInt(btn.dataset.delS);
+      if (state.strengths.length <= 1) return; // keep at least one row
+      state.strengths.splice(i, 1);
+      saveState();
+      // Re-render just the tbody
+      const tbody = document.getElementById('strengths-tbody');
+      tbody.innerHTML = state.strengths.map((row, idx) => renderStrengthRow(row, idx)).join('');
+      autoResizeAll();
+      attachListeners();
+    });
+  });
+  /* Delete need rows */
+  document.querySelectorAll('[data-del-n]').forEach(btn => {
+    btn.onclick = null;
+    btn.addEventListener('click', () => {
+      captureTableValues();
+      const i = parseInt(btn.dataset.delN);
+      if (state.needs.length <= 1) return;
+      state.needs.splice(i, 1);
+      saveState();
+      const tbody = document.getElementById('needs-tbody');
+      tbody.innerHTML = state.needs.map((row, idx) => renderNeedRow(row, idx)).join('');
+      autoResizeAll();
+      attachListeners();
+    });
+  });
+}
+
+/* ── Utility ─────────────────────────────────────────────────────────────── */
+function escHtml(str) {
+  return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ── Resume banner ───────────────────────────────────────────────────────── */
+function hasProgress() {
+  return state.strengths.some(r => r.capacity.trim()) ||
+         state.needs.some(r => r.need.trim()) ||
+         state.top3Strengths.some(s => s.trim());
+}
+
+/* ── Init ────────────────────────────────────────────────────────────────── */
+render();
+</script>
+</body>
+</html>

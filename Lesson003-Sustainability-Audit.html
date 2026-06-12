@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Sustainability Audit — Neurodiversity Works</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: light;
+    --purple-deep:    #5400FF;
+    --purple-mid:     #222C93;
+    --purple-soft:    #C6C1D2;
+    --purple-pale:    #EDE8F7;
+    --purple-whisper: #F4F1FB;
+    --text-dark:      #1F3D37;
+    --text-mid:       #1F3D37;
+    --text-muted:     #3D6164;
+    --placeholder:    #4D7275;
+    --bg:             #FAF8F4;
+    --border:         #C6C1D2;
+    --border-focus:   #5400FF;
+    --answer-bg:      #FFFFFF;
+    /* Rating colours — WCAG AA on white / pale bg */
+    --r-green:        #1A6640;
+    --r-green-bg:     #EAF5EE;
+    --r-green-border: #97CBB0;
+    --r-teal:         #1A5C78;
+    --r-teal-bg:      #E8F2F8;
+    --r-teal-border:  #92C0D4;
+    --r-amber:        #8A5200;
+    --r-amber-bg:     #FFF4E0;
+    --r-amber-border: #E0BB80;
+    --r-red:          #922820;
+    --r-red-bg:       #FFF0EE;
+    --r-red-border:   #D9928C;
+    --r-grey:         #3C3C4E;
+    --r-grey-bg:      #F0F0F5;
+    --r-grey-border:  #A8A8BC;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .skip-link {
+    position: absolute; top: -999px; left: 8px;
+    background: var(--purple-deep); color: #fff;
+    padding: 10px 16px; border-radius: 0 0 6px 6px;
+    font-family: inherit; font-size: 16px; font-weight: 600;
+    text-decoration: none; z-index: 999;
+  }
+  .skip-link:focus { top: 0; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text-dark);
+    line-height: 1.75;
+    min-height: 100vh;
+    font-size: 18px;
+  }
+
+  .page-wrap {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 28px 80px;
+  }
+
+  /* ── Brand header ── */
+  .brand-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 36px; padding-bottom: 20px;
+    border-bottom: 2px solid var(--purple-pale);
+  }
+  .brand-mark {
+    width: 40px; height: 40px;
+    background: var(--purple-deep);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .brand-mark svg { width: 22px; height: 22px; }
+  .brand-text { display: flex; flex-direction: column; }
+  .brand-name {
+    font-size: 13px; font-weight: 700;
+    color: var(--purple-deep);
+    letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.3;
+  }
+  .brand-sub { font-size: 13px; color: var(--text-muted); }
+  .lesson-badge {
+    margin-left: auto;
+    background: var(--purple-pale);
+    color: var(--purple-deep);
+    font-size: 13px; font-weight: 700;
+    padding: 6px 12px; border-radius: 20px;
+    white-space: nowrap; flex-shrink: 0;
+  }
+
+  /* ── Screen system ── */
+  .screen { display: none; animation: fadeIn 0.25s ease; }
+  .screen.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  /* ── Progress bar ── */
+  .progress-wrap {
+    margin-bottom: 32px;
+  }
+  .progress-meta {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 8px;
+  }
+  .progress-label {
+    font-size: 13px; font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .progress-pct { font-size: 13px; color: var(--text-muted); }
+  .progress-track {
+    height: 6px; background: var(--purple-pale);
+    border-radius: 99px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; background: var(--purple-deep);
+    border-radius: 99px;
+    transition: width 0.35s ease;
+  }
+
+  /* ── Domain heading ── */
+  .domain-eyebrow {
+    font-size: 13px; font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    margin-bottom: 6px;
+  }
+  .domain-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 28px; font-weight: 800;
+    color: var(--text-dark);
+    line-height: 1.2; margin-bottom: 14px;
+  }
+  .domain-desc {
+    font-size: 17px; color: var(--text-muted);
+    line-height: 1.75; margin-bottom: 20px;
+  }
+
+  /* ── Expandable considerations ── */
+  .considerations-toggle {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: none; border: none; cursor: pointer;
+    font-family: inherit; font-size: 15px; font-weight: 600;
+    color: var(--purple-mid); padding: 0;
+    margin-bottom: 8px;
+    text-decoration: underline; text-decoration-style: dotted;
+    text-underline-offset: 3px;
+  }
+  .considerations-toggle:focus-visible {
+    outline: 3px solid var(--border-focus); outline-offset: 3px; border-radius: 3px;
+  }
+  .toggle-arrow { transition: transform 0.2s ease; display: inline-block; }
+  .toggle-arrow.open { transform: rotate(90deg); }
+
+  .considerations-body {
+    display: none;
+    background: var(--purple-whisper);
+    border-left: 3px solid var(--purple-soft);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+  }
+  .considerations-body.open { display: block; }
+  .considerations-body ul {
+    list-style: none; display: flex; flex-direction: column; gap: 8px;
+  }
+  .considerations-body li {
+    font-size: 15px; color: var(--text-muted); line-height: 1.6;
+    padding-left: 20px; position: relative;
+  }
+  .considerations-body li::before {
+    content: '·'; position: absolute; left: 6px;
+    color: var(--purple-soft); font-size: 18px; line-height: 1.4;
+  }
+
+  /* ── Rating cards ── */
+  .rating-section { margin: 24px 0 28px; }
+  .rating-label {
+    font-size: 15px; font-weight: 700;
+    color: var(--text-dark); margin-bottom: 12px; display: block;
+  }
+  .rating-options {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .rating-card {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 16px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    background: white;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    min-height: 60px;
+  }
+  .rating-card input[type="radio"] {
+    position: absolute; opacity: 0; width: 0; height: 0;
+  }
+  .rating-card:focus-within {
+    outline: 3px solid var(--border-focus); outline-offset: 2px;
+  }
+  .rating-dot {
+    width: 18px; height: 18px; border-radius: 50%;
+    border: 2px solid currentColor; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s;
+  }
+  .rating-dot-inner {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: currentColor; opacity: 0; transition: opacity 0.15s;
+  }
+  .rating-card-text { display: flex; flex-direction: column; gap: 1px; }
+  .rating-name { font-size: 16px; font-weight: 700; line-height: 1.3; }
+  .rating-desc { font-size: 14px; line-height: 1.4; opacity: 0.85; }
+
+  /* Colour variants */
+  .rc-green  { color: var(--r-green); }
+  .rc-teal   { color: var(--r-teal); }
+  .rc-amber  { color: var(--r-amber); }
+  .rc-red    { color: var(--r-red); }
+  .rc-grey   { color: var(--r-grey); }
+
+  .rating-card.selected.rc-green  { border-color: var(--r-green-border);  background: var(--r-green-bg); }
+  .rating-card.selected.rc-teal   { border-color: var(--r-teal-border);   background: var(--r-teal-bg); }
+  .rating-card.selected.rc-amber  { border-color: var(--r-amber-border);  background: var(--r-amber-bg); }
+  .rating-card.selected.rc-red    { border-color: var(--r-red-border);    background: var(--r-red-bg); }
+  .rating-card.selected.rc-grey   { border-color: var(--r-grey-border);   background: var(--r-grey-bg); }
+  .rating-card.selected .rating-dot-inner { opacity: 1; }
+  .rating-card:hover:not(.selected) { border-color: var(--purple-soft); }
+
+  /* ── Notes textarea ── */
+  .notes-section { margin-bottom: 32px; }
+  .notes-label {
+    display: block; font-size: 15px; font-weight: 600;
+    color: var(--text-muted); margin-bottom: 8px;
+  }
+  textarea {
+    width: 100%; min-height: 90px;
+    padding: 12px 14px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    font-family: inherit; font-size: 16px; color: var(--text-dark);
+    background: var(--answer-bg); resize: vertical; line-height: 1.75;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    outline: none;
+  }
+  textarea::placeholder { color: var(--placeholder); }
+  textarea:focus {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(84,0,255,0.12);
+    outline: 3px solid var(--border-focus); outline-offset: 2px;
+  }
+
+  /* ── Navigation ── */
+  .nav-buttons {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 16px; margin-top: 8px;
+  }
+  .btn {
+    font-family: inherit; font-size: 16px; font-weight: 700;
+    padding: 14px 28px; border-radius: 10px; border: none;
+    cursor: pointer; transition: background 0.15s, transform 0.1s;
+    min-height: 52px; display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn:active { transform: scale(0.98); }
+  .btn:focus-visible { outline: 3px solid var(--border-focus); outline-offset: 3px; }
+
+  .btn-primary {
+    background: var(--purple-deep); color: white;
+  }
+  .btn-primary:hover { background: #4200CC; }
+
+  .btn-secondary {
+    background: var(--purple-pale); color: var(--purple-mid);
+  }
+  .btn-secondary:hover { background: #DDD8F0; }
+
+  .btn-ghost {
+    background: none; color: var(--text-muted);
+    border: 2px solid var(--border);
+  }
+  .btn-ghost:hover { border-color: var(--purple-soft); color: var(--text-dark); }
+
+  .btn-sm { font-size: 14px; padding: 10px 18px; min-height: 42px; }
+
+  /* ── Intro screen ── */
+  .intro-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 30px; font-weight: 800;
+    color: var(--text-dark); margin-bottom: 18px; line-height: 1.2;
+  }
+  .intro-body { font-size: 17px; color: var(--text-mid); line-height: 1.8; margin-bottom: 14px; }
+
+  .callout-block {
+    background: var(--purple-whisper);
+    border-left: 4px solid var(--purple-soft);
+    border-radius: 0 10px 10px 0;
+    padding: 16px 20px;
+    font-size: 16px; font-style: italic;
+    color: var(--text-muted); line-height: 1.7;
+    margin: 20px 0;
+  }
+
+  .context-question {
+    font-size: 17px; font-weight: 700; color: var(--text-dark);
+    margin: 32px 0 14px;
+  }
+  .context-options {
+    display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px;
+  }
+  .context-card {
+    display: flex; align-items: center; gap: 14px;
+    padding: 16px 18px;
+    border: 2px solid var(--border); border-radius: 10px;
+    background: white; cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    min-height: 60px;
+  }
+  .context-card input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+  .context-card:focus-within { outline: 3px solid var(--border-focus); outline-offset: 2px; }
+  .context-card:hover:not(.selected) { border-color: var(--purple-soft); }
+  .context-card.selected { border-color: var(--purple-deep); background: var(--purple-pale); }
+  .context-card-dot {
+    width: 18px; height: 18px; border-radius: 50%;
+    border: 2px solid var(--purple-soft); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--purple-deep);
+  }
+  .context-card.selected .context-card-dot {
+    border-color: var(--purple-deep); background: var(--purple-deep); color: white;
+  }
+  .context-card-dot-inner {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: currentColor; opacity: 0;
+  }
+  .context-card.selected .context-card-dot-inner { opacity: 1; }
+  .context-name { font-size: 16px; font-weight: 700; color: var(--text-dark); }
+  .context-hint { font-size: 14px; color: var(--text-muted); }
+
+  .resume-notice {
+    background: var(--purple-pale);
+    border: 2px solid var(--purple-soft);
+    border-radius: 10px; padding: 16px 20px;
+    font-size: 15px; color: var(--text-dark); line-height: 1.6;
+    margin-bottom: 20px;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .resume-notice-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── Anchor recap (from Lessons 1–2) ── */
+  .anchor-recap {
+    background: white;
+    border: 2px solid var(--purple-soft);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin: 20px 0 28px;
+  }
+  .anchor-recap-label {
+    font-size: 13px; font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+  .anchor-recap-text {
+    font-size: 17px; font-style: italic;
+    color: var(--text-dark); line-height: 1.7;
+  }
+  .anchor-recap-text strong { color: var(--purple-deep); font-style: normal; }
+
+  a.btn { text-decoration: none; }
+
+  /* ── Heat map screen ── */
+  .heatmap-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 30px; font-weight: 800;
+    color: var(--text-dark); margin-bottom: 10px; line-height: 1.2;
+  }
+  .heatmap-context-tag {
+    display: inline-block;
+    background: var(--purple-pale); color: var(--purple-mid);
+    font-size: 13px; font-weight: 700; padding: 4px 12px;
+    border-radius: 20px; margin-bottom: 24px;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+
+  .hm-section-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 19px; font-weight: 700;
+    color: var(--text-dark); margin: 32px 0 12px;
+  }
+  .hm-grid { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+  .hm-row {
+    display: grid;
+    grid-template-columns: 28px 1fr auto;
+    align-items: center; gap: 10px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: white;
+  }
+  .hm-num { font-size: 13px; font-weight: 700; color: var(--text-muted); }
+  .hm-name { font-size: 15px; font-weight: 600; color: var(--text-dark); }
+  .hm-badge {
+    font-size: 12px; font-weight: 700;
+    padding: 3px 10px; border-radius: 20px;
+    white-space: nowrap;
+  }
+  .hm-notes-row {
+    grid-column: 2 / -1;
+    font-size: 13px; color: var(--text-muted); font-style: italic;
+    margin-top: -4px; padding-bottom: 2px;
+  }
+
+  /* Rating row colours */
+  .hm-row.rc-green  { border-color: var(--r-green-border);  background: var(--r-green-bg); }
+  .hm-row.rc-teal   { border-color: var(--r-teal-border);   background: var(--r-teal-bg); }
+  .hm-row.rc-amber  { border-color: var(--r-amber-border);  background: var(--r-amber-bg); }
+  .hm-row.rc-red    { border-color: var(--r-red-border);    background: var(--r-red-bg); }
+  .hm-row.rc-grey   { border-color: var(--r-grey-border);   background: var(--r-grey-bg); }
+  .badge-green  { background: var(--r-green-bg);  color: var(--r-green);  border: 1px solid var(--r-green-border); }
+  .badge-teal   { background: var(--r-teal-bg);   color: var(--r-teal);   border: 1px solid var(--r-teal-border); }
+  .badge-amber  { background: var(--r-amber-bg);  color: var(--r-amber);  border: 1px solid var(--r-amber-border); }
+  .badge-red    { background: var(--r-red-bg);    color: var(--r-red);    border: 1px solid var(--r-red-border); }
+  .badge-grey   { background: var(--r-grey-bg);   color: var(--r-grey);   border: 1px solid var(--r-grey-border); }
+
+  .summary-box {
+    border-radius: 12px; padding: 20px 22px; margin-bottom: 20px;
+  }
+  .summary-box.risk-box { background: var(--r-red-bg); border: 2px solid var(--r-red-border); }
+  .summary-box.support-box { background: var(--r-green-bg); border: 2px solid var(--r-green-border); }
+  .summary-box-title {
+    font-size: 13px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.06em; margin-bottom: 12px;
+  }
+  .risk-box .summary-box-title { color: var(--r-red); }
+  .support-box .summary-box-title { color: var(--r-green); }
+  .summary-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .summary-list li {
+    font-size: 16px; font-weight: 600; color: var(--text-dark);
+    display: flex; align-items: flex-start; gap: 8px;
+  }
+  .summary-list li::before { flex-shrink: 0; margin-top: 2px; }
+  .risk-box .summary-list li::before { content: '⚠'; font-size: 14px; }
+  .support-box .summary-list li::before { content: '✓'; font-weight: 900; color: var(--r-green); }
+
+  .observation-section { margin: 28px 0; }
+  .obs-label {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 18px; font-weight: 700;
+    color: var(--text-dark); margin-bottom: 6px; display: block;
+  }
+  .obs-hint { font-size: 15px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.6; }
+
+  .community-section {
+    margin-top: 36px; padding-top: 28px;
+    border-top: 2px solid var(--purple-pale);
+  }
+  .community-label {
+    font-size: 13px; font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px;
+  }
+  .community-prompt {
+    background: var(--purple-whisper);
+    border-left: 4px solid var(--purple-soft);
+    border-radius: 0 10px 10px 0;
+    padding: 16px 20px;
+    font-size: 16px; font-style: italic;
+    color: var(--text-dark); line-height: 1.7;
+    margin-bottom: 12px;
+  }
+  .closing-line {
+    margin-top: 28px; font-size: 18px; font-weight: 600;
+    color: var(--text-dark); line-height: 1.6;
+    text-align: center;
+  }
+  .restart-row {
+    margin-top: 32px; text-align: center;
+  }
+
+  /* ── Unrated notice ── */
+  .unrated-notice {
+    background: var(--purple-pale); border: 2px solid var(--purple-soft);
+    border-radius: 8px; padding: 12px 16px;
+    font-size: 14px; color: var(--text-muted); margin-top: 8px;
+  }
+
+  /* ── Radar chart ── */
+  .chart-wrap { margin: 8px 0 32px; }
+  .chart-heading {
+    font-size: 13px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 16px;
+  }
+  .radar-svg-wrap {
+    margin: 0 auto 12px;
+  }
+  .radar-svg-wrap svg { width: 100%; height: auto; display: block; }
+  #radar-tip {
+    position: fixed; z-index: 9999; pointer-events: none;
+    background: #1F3D37; color: #fff;
+    font-size: 13px; font-family: 'Inter', sans-serif; font-weight: 500;
+    padding: 6px 11px; border-radius: 7px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.22);
+    white-space: nowrap; display: none; line-height: 1.3;
+  }
+  .radar-legend { display: flex; flex-direction: column; gap: 5px; }
+  .radar-legend-item {
+    display: grid; grid-template-columns: 26px 1fr auto;
+    gap: 8px; align-items: center;
+    padding: 8px 12px; border-radius: 8px;
+    background: white; border: 1px solid var(--border);
+  }
+  .radar-legend-num {
+    font-size: 13px; font-weight: 800;
+    color: var(--purple-deep); text-align: center;
+  }
+  .radar-legend-name { font-size: 14px; color: var(--text-dark); font-weight: 500; }
+  .radar-legend-badge {
+    font-size: 11px; font-weight: 700;
+    padding: 2px 8px; border-radius: 12px; white-space: nowrap;
+  }
+
+  @media (max-width: 480px) {
+    .page-wrap { padding: 28px 18px 60px; }
+    .intro-title, .heatmap-title { font-size: 24px; }
+    .domain-title { font-size: 22px; }
+    .btn { padding: 12px 20px; }
+  }
+
+  @media print {
+    @page { margin: 18mm 15mm; }
+    body { background: white; }
+    .skip-link, .site-header, .course-nav { display: none !important; }
+    .screen { box-shadow: none !important; padding: 0 !important; max-width: 100% !important; }
+    .restart-row, .community-section, .observation-section,
+    .unrated-notice, .heatmap-context-tag { display: none !important; }
+    .heatmap-title { font-size: 22px; margin-bottom: 8px; }
+    .hm-grid { break-inside: avoid; }
+    .summary-box { break-inside: avoid; }
+    .chart-wrap { break-inside: avoid; }
+    a { text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<div class="page-wrap">
+  <header class="brand-header" role="banner">
+    <div class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 3C7 3 3 7 3 12s4 9 9 9 9-4 9-9-4-9-9-9zm0 4a5 5 0 110 10A5 5 0 0112 7z" fill="white" opacity="0.3"/>
+        <circle cx="12" cy="12" r="3" fill="white"/>
+      </svg>
+    </div>
+    <div class="brand-text">
+      <span class="brand-name">Neurodiversity Works</span>
+      <span class="brand-sub">Work That Works — Lesson 3</span>
+    </div>
+    <span class="lesson-badge" aria-label="Lesson 3">Lesson 3</span>
+    <a href="workbook.html" style="margin-left:12px;font-size:13px;font-weight:600;color:var(--purple-deep);text-decoration:underline;text-underline-offset:3px;white-space:nowrap;">📖 My workbook</a>
+  </header>
+
+  <main id="main">
+    <div id="app" role="region" aria-live="polite" aria-label="Audit tool"></div>
+  </main>
+</div>
+
+<script>
+const STORAGE_KEY = 'ndw_lesson3_audit_v1';
+
+/* ── Domain data ────────────────────────────────────────── */
+const domains = [
+  {
+    id: 1,
+    name: "Energy and Capacity",
+    description: "How much is being asked of you, and how well does that match what you actually have available — not just day to day, but across weeks, seasons, and life phases?",
+    considerations: [
+      "Workload and hours — is the volume realistic without consistent over-effort?",
+      "Cognitive load — how much mental effort does the work demand, beyond the tasks themselves?",
+      "Context switching — how often are you pulled between different tasks, modes, or demands?",
+      "Consistency — does your energy vary significantly across the week, month, or year?",
+      "Hormonal cycles — do these affect your capacity in ways the environment doesn't accommodate?",
+      "Sleep — is the schedule compatible with how you sleep?",
+      "Caring responsibilities — do dependants' needs affect your availability or recovery?",
+      "Health conditions — does variable capacity go unaccounted for in your environment?",
+    ]
+  },
+  {
+    id: 2,
+    name: "Sensory Environment",
+    description: "The sensory conditions of your work — what you're exposed to, how much control you have over it, and how it affects your ability to function.",
+    considerations: [
+      "Noise — background levels, unpredictability, sudden sounds, open-plan environments",
+      "Lighting — fluorescent, brightness, flickering, lack of natural light",
+      "Temperature and air quality",
+      "Smell — cleaning products, food, fragrances",
+      "Clothing requirements — uniforms or dress codes that affect sensory comfort",
+      "Commuting — transport, crowds, transition time and energy cost",
+      "Video calls — faces on screen, your own image, background noise",
+      "Visual clutter — busy environments, visual noise in the workspace",
+    ]
+  },
+  {
+    id: 3,
+    name: "Executive Function",
+    description: "The day-to-day demands on planning, organising, initiating, and self-managing — including the invisible effort of keeping everything in order.",
+    considerations: [
+      "Getting started — especially on low-interest, complex, or ambiguous tasks",
+      "Stopping and transitioning — moving between tasks or contexts",
+      "Prioritising — when everything feels urgent, or priorities are unclear",
+      "Sequencing — knowing what order to do things in",
+      "Time estimation and deadlines — planning and following through",
+      "Working memory — holding multiple pieces of information in mind",
+      "Admin, email, and paperwork — the background tasks that accumulate",
+      "Self-monitoring — tracking performance, catching errors, managing perception",
+    ]
+  },
+  {
+    id: 4,
+    name: "Communication and Processing",
+    description: "How information is given and received in this environment — and how well that matches the way you process it.",
+    considerations: [
+      "Written vs verbal — is information given in a format you can process?",
+      "Clarity — clear, concrete instructions, or constant inference required?",
+      "Ambiguity — unclear expectations, unstated assumptions, shifting goalposts",
+      "Indirect communication — implied meanings, things 'understood' but never said",
+      "Meeting formats — pace, turn-taking, how much processing time is available",
+      "Feedback style — direct or oblique, specific or vague, verbal or written?",
+      "Response speed — how quickly are you expected to reply or decide?",
+      "Sarcasm, irony, or in-group communication that isn't explained",
+    ]
+  },
+  {
+    id: 5,
+    name: "Social and Emotional Load",
+    description: "The emotional and relational demands of the role — not just the obvious ones, but the constant background work of navigating other people.",
+    considerations: [
+      "Team size and dynamics",
+      "Hierarchy and power — managing upwards, navigating authority",
+      "Small talk and social expectation — informal interaction that isn't optional",
+      "Conflict and how it's handled — openly or passively",
+      "Feedback — giving and receiving",
+      "Emotional labour — managing how you come across and how others feel",
+      "Being perceived and evaluated — ongoing awareness of being watched or judged",
+      "Being misunderstood — frequency and cost of having to re-explain yourself",
+      "Rejection sensitivity — intensity of response to criticism or exclusion",
+    ]
+  },
+  {
+    id: 6,
+    name: "Predictability and Uncertainty",
+    description: "How stable and legible the environment is — its rhythms, expectations, and demands.",
+    considerations: [
+      "Last-minute changes — how often priorities shift or tasks appear without notice",
+      "Unclear success criteria — not knowing what 'good enough' looks like",
+      "Management stability — consistency of your manager or leadership",
+      "Access to information — whether you can get what you need to do your job",
+      "Planning ahead — whether it is possible to anticipate what's coming",
+      "Ambiguity in role — unclear boundaries or overlapping responsibilities",
+      "Pace — consistent rhythm, or lurching between extremes without warning",
+    ]
+  },
+  {
+    id: 7,
+    name: "Autonomy and Control",
+    description: "The degree to which you can shape your work to match your needs and working style.",
+    considerations: [
+      "Method — can you approach tasks in the way that works best for you?",
+      "Schedule — flexibility in when you work",
+      "Environment — choice over where you work, or control of your surroundings",
+      "Communication — can you use the format that works for you (written, async, etc.)?",
+      "Pacing — can you speed up, slow down, or take breaks when you need to?",
+      "Task order — can you work in the sequence that makes sense to you?",
+      "Finishing — can you see tasks through, or are you constantly interrupted before completion?",
+    ]
+  },
+  {
+    id: 8,
+    name: "Values and Motivation",
+    description: "Whether the work provides enough of what keeps you engaged — and whether it asks you to work against your own values.",
+    considerations: [
+      "Interest and curiosity — does the work give you enough to engage your attention?",
+      "Purpose and meaning — does it connect to something worth doing?",
+      "Fairness — are people treated equitably, consistently?",
+      "Creativity and problem-solving — is there space for these?",
+      "Visible impact — can you see the result of what you do?",
+      "Values alignment — does the work ask you to act against your own values?",
+      "Autonomy as motivation — enough independence to stay engaged?",
+    ]
+  },
+  {
+    id: 9,
+    name: "Recovery and Regulation",
+    description: "The conditions that allow you to manage your nervous system during the working day — and recover properly afterwards.",
+    considerations: [
+      "Breaks — are there genuine breaks, or is every moment accounted for?",
+      "Decompression — space between demanding tasks or interactions",
+      "Transitions — time to shift between contexts, modes, or environments",
+      "Sensory tools — access to headphones, fidgets, dim lighting, whatever helps you regulate",
+      "Movement — ability to move, change position, or pace",
+      "Food and hydration — realistic access during the working day",
+      "Alone time — periods during the day without social demand",
+      "Post-work recovery — enough time before needing to function again",
+    ]
+  },
+  {
+    id: 10,
+    name: "Support and Safety",
+    description: "Whether the human and structural support is adequate — and whether it feels safe to access it.",
+    considerations: [
+      "Manager relationship — do they understand your needs? Are they approachable and do they follow through?",
+      "Psychological safety — can you make mistakes, ask questions, be honest without fear?",
+      "Adjustments — can you request changes to how or where you work, and are they taken seriously?",
+      "Disclosure safety — do you feel safe being open about your neurodivergence?",
+      "HR support — genuine support available, or only on paper?",
+      "Peer support — understanding colleagues, or isolation?",
+      "Belonging — do you feel like you fit, or always slightly out of step?",
+    ]
+  },
+];
+
+const ratingOptions = [
+  { value: 'works_well',    label: 'Works well',      desc: 'Positive or actively supportive',              cls: 'rc-green',  badge: 'badge-green'  },
+  { value: 'manageable',   label: 'Manageable',       desc: 'Works, but takes more effort than it should',  cls: 'rc-teal',   badge: 'badge-teal'   },
+  { value: 'costly',       label: 'Costly',           desc: 'Draining, even if you\'re coping',             cls: 'rc-amber',  badge: 'badge-amber'  },
+  { value: 'unsustainable',label: 'Unsustainable',    desc: 'A significant problem that cannot continue',   cls: 'rc-red',    badge: 'badge-red'    },
+  { value: 'unknown',      label: 'Unknown',          desc: 'Not enough experience or information to rate', cls: 'rc-grey',   badge: 'badge-grey'   },
+];
+
+const contextOptions = [
+  { value: 'current',     label: 'My current job',         hint: 'Rate this environment as it is right now' },
+  { value: 'previous',    label: 'A previous job',         hint: 'Useful for understanding what changed — or what cost you' },
+  { value: 'ideal',       label: 'An imagined ideal role', hint: 'What would you want each area to look like?' },
+  { value: 'jobsearch',   label: 'Job search criteria',    hint: 'What conditions are non-negotiable for your next role?' },
+];
+
+/* ── State ──────────────────────────────────────────────── */
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch (e) { /* ignore */ }
+  return { screen: 'intro', context: null, ratings: {}, notes: {}, observation: '' };
+}
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+
+let state = loadState();
+
+/* ── Pull-through: anchor sentence from Lessons 1–2 ─────── */
+function getAnchorRecap() {
+  try {
+    const l1 = JSON.parse(localStorage.getItem('ndw_lesson1_reflection_v2') || '{}');
+    const l2 = JSON.parse(localStorage.getItem('ndw_lesson2_naming_v1') || '{}');
+    const base  = (l1.sentence || '').trim();
+    const layer = (l2.sentence || '').trim();
+    if (!base && !layer) return '';
+    let html = '<div class="anchor-recap" role="note">';
+    html += '<p class="anchor-recap-label">Your anchor sentence from Lessons 1–2</p>';
+    html += '<p class="anchor-recap-text"><strong>"Work becomes unsustainable for me when…"</strong> ';
+    if (base) html += escapeHtml(base);
+    if (layer) html += (base ? '<br>' : '') + '<strong>…and I can now see that this is partly about:</strong> ' + escapeHtml(layer);
+    html += '</p></div>';
+    return html;
+  } catch (e) { return ''; }
+}
+
+/* ── Rating / context helpers ───────────────────────────── */
+function getRatingOption(val) { return ratingOptions.find(r => r.value === val) || null; }
+function getContextLabel(val) {
+  const c = contextOptions.find(c => c.value === val);
+  return c ? c.label : val;
+}
+
+/* ── Navigation ─────────────────────────────────────────── */
+function goTo(screen) {
+  state.screen = screen;
+  saveState();
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function hasExistingData() {
+  return Object.keys(state.ratings).length > 0;
+}
+
+/* ── Render functions ───────────────────────────────────── */
+function render() {
+  const app = document.getElementById('app');
+  if (state.screen === 'intro')   { app.innerHTML = renderIntro();   }
+  else if (state.screen === 'heatmap') { app.innerHTML = renderHeatmap(); }
+  else { app.innerHTML = renderDomain(parseInt(state.screen, 10)); }
+  attachListeners();
+}
+
+/* ── Intro screen ── */
+function renderIntro() {
+  const hasData = hasExistingData();
+  const allRated = hasData && domains.every(d => state.ratings[d.id]);
+  const ratedCount = Object.keys(state.ratings).length;
+
+  return `
+    <div class="screen active" id="screen-intro">
+      <h1 class="intro-title">The Neurodivergent Work Sustainability Audit</h1>
+      <p class="intro-body">This audit looks at ten areas of a working environment and asks you to rate each one. At the end, you'll have a heat map — a clear picture of where the pressure is and where you have support.</p>
+      <p class="intro-body">It isn't a test. There are no right answers. The goal is accuracy, not optimism.</p>
+
+      <div class="callout-block">Rating something as unsustainable is not a failure — it's information.</div>
+
+      ${getAnchorRecap()}
+
+      ${allRated ? `
+      <div class="resume-notice" role="status">
+        <span class="resume-notice-icon">✅</span>
+        <span>Your completed audit is saved. Jump straight to your results, or start a fresh audit below.</span>
+      </div>
+      <div style="text-align:center;margin:8px 0 24px">
+        <button class="btn btn-primary" id="btn-view-results">View my results →</button>
+      </div>` : hasData ? `
+      <div class="resume-notice" role="status">
+        <span class="resume-notice-icon">💾</span>
+        <span>Your progress is saved — ${ratedCount} of 10 domains rated. Pick up where you left off, or start fresh.</span>
+      </div>` : ''}
+
+      <p class="context-question">${hasData ? 'Or start a new audit — which situation?' : 'Which situation are you auditing?'}</p>
+      <div class="context-options" role="radiogroup" aria-label="Choose audit context">
+        ${contextOptions.map(c => `
+        <label class="context-card ${state.context === c.value ? 'selected' : ''}">
+          <input type="radio" name="context" value="${c.value}" ${state.context === c.value ? 'checked' : ''}>
+          <span class="context-card-dot" aria-hidden="true"><span class="context-card-dot-inner"></span></span>
+          <span>
+            <span class="context-name">${c.label}</span>
+            <span style="display:block; font-size:14px; color:var(--text-muted)">${c.hint}</span>
+          </span>
+        </label>`).join('')}
+      </div>
+
+      <div class="nav-buttons">
+        ${hasData && !allRated ? `<button class="btn btn-ghost" id="btn-continue">Resume where I left off</button>` : '<span></span>'}
+        <button class="btn ${hasData ? 'btn-ghost' : 'btn-primary'}" id="btn-start">
+          ${hasData ? 'Start fresh' : 'Begin the audit'} <span aria-hidden="true">→</span>
+        </button>
+      </div>
+    </div>`;
+}
+
+/* ── Domain screen ── */
+function renderDomain(id) {
+  const domain = domains.find(d => d.id === id);
+  if (!domain) { goTo('intro'); return ''; }
+  const pct = Math.round((id / domains.length) * 100);
+  const currentRating = state.ratings[id] || null;
+  const currentNotes = state.notes[id] || '';
+
+  return `
+    <div class="screen active" id="screen-domain-${id}">
+      <div class="progress-wrap" role="progressbar" aria-valuenow="${id}" aria-valuemin="1" aria-valuemax="${domains.length}" aria-label="Progress">
+        <div class="progress-meta">
+          <span class="progress-label">Domain ${id} of ${domains.length}</span>
+          <span class="progress-pct">${pct}%</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+      </div>
+
+      <p class="domain-eyebrow">Domain ${id}</p>
+      <h1 class="domain-title">${domain.name}</h1>
+      <p class="domain-desc">${domain.description}</p>
+
+      <button class="considerations-toggle" id="toggle-considerations" aria-expanded="false" aria-controls="considerations-body">
+        <span class="toggle-arrow" id="toggle-arrow">▶</span> What might this include?
+      </button>
+      <div class="considerations-body" id="considerations-body">
+        <ul>
+          ${domain.considerations.map(c => `<li>${c}</li>`).join('')}
+        </ul>
+      </div>
+
+      <div class="rating-section">
+        <span class="rating-label" id="rating-heading">How does this area feel in the situation you are auditing?</span>
+        <div class="rating-options" role="radiogroup" aria-labelledby="rating-heading">
+          ${ratingOptions.map(r => `
+          <label class="rating-card ${r.cls} ${currentRating === r.value ? 'selected' : ''}" aria-label="${r.label}: ${r.desc}">
+            <input type="radio" name="domain-rating" value="${r.value}" ${currentRating === r.value ? 'checked' : ''}>
+            <span class="rating-dot ${r.cls}" aria-hidden="true"><span class="rating-dot-inner"></span></span>
+            <span class="rating-card-text">
+              <span class="rating-name">${r.label}</span>
+              <span class="rating-desc">${r.desc}</span>
+            </span>
+          </label>`).join('')}
+        </div>
+      </div>
+
+      <div class="notes-section">
+        <label class="notes-label" for="domain-notes">Notes (optional) — one word or phrase is enough</label>
+        <textarea id="domain-notes" placeholder="e.g. 'open plan is exhausting' or 'this is actually fine'" rows="2">${currentNotes}</textarea>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="btn btn-ghost" id="btn-back">${id === 1 ? '← Choose context' : '← Back'}</button>
+        <button class="btn btn-primary" id="btn-next">${id === domains.length ? 'See my heat map →' : 'Next domain →'}</button>
+      </div>
+    </div>`;
+}
+
+/* ── Heat map screen ── */
+function renderHeatmap() {
+  const riskOrder = ['unsustainable', 'costly'];
+  const supportOrder = ['works_well', 'manageable'];
+
+  const risks = domains
+    .filter(d => riskOrder.includes(state.ratings[d.id]))
+    .sort((a,b) => riskOrder.indexOf(state.ratings[a.id]) - riskOrder.indexOf(state.ratings[b.id]))
+    .slice(0, 3);
+
+  const supports = domains
+    .filter(d => supportOrder.includes(state.ratings[d.id]))
+    .sort((a,b) => supportOrder.indexOf(state.ratings[a.id]) - supportOrder.indexOf(state.ratings[b.id]))
+    .slice(0, 3);
+
+  const allRated = domains.every(d => state.ratings[d.id]);
+
+  return `
+    <div class="screen active" id="screen-heatmap">
+      <h1 class="heatmap-title">Your Sustainability Heat Map</h1>
+      ${state.context ? `<span class="heatmap-context-tag">${getContextLabel(state.context)}</span>` : ''}
+
+      ${renderChart()}
+
+      ${!allRated ? `<div class="unrated-notice">Some domains weren't rated — they appear as "Unknown" below. You can go back to fill them in if you'd like.</div>` : ''}
+
+      <h2 class="hm-section-title">All ten domains</h2>
+      <div class="hm-grid" role="list">
+        ${domains.map(d => {
+          const r = getRatingOption(state.ratings[d.id]);
+          const cls  = r ? r.cls   : 'rc-grey';
+          const badge = r ? r.badge : 'badge-grey';
+          const label = r ? r.label : 'Not rated';
+          const note = state.notes[d.id] ? state.notes[d.id] : '';
+          return `
+          <div class="hm-row ${cls}" role="listitem">
+            <span class="hm-num">${d.id}</span>
+            <span class="hm-name">${d.name}</span>
+            <span class="hm-badge ${badge}">${label}</span>
+            ${note ? `<span class="hm-notes-row">${escapeHtml(note)}</span>` : ''}
+          </div>`;
+        }).join('')}
+      </div>
+
+      ${risks.length > 0 ? `
+      <div class="summary-box risk-box" role="region" aria-label="Top risk areas">
+        <p class="summary-box-title">Top risk areas</p>
+        <ul class="summary-list">
+          ${risks.map(d => `<li><span>${d.name}</span></li>`).join('')}
+        </ul>
+      </div>` : '<p style="font-size:15px;color:var(--text-muted);margin:16px 0">No areas rated as costly or unsustainable — you can go back to check your ratings, or this may genuinely be a good environment.</p>'}
+
+      ${supports.length > 0 ? `
+      <div class="summary-box support-box" role="region" aria-label="Supportive conditions">
+        <p class="summary-box-title">Conditions that support you</p>
+        <ul class="summary-list">
+          ${supports.map(d => `<li><span>${d.name}</span></li>`).join('')}
+        </ul>
+      </div>` : ''}
+
+      <div class="observation-section">
+        <label class="obs-label" for="observation">What does this tell you?</label>
+        <p class="obs-hint">Write one sentence — not a solution, just what you notice when you look at this.</p>
+        <textarea id="observation" placeholder="e.g. 'I had no idea how much of my energy was going on sensory stuff'" rows="3">${state.observation || ''}</textarea>
+      </div>
+
+      <div class="community-section">
+        <p class="community-label">Community prompt</p>
+        <div class="community-prompt">"Which domain surprised you most — either because it was worse than you expected, or better? You don't have to explain why. Just the domain name is enough."</div>
+        <p style="font-size:15px;color:var(--text-muted)">Share as much or as little as you like.</p>
+      </div>
+
+      <p class="closing-line">You now have a map. That's not a small thing. 💜</p>
+
+      <div class="restart-row">
+        <a href="Lesson004-Strengths-Needs-Friction.html" class="btn btn-primary">Next: Strengths, Needs &amp; Friction →</a>
+      </div>
+      <div class="restart-row" style="margin-top:14px">
+        <button class="btn btn-ghost btn-sm" id="btn-pdf">⬇ Save as PDF</button>
+        <span style="display:inline-block;width:12px"></span>
+        <a href="workbook.html" class="btn btn-ghost btn-sm">📖 View my full workbook</a>
+        <span style="display:inline-block;width:12px"></span>
+        <button class="btn btn-ghost btn-sm" id="btn-back-to-10">← Edit my ratings</button>
+        <span style="display:inline-block;width:12px"></span>
+        <button class="btn btn-ghost btn-sm" id="btn-restart">Clear all &amp; start again</button>
+      </div>
+    </div>`;
+}
+
+/* ── Event listeners ────────────────────────────────────── */
+function attachListeners() {
+  /* Intro screen */
+  document.querySelectorAll('input[name="context"]').forEach(input => {
+    input.addEventListener('change', e => {
+      state.context = e.target.value;
+      saveState();
+      document.querySelectorAll('.context-card').forEach(c => c.classList.remove('selected'));
+      e.target.closest('.context-card').classList.add('selected');
+    });
+  });
+
+  const btnStart = document.getElementById('btn-start');
+  if (btnStart) {
+    btnStart.addEventListener('click', () => {
+      if (!state.context) {
+        alert('Please choose which situation you are auditing before beginning.');
+        return;
+      }
+      // Reset ratings and notes for fresh start
+      state.ratings = {};
+      state.notes = {};
+      state.observation = '';
+      goTo(1);
+    });
+  }
+
+  const btnViewResults = document.getElementById('btn-view-results');
+  if (btnViewResults) {
+    btnViewResults.addEventListener('click', () => goTo('heatmap'));
+  }
+
+  const btnContinue = document.getElementById('btn-continue');
+  if (btnContinue) {
+    btnContinue.addEventListener('click', () => {
+      if (!state.context) {
+        alert('Please confirm which situation you are auditing.');
+        return;
+      }
+      // Find first unrated domain
+      const firstUnrated = domains.find(d => !state.ratings[d.id]);
+      goTo(firstUnrated ? firstUnrated.id : 'heatmap');
+    });
+  }
+
+  /* Considerations toggle */
+  const toggle = document.getElementById('toggle-considerations');
+  const body   = document.getElementById('considerations-body');
+  const arrow  = document.getElementById('toggle-arrow');
+  if (toggle && body) {
+    toggle.addEventListener('click', () => {
+      const open = body.classList.toggle('open');
+      arrow.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', open);
+    });
+  }
+
+  /* Rating cards */
+  document.querySelectorAll('input[name="domain-rating"]').forEach(input => {
+    input.addEventListener('change', e => {
+      const domainId = parseInt(state.screen, 10);
+      state.ratings[domainId] = e.target.value;
+      saveState();
+      document.querySelectorAll('.rating-card').forEach(card => {
+        card.classList.toggle('selected', card.querySelector('input') === e.target);
+      });
+    });
+  });
+
+  /* Notes textarea */
+  const notesEl = document.getElementById('domain-notes');
+  if (notesEl) {
+    notesEl.addEventListener('input', e => {
+      const domainId = parseInt(state.screen, 10);
+      state.notes[domainId] = e.target.value;
+      saveState();
+    });
+  }
+
+  /* Domain navigation */
+  const btnBack = document.getElementById('btn-back');
+  if (btnBack) {
+    btnBack.addEventListener('click', () => {
+      const id = parseInt(state.screen, 10);
+      goTo(id <= 1 ? 'intro' : id - 1);
+    });
+  }
+
+  const btnNext = document.getElementById('btn-next');
+  if (btnNext) {
+    btnNext.addEventListener('click', () => {
+      const id = parseInt(state.screen, 10);
+      if (!state.ratings[id]) {
+        // Allow skipping — just save Unknown
+        state.ratings[id] = 'unknown';
+        saveState();
+      }
+      goTo(id >= domains.length ? 'heatmap' : id + 1);
+    });
+  }
+
+  /* Observation textarea */
+  const obsEl = document.getElementById('observation');
+  if (obsEl) {
+    obsEl.addEventListener('input', e => {
+      state.observation = e.target.value;
+      saveState();
+    });
+  }
+
+  /* Heatmap navigation */
+  const btnRestart = document.getElementById('btn-restart');
+  if (btnRestart) {
+    btnRestart.addEventListener('click', () => {
+      if (confirm('This will clear your current ratings. Are you sure?')) {
+        state = { screen: 'intro', context: null, ratings: {}, notes: {}, observation: '' };
+        saveState();
+        render();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+  }
+
+  const btnBackTo10 = document.getElementById('btn-back-to-10');
+  if (btnBackTo10) {
+    btnBackTo10.addEventListener('click', () => goTo(domains.length));
+  }
+
+  /* PDF export */
+  const btnPdf = document.getElementById('btn-pdf');
+  if (btnPdf) {
+    btnPdf.addEventListener('click', () => window.print());
+  }
+
+  /* Radar dot tooltips */
+  const tip = document.getElementById('radar-tip');
+  if (tip) {
+    document.querySelectorAll('.radar-svg-wrap circle[data-tip]').forEach(circle => {
+      circle.addEventListener('mouseenter', e => {
+        tip.textContent = e.currentTarget.dataset.tip;
+        tip.style.display = 'block';
+      });
+      circle.addEventListener('mousemove', e => {
+        tip.style.left = (e.clientX + 16) + 'px';
+        tip.style.top  = (e.clientY - 36) + 'px';
+      });
+      circle.addEventListener('mouseleave', () => {
+        tip.style.display = 'none';
+      });
+    });
+  }
+}
+
+/* ── Radar chart renderer ────────────────────────────────── */
+function renderChart() {
+  const N  = domains.length;  // 10
+  const cx = 250, cy = 255;
+  const maxR   = 155;  // outermost ring radius
+  const labelR = 200;  // number label radius
+
+  // Rating → axis value (1–4; unknown → neutral 1.5)
+  const valMap = { works_well: 1, manageable: 2, costly: 3, unsustainable: 4 };
+  function getVal(id) {
+    const r = state.ratings[id];
+    return (r && r !== 'unknown') ? valMap[r] : 1.5;
+  }
+
+  // Polar helpers — start at top (−90°), clockwise
+  function ang(i)      { return (i * 2 * Math.PI / N) - Math.PI / 2; }
+  function pt(i, v)    { const r = (v / 4) * maxR, a = ang(i);
+                         return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) }; }
+  function fmt(n)      { return n.toFixed(1); }
+
+  // ── Background rings at each rating level ──
+  const ringMeta = [
+    { lvl: 1, color: '#97CBB0', dash: '5 3', opacity: '0.6', fill: 'rgba(151,203,176,0.07)', width: '1.5' },
+    { lvl: 2, color: '#92C0D4', dash: '5 3', opacity: '0.55', fill: 'none',                  width: '1.5' },
+    { lvl: 3, color: '#E0BB80', dash: '5 3', opacity: '0.6',  fill: 'none',                  width: '1.5' },
+    { lvl: 4, color: '#222C93', dash: 'none', opacity: '0.7', fill: 'rgba(34,44,147,0.04)',   width: '2'   },
+  ];
+  const rings = ringMeta.map(({ lvl, color, dash, opacity, fill, width }) => {
+    const pts = Array.from({ length: N }, (_, i) => {
+      const p = pt(i, lvl); return `${fmt(p.x)},${fmt(p.y)}`;
+    }).join(' ');
+    return `<polygon points="${pts}" fill="${fill}" stroke="${color}" stroke-width="${width}"
+      stroke-dasharray="${dash === 'none' ? '' : dash}" opacity="${opacity}"/>`;
+  }).join('');
+
+  // ── Ring level labels (along the 12 o'clock axis, offset right) ──
+  const levelNames = ['Works well', 'Manageable', 'Costly', 'Unsustainable'];
+  const levelLabels = [1,2,3,4].map((lvl, ri) => {
+    const r = (lvl / 4) * maxR;
+    return `<text x="${cx + 7}" y="${fmt(cy - r + 3)}"
+      font-size="9" font-family="Inter, sans-serif" fill="#8090A8"
+      dominant-baseline="auto">${levelNames[ri]}</text>`;
+  }).join('');
+
+  // ── Axis lines from centre to outermost ring ──
+  const axes = Array.from({ length: N }, (_, i) => {
+    const o = pt(i, 4);
+    return `<line x1="${cx}" y1="${cy}" x2="${fmt(o.x)}" y2="${fmt(o.y)}"
+      stroke="var(--border)" stroke-width="1.5"/>`;
+  }).join('');
+
+  // ── Data polygon ──
+  const dataPts = domains.map((d, i) => { const p = pt(i, getVal(d.id)); return `${fmt(p.x)},${fmt(p.y)}`; }).join(' ');
+  const polygon = `<polygon points="${dataPts}"
+    fill="rgba(84,0,255,0.12)" stroke="#5400FF" stroke-width="3" stroke-linejoin="round"/>`;
+
+  // ── Coloured dot at each data point ──
+  const dotColors = { works_well: '#1A6640', manageable: '#1A5C78',
+                      costly: '#8A5200', unsustainable: '#922820', unknown: '#6060A0' };
+  const ratingLabels = { works_well: 'Works well', manageable: 'Manageable',
+                         costly: 'Costly', unsustainable: 'Unsustainable', unknown: 'Unknown / not yet rated' };
+  const dots = domains.map((d, i) => {
+    const rating = state.ratings[d.id] || 'unknown';
+    const p = pt(i, getVal(d.id));
+    const col = dotColors[rating] || dotColors.unknown;
+    const tip = `${d.id}. ${d.name} — ${ratingLabels[rating] || 'Unknown'}`;
+    return `<circle cx="${fmt(p.x)}" cy="${fmt(p.y)}" r="6" fill="${col}" stroke="white" stroke-width="2.5" data-tip="${tip}" style="cursor:default"/>`;
+  }).join('');
+
+  // ── Domain number labels outside the chart ──
+  const numLabels = domains.map((d, i) => {
+    const a = ang(i);
+    const lx = cx + labelR * Math.cos(a);
+    const ly = cy + labelR * Math.sin(a);
+    const anchor = lx < cx - 8 ? 'end' : lx > cx + 8 ? 'start' : 'middle';
+    return `<text x="${fmt(lx)}" y="${fmt(ly)}" text-anchor="${anchor}" dominant-baseline="middle"
+      font-size="12.5" font-family="Inter, sans-serif" font-weight="700"
+      fill="var(--text-dark)">${d.id}</text>`;
+  }).join('');
+
+  return `
+    <div class="chart-wrap" role="region" aria-label="Radar chart of your sustainability profile">
+      <p class="chart-heading">Your sustainability radar</p>
+      <p style="font-size:14px;color:var(--text-muted);margin-bottom:16px;line-height:1.5">
+        Each number is a domain — see the list below. Closer to the edge = higher risk. Closer to the centre = more supportive.</p>
+      <div class="radar-svg-wrap">
+        <svg viewBox="0 0 500 510" xmlns="http://www.w3.org/2000/svg"
+             role="img" aria-label="Radar chart: 10 domains arranged in a circle. A larger shape means more areas at risk.">
+          <title>Sustainability radar — larger shape means higher-risk areas</title>
+          ${rings}
+          ${axes}
+          ${levelLabels}
+          ${polygon}
+          ${dots}
+          ${numLabels}
+        </svg>
+      </div>
+    </div>`;
+}
+
+/* ── Utility ────────────────────────────────────────────── */
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ── Init ───────────────────────────────────────────────── */
+render();
+</script>
+<div id="radar-tip"></div>
+</body>
+</html>

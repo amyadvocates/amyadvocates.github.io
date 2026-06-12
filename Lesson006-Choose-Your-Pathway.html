@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 6: Choose Your Pathway — Neurodiversity Works</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --purple-deep:  #5400FF;
+      --purple-dark:  #222C93;
+      --purple-pale:  #EDE8FF;
+      --green:        #1A6640;
+      --green-pale:   #EAF5EE;
+      --green-border: #B2D9C0;
+      --teal:         #0F6B6B;
+      --teal-pale:    #E6F4F4;
+      --teal-border:  #9DD4D4;
+      --amber:        #8A5200;
+      --amber-pale:   #FDF4E3;
+      --amber-border: #E8C97A;
+      --red:          #922820;
+      --red-pale:     #FFF0EE;
+      --bg:           #FAF8F4;
+      --surface:      #FFFFFF;
+      --text-dark:    #1A1A2E;
+      --text-muted:   #6060A0;
+      --border:       #E8E4DC;
+      --border-focus: #5400FF;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg); color: var(--text-dark);
+      min-height: 100vh; line-height: 1.6;
+    }
+    .skip-link {
+      position: absolute; top: -40px; left: 16px;
+      background: var(--purple-deep); color: #fff;
+      padding: 8px 16px; border-radius: 4px; font-size: 14px;
+      z-index: 9999; text-decoration: none; transition: top 0.2s;
+    }
+    .skip-link:focus { top: 8px; }
+
+    /* ── Layout ── */
+    #main { max-width: 740px; margin: 0 auto; padding: 32px 20px 64px; }
+
+    /* ── Progress ── */
+    .progress-wrap { margin-bottom: 28px; }
+    .progress-meta { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+    .progress-label { font-size: 13px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.04em; text-transform: uppercase; }
+    .progress-pct   { font-size: 13px; font-weight: 700; color: var(--purple-deep); }
+    .progress-track { height: 5px; background: var(--border); border-radius: 99px; overflow: hidden; }
+    .progress-fill  { height: 100%; background: var(--purple-deep); border-radius: 99px; transition: width 0.4s ease; }
+
+    /* ── Page header ── */
+    .lesson-eyebrow {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--purple-deep); margin-bottom: 8px;
+    }
+    .lesson-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(22px, 5vw, 32px);
+      font-weight: 700; line-height: 1.25;
+      color: var(--text-dark); margin-bottom: 8px;
+    }
+    .lesson-desc {
+      font-size: 16px; color: var(--text-muted);
+      line-height: 1.65; margin-bottom: 24px;
+    }
+
+    /* ── Option cards (radio + checkbox) ── */
+    .options-list { display: flex; flex-direction: column; gap: 9px; margin-bottom: 8px; }
+
+    .option-card {
+      display: flex; align-items: flex-start; gap: 13px;
+      padding: 14px 16px; border: 1.5px solid var(--border);
+      border-radius: 10px; cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      background: var(--surface);
+    }
+    .option-card:hover { border-color: var(--purple-deep); }
+    .option-card.selected {
+      border-color: var(--purple-deep);
+      background: var(--purple-pale);
+    }
+    .option-card.disabled {
+      opacity: 0.42; pointer-events: none; cursor: default;
+    }
+
+    .opt-dot {
+      width: 18px; height: 18px; border-radius: 50%;
+      border: 2px solid var(--border); flex-shrink: 0;
+      margin-top: 3px; display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .option-card.selected .opt-dot {
+      border-color: var(--purple-deep); background: var(--purple-deep);
+    }
+    .option-card.selected .opt-dot::after {
+      content: ''; width: 7px; height: 7px; border-radius: 50%; background: white;
+    }
+    .opt-check {
+      width: 18px; height: 18px; border-radius: 4px;
+      border: 2px solid var(--border); flex-shrink: 0;
+      margin-top: 3px; display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .option-card.selected .opt-check {
+      border-color: var(--purple-deep); background: var(--purple-deep);
+    }
+    .option-card.selected .opt-check::after {
+      content: '✓'; color: white; font-size: 11px; font-weight: 800; line-height: 1;
+    }
+
+    .opt-label { font-size: 14px; font-weight: 700; color: var(--text-dark); display: block; margin-bottom: 2px; }
+    .opt-hint  { font-size: 13px; color: var(--text-muted); line-height: 1.5; display: block; }
+
+    .max-note {
+      font-size: 13px; color: var(--amber); margin-top: 6px;
+      display: none;
+    }
+    .max-note.visible { display: block; }
+
+    /* ── Pathway boxes (result screen) ── */
+    .pathway-box {
+      border-radius: 12px; padding: 22px 24px; margin-bottom: 14px;
+      border: 2px solid;
+    }
+    .pathway-box.giw { background: var(--teal-pale);  border-color: var(--teal-border); }
+    .pathway-box.sw  { background: var(--green-pale); border-color: var(--green-border); }
+    .pathway-box.rd  { background: var(--amber-pale); border-color: var(--amber-border); }
+    .pathway-box.secondary { opacity: 0.85; }
+
+    .pathway-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; margin-bottom: 4px;
+    }
+    .pathway-box.giw .pathway-label { color: var(--teal); }
+    .pathway-box.sw  .pathway-label { color: var(--green); }
+    .pathway-box.rd  .pathway-label { color: var(--amber); }
+
+    .pathway-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px; font-weight: 700; margin-bottom: 8px; line-height: 1.3;
+    }
+    .pathway-box.giw .pathway-name { color: var(--teal); }
+    .pathway-box.sw  .pathway-name { color: var(--green); }
+    .pathway-box.rd  .pathway-name { color: var(--amber); }
+
+    .pathway-desc {
+      font-size: 15px; color: var(--text-dark); line-height: 1.65; margin-bottom: 14px;
+    }
+    .covers-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px;
+    }
+    .covers-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+    .covers-list li {
+      font-size: 14px; color: var(--text-dark); line-height: 1.5;
+      padding-left: 18px; position: relative;
+    }
+    .covers-list li::before {
+      content: '→'; position: absolute; left: 0;
+      color: var(--text-muted); font-size: 12px;
+    }
+
+    .also-label {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.05em;
+      text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; margin-top: 22px;
+    }
+
+    /* ── Experiment textarea ── */
+    .obs-label { font-size: 15px; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; margin-top: 24px; }
+    .obs-hint  { font-size: 13px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.5; }
+    .obs-area {
+      width: 100%; border: 1.5px solid var(--border); border-radius: 10px;
+      padding: 14px; font-family: 'Inter', sans-serif;
+      font-size: 15px; color: var(--text-dark); background: var(--surface);
+      outline: none; resize: none; line-height: 1.65;
+      transition: border-color 0.2s;
+    }
+    .obs-area:focus { border-color: var(--border-focus); }
+
+    /* ── Community prompt ── */
+    .community-section { margin-top: 28px; }
+    .community-label {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.07em;
+      text-transform: uppercase; color: var(--purple-deep); margin-bottom: 8px;
+    }
+    .community-prompt {
+      background: var(--purple-pale); border-radius: 12px;
+      padding: 18px 22px; font-size: 15px; color: var(--purple-dark);
+      font-style: italic; line-height: 1.65; margin-bottom: 8px;
+    }
+
+    /* ── Paid bridge ── */
+    .paid-bridge {
+      background: var(--text-dark); color: #fff;
+      border-radius: 12px; padding: 22px 26px; margin-top: 24px;
+    }
+    .paid-bridge-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: #A0A8D8; margin-bottom: 8px;
+    }
+    .paid-bridge p {
+      font-size: 15px; line-height: 1.65; color: #E0E4F8;
+    }
+    .paid-bridge strong { color: #fff; }
+
+    /* ── Nav ── */
+    .nav-buttons {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 12px; margin-top: 32px; flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 13px 26px; border-radius: 99px;
+      font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700;
+      cursor: pointer; border: none; transition: all 0.18s; line-height: 1;
+    }
+    .btn-primary { background: var(--purple-deep); color: #fff; }
+    .btn-primary:hover { background: var(--purple-dark); transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.35; cursor: default; transform: none; }
+    .btn-ghost {
+      background: transparent; color: var(--text-dark);
+      border: 1.5px solid var(--border);
+    }
+    .btn-ghost:hover { border-color: var(--purple-deep); color: var(--purple-deep); }
+    .btn-sm { padding: 9px 18px; font-size: 13px; }
+    a.btn { text-decoration: none; }
+    .save-badge { font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 12px; }
+
+    /* ── Pull-through chips ── */
+    .pull-chips-label {
+      font-size: 12px; font-weight: 600; color: var(--text-muted);
+      margin: 10px 0 6px;
+    }
+    .pull-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+    .pull-chip {
+      font-size: 13px; background: var(--purple-pale); color: var(--purple-dark);
+      border: 1.5px solid transparent; border-radius: 99px;
+      padding: 5px 13px; cursor: pointer; font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.12s;
+      max-width: 100%; text-align: left;
+    }
+    .pull-chip:hover { border-color: var(--purple-deep); }
+    .pull-chip:focus-visible { outline: 2px solid var(--border-focus); outline-offset: 2px; }
+
+    hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+    /* ── Print ── */
+    @media print {
+      @page { margin: 16mm 14mm; }
+      body { background: white; }
+      .nav-buttons, .save-badge, .paid-bridge { display: none !important; }
+      #main { padding: 0; max-width: 100%; }
+    }
+
+    @media (max-width: 600px) {
+      .option-card { padding: 12px 13px; }
+      .opt-label { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<div style="max-width:740px;margin:0 auto;padding:16px 20px 0;display:flex;justify-content:flex-end;">
+  <a href="workbook.html" style="font-size:13px;font-weight:600;color:var(--purple-deep);text-decoration:underline;text-underline-offset:3px;white-space:nowrap;">📖 My workbook</a>
+</div>
+<main id="main">
+  <div id="app"></div>
+</main>
+
+<script>
+/* ── Data ───────────────────────────────────────────────────────────────── */
+const STORAGE_KEY = 'ndw_lesson6_v1';
+const SCREENS = ['q1', 'q2', 'q3', 'q4', 'result'];
+const SCREEN_LABELS = {
+  q1:     'Where are you right now?',
+  q2:     'How does it feel?',
+  q3:     'What to work on',
+  q4:     'Your capacity',
+  result: 'Your Pathway',
+};
+
+const Q1_OPTIONS = [
+  { value: 'employed',         label: "I'm in paid work — employed or self-employed",                         hint: "Including part-time, contract, or freelance" },
+  { value: 'returning-same',   label: "I'm returning to the same job after sick leave, burnout, or time out", hint: "Going back to an employer or role I had before" },
+  { value: 'returning-search', label: "I'm returning to the job market after time out",                        hint: "Looking for work again after a break — not going back to the same employer" },
+  { value: 'seeking',          label: "I'm not in work and I'm actively looking",                              hint: "Including recent redundancy or the end of a contract" },
+  { value: 'unsure-work',      label: "I'm in work but I'm not sure for how much longer",                      hint: "I'm considering leaving, or things feel unsustainable" },
+  { value: 'between',          label: "I'm in between — studying, caring, or figuring it out",                 hint: "Work isn't the immediate priority right now" },
+];
+
+const Q2_OPTIONS = [
+  { value: 'basically-right', label: "Basically right — I just need more support or adjustments to do it sustainably", hint: "The role and environment are mostly a fit" },
+  { value: 'costly',          label: "Managing, but it's costing more than I can sustain long-term",                    hint: "I'm coping but running close to empty" },
+  { value: 'wrong-fit',       label: "Wrong fit — the role or environment doesn't really suit me",                     hint: "Something more fundamental needs to change" },
+  { value: 'burnout',         label: "Burnt out or very close to it",                                                   hint: "Stabilising is the first priority right now" },
+  { value: 'not-in-work',     label: "Not in work right now — so this is about what I'm looking for",                  hint: "My focus is on finding or returning to work" },
+];
+
+const Q3_OPTIONS = [
+  { value: 'adjustments',    label: "Support and adjustments at my current job",              hint: "Getting what I need in place — formally or informally" },
+  { value: 'applications',   label: "Job searching, applications, or interviews",              hint: "Finding and going for roles that might actually fit" },
+  { value: 'work-type',      label: "Working out what kind of work would actually suit me",   hint: "Not ready for applications yet — still figuring out the fit" },
+  { value: 'burnout-rec',    label: "Burnout, recovery, or protecting my energy",              hint: "Stabilising and preventing further depletion" },
+  { value: 'role-fit',       label: "Role fit — whether the type of work is right for me",    hint: "Not just where I work, but the nature of the work itself" },
+  { value: 'workplace-convs',label: "Workplace conversations — manager, HR, or colleagues",   hint: "Preparing for or navigating a difficult conversation" },
+  { value: 'direction',      label: "Career direction and longer-term fit",                    hint: "Whether my current path is actually right for me" },
+  { value: 'confidence',     label: "Confidence and self-belief",                              hint: "Trusting my own experience and needs" },
+  { value: 'access-needs',   label: "Understanding my access needs and disability support",    hint: "Getting clearer on what I need and what's available" },
+];
+
+const Q4_OPTIONS = [
+  { value: 'good-capacity', label: "I have capacity to think, plan, and start making changes", hint: "Not unlimited, but enough to work with" },
+  { value: 'stretched',     label: "Stretched — I can manage one or two steps but not a lot more", hint: "Small moves are possible; big ones aren't" },
+  { value: 'depleted',      label: "Quite depleted — I need to stabilise before I can think ahead", hint: "Rest and recovery feel necessary before anything else" },
+  { value: 'in-burnout',    label: "In burnout — big decisions aren't possible right now",          hint: "I need support, not strategy, right now" },
+];
+
+const PATHWAY_DATA = {
+  giw: {
+    cssClass: 'giw',
+    icon: '🔍',
+    primaryLabel: 'Primary pathway',
+    name: 'Getting Into Work',
+    desc: 'You\'re looking for work that actually fits — and the focus right now is building a search strategy based on sustainability, not just availability.',
+    descBurnout: 'Once there\'s enough capacity, the focus will be on building a search strategy based on sustainability, not urgency.',
+    covers: [
+      'Job search criteria built around sustainability, not just job title',
+      'Identifying environments and cultures that are likely to be a good fit',
+      'Application and interview barriers for neurodivergent people',
+      'Strengths-based positioning for CVs and interviews',
+      'Red flags to look for in job descriptions and workplace cultures',
+    ],
+  },
+  sw: {
+    cssClass: 'sw',
+    icon: '🛡',
+    primaryLabel: 'Primary pathway',
+    name: 'Staying Well at Work',
+    desc: 'You\'re in work — or returning to it — and the focus is on building enough support and protection to make the work sustainable.',
+    descBurnout: 'Right now, the priority is stabilisation. Getting support in place and reducing what\'s most depleting is the most useful starting point.',
+    covers: [
+      'Getting adjustments and support in place — formally or informally',
+      'Role redesign and workload boundaries',
+      'Manager, HR, and workplace conversations',
+      'Energy protection and reducing masking and overcommitment',
+      'Preventing burnout escalation',
+    ],
+  },
+  rd: {
+    cssClass: 'rd',
+    icon: '◈',
+    primaryLabel: 'Primary pathway',
+    name: 'Redesigning Your Career',
+    desc: 'Something more fundamental needs to change — and the focus is on understanding what a better-fit path might look like, and how to move towards it without making a dramatic leap.',
+    descBurnout: 'A redesign may well be needed — but it can wait until there\'s enough capacity to think clearly. Stabilising comes first.',
+    covers: [
+      'Recognising when the current path is structurally wrong, not just hard',
+      'Identifying transferable strengths that work across contexts',
+      'Values and nervous-system fit — what kind of work your brain thrives in',
+      'What to keep, reduce, change, or leave behind',
+      'Testing options before making a big change',
+    ],
+  },
+};
+
+/* ── Scoring ─────────────────────────────────────────────────────────────── */
+const Q1W = {
+  'employed':          { sw:2, rd:1 },
+  'returning-same':    { sw:3 },
+  'returning-search':  { giw:2, sw:1, rd:1 },
+  'seeking':           { giw:3 },
+  'unsure-work':       { sw:1, rd:2 },
+  'between':           { giw:1, rd:1 },
+};
+const Q2W = {
+  'basically-right': { sw:3 },
+  'costly':          { sw:2, rd:1 },
+  'wrong-fit':       { sw:1, rd:2 },
+  'burnout':         { sw:3 },
+  'not-in-work':     { giw:2, rd:1 },
+};
+const Q3W = {
+  'adjustments':    { sw:2 },
+  'applications':   { giw:2 },
+  'work-type':      { giw:2, rd:1 },
+  'burnout-rec':    { sw:2 },
+  'role-fit':       { rd:2 },
+  'workplace-convs':{ sw:2 },
+  'direction':      { rd:2 },
+  'confidence':     {},
+  'access-needs':   { giw:1, sw:1 },
+};
+const Q4W = {
+  'good-capacity': { giw:1, rd:1 },
+  'stretched':     { sw:1 },
+  'depleted':      { sw:3 },
+  'in-burnout':    { sw:4 },
+};
+
+function addW(scores, w) {
+  if (!w) return;
+  if (w.giw) scores.giw += w.giw;
+  if (w.sw)  scores.sw  += w.sw;
+  if (w.rd)  scores.rd  += w.rd;
+}
+
+function calculatePathway() {
+  const scores = { giw: 0, sw: 0, rd: 0 };
+  addW(scores, Q1W[state.q1] || {});
+  addW(scores, Q2W[state.q2] || {});
+  (state.q3 || []).forEach(v => addW(scores, Q3W[v] || {}));
+  addW(scores, Q4W[state.q4] || {});
+
+  // Stabilise First: Q4=in-burnout (hard override), or Q4=depleted + Q2=burnout (combined signal)
+  const stabiliseFirst = state.q4 === 'in-burnout' ||
+    (state.q4 === 'depleted' && state.q2 === 'burnout');
+  // Burnout flag: broader — triggers cautionary language in pathway descriptions
+  const burnoutFlag = state.q4 === 'in-burnout' || state.q4 === 'depleted' || state.q2 === 'burnout';
+
+  let primary, secondary, nextPathway;
+
+  if (stabiliseFirst) {
+    // Stabilise First is a capacity state, not a career pathway — shown as a distinct result
+    primary = 'stabilise';
+    // Identify the most likely next pathway from scores (could be any of the three)
+    const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+    nextPathway = sorted[0][1] >= 1 ? sorted[0][0] : null;
+    secondary = null;
+  } else {
+    const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+
+    // Triple tie
+    const allEqual = sorted[0][1] > 0 &&
+      sorted[0][1] === sorted[1][1] && sorted[1][1] === sorted[2][1];
+    if (allEqual) {
+      primary = 'unclear';
+      secondary = null;
+      nextPathway = null;
+    } else if (sorted[0][1] === sorted[1][1]) {
+      // Two-way tie — apply tie-break rules
+      const pair = [sorted[0][0], sorted[1][0]].sort().join('-');
+      if (pair === 'giw-rd') {
+        const notInWork = ['seeking', 'between', 'returning-search'].includes(state.q1);
+        primary   = notInWork ? 'giw' : 'rd';
+        secondary = notInWork ? 'rd'  : 'giw';
+      } else if (pair === 'rd-sw') {
+        const swFavour = ['burnout', 'costly'].includes(state.q2) || state.q4 === 'depleted';
+        primary   = swFavour ? 'sw' : 'rd';
+        secondary = swFavour ? 'rd' : 'sw';
+      } else {
+        // GIW-SW tie: SW is safer to recommend first
+        primary   = 'sw';
+        secondary = 'giw';
+      }
+      nextPathway = null;
+    } else {
+      // Clear winner
+      primary     = sorted[0][0];
+      secondary   = sorted[1][0];
+      nextPathway = null;
+    }
+
+    // Apply "Also relevant" threshold: score >= 2 AND >= 30% of primary score
+    if (secondary) {
+      const primScore = scores[primary] || 0;
+      const secScore  = scores[secondary] || 0;
+      if (secScore < 2 || secScore < primScore * 0.3) secondary = null;
+    }
+  }
+
+  return { primary, secondary, nextPathway, stabiliseFirst, burnout: burnoutFlag, scores };
+}
+
+/* ── State ───────────────────────────────────────────────────────────────── */
+function defaultState() {
+  return { screen: 'q1', q1: null, q2: null, q3: [], q4: null, experiment: '', showAll: false };
+}
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return Object.assign(defaultState(), JSON.parse(raw));
+  } catch(e) {}
+  return defaultState();
+}
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+
+let state = loadState();
+
+/* ── Navigation ──────────────────────────────────────────────────────────── */
+function captureValues() {
+  const exp = document.getElementById('experiment');
+  if (exp) { state.experiment = exp.value; saveState(); }
+}
+function goTo(screen) {
+  captureValues();
+  state.screen = screen;
+  saveState();
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ── Progress ─────────────────────────────────────────────────────────────── */
+function renderProgress(screenId) {
+  const idx = SCREENS.indexOf(screenId);
+  const pct = Math.round(((idx + 1) / SCREENS.length) * 100);
+  return `
+    <div class="progress-wrap" role="progressbar" aria-valuenow="${idx+1}" aria-valuemin="1" aria-valuemax="${SCREENS.length}">
+      <div class="progress-meta">
+        <span class="progress-label">${idx+1} of ${SCREENS.length} — ${SCREEN_LABELS[screenId]}</span>
+        <span class="progress-pct">${pct}%</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+    </div>`;
+}
+
+/* ── Option rendering ─────────────────────────────────────────────────────── */
+function renderOptionCards(options, selectedVal, isMulti) {
+  const selArr = isMulti ? (selectedVal || []) : null;
+  return options.map(opt => {
+    const isSel = isMulti ? selArr.includes(opt.value) : selectedVal === opt.value;
+    const isDisabled = isMulti && selArr.length >= 2 && !isSel;
+    const indicator = isMulti
+      ? `<span class="opt-check" aria-hidden="true"></span>`
+      : `<span class="opt-dot" aria-hidden="true"></span>`;
+    return `
+      <div class="option-card${isSel ? ' selected' : ''}${isDisabled ? ' disabled' : ''}"
+           data-value="${escHtml(opt.value)}" tabindex="0"
+           role="${isMulti ? 'checkbox' : 'radio'}" aria-checked="${isSel}">
+        ${indicator}
+        <span>
+          <span class="opt-label">${opt.label}</span>
+          ${opt.hint ? `<span class="opt-hint">${opt.hint}</span>` : ''}
+        </span>
+      </div>`;
+  }).join('');
+}
+
+/* ── Question screens ─────────────────────────────────────────────────────── */
+function renderQ1() {
+  const hasSelection = !!state.q1;
+  return `
+    ${renderProgress('q1')}
+    <p class="lesson-eyebrow">Lesson 6 — Choose Your Pathway</p>
+    <h1 class="lesson-title">Right now, which of these is closest to where you are?</h1>
+    <p class="lesson-desc">Choose the option that fits best — it doesn't have to be perfect.</p>
+    <div class="options-list" id="options-q1" role="radiogroup" aria-label="Current situation">
+      ${renderOptionCards(Q1_OPTIONS, state.q1, false)}
+    </div>
+    <div class="nav-buttons">
+      <span></span>
+      <button class="btn btn-primary" id="btn-next" ${!hasSelection ? 'disabled' : ''}>Next <span aria-hidden="true">→</span></button>
+    </div>
+    <p class="save-badge">💾 Saves automatically</p>`;
+}
+
+function renderQ2() {
+  const hasSelection = !!state.q2;
+  return `
+    ${renderProgress('q2')}
+    <p class="lesson-eyebrow">Lesson 6 — Choose Your Pathway</p>
+    <h1 class="lesson-title">How does your current situation feel?</h1>
+    <p class="lesson-desc">Go with the option that resonates most, even if it's not a perfect fit.</p>
+    <div class="options-list" id="options-q2" role="radiogroup" aria-label="How your situation feels">
+      ${renderOptionCards(Q2_OPTIONS, state.q2, false)}
+    </div>
+    <div class="nav-buttons">
+      <button class="btn btn-ghost" id="btn-back"><span aria-hidden="true">←</span> Back</button>
+      <button class="btn btn-primary" id="btn-next" ${!hasSelection ? 'disabled' : ''}>Next <span aria-hidden="true">→</span></button>
+    </div>
+    <p class="save-badge">💾 Saves automatically</p>`;
+}
+
+function renderQ3() {
+  const hasSelection = state.q3 && state.q3.length > 0;
+  return `
+    ${renderProgress('q3')}
+    <p class="lesson-eyebrow">Lesson 6 — Choose Your Pathway</p>
+    <h1 class="lesson-title">What are the main things you need to work on?</h1>
+    <p class="lesson-desc">Choose up to two — the areas that feel most pressing right now.</p>
+    <div class="options-list" id="options-q3" role="group" aria-label="Main areas to work on">
+      ${renderOptionCards(Q3_OPTIONS, state.q3, true)}
+    </div>
+    <p class="max-note${(state.q3 && state.q3.length >= 2) ? ' visible' : ''}" id="max-note">You've selected two — deselect one to choose another.</p>
+    <div class="nav-buttons">
+      <button class="btn btn-ghost" id="btn-back"><span aria-hidden="true">←</span> Back</button>
+      <button class="btn btn-primary" id="btn-next" ${!hasSelection ? 'disabled' : ''}>Next <span aria-hidden="true">→</span></button>
+    </div>
+    <p class="save-badge">💾 Saves automatically</p>`;
+}
+
+function renderQ4() {
+  const hasSelection = !!state.q4;
+  return `
+    ${renderProgress('q4')}
+    <p class="lesson-eyebrow">Lesson 6 — Choose Your Pathway</p>
+    <h1 class="lesson-title">Where is your capacity right now?</h1>
+    <p class="lesson-desc">Be honest — there's no wrong answer. Your capacity shapes what's actually useful to focus on first.</p>
+    <div class="options-list" id="options-q4" role="radiogroup" aria-label="Your current capacity">
+      ${renderOptionCards(Q4_OPTIONS, state.q4, false)}
+    </div>
+    <div class="nav-buttons">
+      <button class="btn btn-ghost" id="btn-back"><span aria-hidden="true">←</span> Back</button>
+      <button class="btn btn-primary" id="btn-next" ${!hasSelection ? 'disabled' : ''}>See my pathway <span aria-hidden="true">→</span></button>
+    </div>
+    <p class="save-badge">💾 Saves automatically</p>`;
+}
+
+/* ── Result screen ────────────────────────────────────────────────────────── */
+function renderPathwayBox(id, isPrimary, inCompare) {
+  const pw = PATHWAY_DATA[id];
+  const result = calculatePathway();
+  const desc = result.burnout && id !== 'sw' ? pw.descBurnout : pw.desc;
+  const showCovers = isPrimary || inCompare;
+  const label = inCompare ? '' : (isPrimary ? 'Your suggested starting pathway' : 'Also relevant');
+  const coversHtml = showCovers
+    ? `<p class="covers-label">This pathway covers</p>
+       <ul class="covers-list">${pw.covers.map(c => `<li>${c}</li>`).join('')}</ul>`
+    : '';
+  return `
+    <div class="pathway-box ${pw.cssClass}${isPrimary || inCompare ? '' : ' secondary'}">
+      ${label ? `<p class="pathway-label">${label}</p>` : ''}
+      <p class="pathway-name">${pw.name}</p>
+      <p class="pathway-desc">${desc}</p>
+      ${coversHtml}
+    </div>`;
+}
+
+function renderAllPathways() {
+  return `
+    <div style="margin-top:6px">
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;font-style:italic;line-height:1.5">
+        All three pathways — read through them and see which resonates most.
+      </p>
+      ${renderPathwayBox('giw', false, true)}
+      ${renderPathwayBox('sw',  false, true)}
+      ${renderPathwayBox('rd',  false, true)}
+    </div>`;
+}
+
+function renderResult() {
+  const result = calculatePathway();
+
+  // Persist the computed result so Lesson 7 and the workbook can pull it through
+  state.savedResult = {
+    primary: result.primary,
+    secondary: result.secondary,
+    nextPathway: result.nextPathway,
+    stabiliseFirst: result.stabiliseFirst,
+    burnout: result.burnout,
+  };
+  saveState();
+
+  let primaryHtml, secondaryHtml = '', nextPathwayHtml = '';
+
+  if (result.stabiliseFirst) {
+    // ── Stabilise First card ─────────────────────────────────────────────────
+    const nextPw = result.nextPathway ? PATHWAY_DATA[result.nextPathway] : null;
+    primaryHtml = `
+      <div style="background:#fff8e6;border:2px solid #e8a200;border-radius:16px;padding:22px 24px;margin-bottom:12px">
+        <p style="font-size:11px;font-weight:700;color:#9a6400;margin:0 0 6px;text-transform:uppercase;letter-spacing:.06em">Your suggested starting point</p>
+        <p style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:#5c3d00;margin:0 0 12px">Stabilise First</p>
+        <p style="font-size:15px;color:#5c3d00;line-height:1.6;margin:0 0 14px">From your answers, it sounds like your capacity is very low right now. That doesn't mean you don't need career change, adjustments, or a plan — but it does mean the first step is probably not a big decision or an action-heavy process.</p>
+        <p style="font-size:13px;font-weight:600;color:#7a5200;margin:0 0 8px">For now, focus on:</p>
+        <ul style="font-size:14px;color:#5c3d00;line-height:1.8;margin:0 0 16px;padding-left:20px">
+          <li>reducing immediate pressure</li>
+          <li>identifying what is draining you most</li>
+          <li>getting support in place</li>
+          <li>making work or job-search demands smaller</li>
+          <li>protecting recovery time</li>
+          <li>avoiding major career decisions until you have more capacity</li>
+        </ul>
+        ${nextPw ? `
+        <div style="background:#fff3d0;border-radius:10px;padding:12px 16px;margin-bottom:14px">
+          <p style="font-size:12px;font-weight:700;color:#7a5200;margin:0 0 4px;text-transform:uppercase;letter-spacing:.04em">Likely next pathway</p>
+          <p style="font-size:14px;color:#5c3d00;margin:0">Based on your answers, <strong>${escHtml(nextPw.name)}</strong> is likely to be your next focus once you've stabilised — but that step can wait.</p>
+        </div>` : ''}
+        <p style="font-size:13px;color:#7a6030;line-height:1.5;margin:0;font-style:italic">This community can help with practical tools and peer support, but it is not crisis, medical, legal, or therapeutic support. If you are unsafe, in crisis, or unable to function day to day, please seek appropriate professional or emergency support.</p>
+      </div>`;
+    secondaryHtml = '';
+
+  } else if (result.primary === 'unclear') {
+    primaryHtml = `
+      <div class="pathway-box" style="border-radius:16px;padding:20px 22px;margin-bottom:12px;background:#f5f0ff;border:2px solid #c5b8f0">
+        <p class="pathway-label">No clear pathway yet</p>
+        <p class="pathway-name" style="font-size:18px">Your answers point in several directions equally</p>
+        <p class="pathway-desc">This sometimes happens at a transition point, or when several things feel urgent at once. Use the "Compare all three pathways" option below — reading through each one often makes it clearer which resonates most right now.</p>
+      </div>`;
+  } else {
+    primaryHtml = renderPathwayBox(result.primary, true);
+    if (result.secondary) {
+      secondaryHtml = renderPathwayBox(result.secondary, false);
+    }
+  }
+
+  const introDesc = result.stabiliseFirst
+    ? 'From your answers, stabilisation is the right starting point before any bigger career decisions.'
+    : result.primary === 'unclear'
+      ? 'Your answers don\'t clearly favour one pathway — that\'s useful information. Read through all three below.'
+      : `Based on what you've shared, here's a suggested starting point — not a fixed label, just a useful place to focus first.${result.secondary ? ' A second pathway is also shown below.' : ''}`;
+
+  return `
+    ${renderProgress('result')}
+    <p class="lesson-eyebrow">Lesson 6 — Choose Your Pathway</p>
+    <h1 class="lesson-title">Your pathway</h1>
+    <p class="lesson-desc">${introDesc}</p>
+
+    ${primaryHtml}
+    ${nextPathwayHtml}
+    ${secondaryHtml}
+
+    <div style="margin-top:16px;text-align:center">
+      <button class="btn btn-ghost btn-sm" id="btn-toggle-all" style="width:100%;justify-content:center">
+        ${state.showAll ? '↑ Hide all pathways' : '↓ Compare all three pathways'}
+      </button>
+    </div>
+    ${state.showAll ? renderAllPathways() : ''}
+
+    <hr>
+
+    <p class="obs-label">What's the smallest useful experiment?</p>
+    <p class="obs-hint">One conversation, one adjustment, one piece of research. Small and specific is better than ambitious and vague.</p>
+    <textarea id="experiment" class="obs-area" rows="3"
+      placeholder="e.g. 'Ask my manager for a written priority list at the start of the week.'">${escHtml(state.experiment)}</textarea>
+    ${(() => {
+      try {
+        const l5 = JSON.parse(localStorage.getItem('ndw_lesson5_v1') || 'null');
+        const cands = l5 ? (l5.starterList || []).map(s => (s || '').trim()).filter(Boolean) : [];
+        return cands.length ? `
+        <p class="pull-chips-label">From your Lesson 5 starter list — tap to use:</p>
+        <div class="pull-chips">
+          ${cands.map(c => `<button type="button" class="pull-chip" data-exp-chip="${escHtml(c)}">${escHtml(c)}</button>`).join('')}
+        </div>` : '';
+      } catch(e) { return ''; }
+    })()}
+
+    <div class="community-section">
+      <p class="community-label">Community prompt</p>
+      <div class="community-prompt">"Which pathway are you on right now: Get Into Work, Stay Well, or Redesign? What made you choose that?"</div>
+      <p style="font-size:14px;color:var(--text-muted)">Share as much or as little as you like in the Skool community.</p>
+    </div>
+
+    <div class="paid-bridge" role="complementary" aria-label="Premium content">
+      <p class="paid-bridge-label">Want to go further?</p>
+      <p>In <strong>Work That Works Premium</strong>, each pathway is explored in depth — with specific tools, scripts, and frameworks for your situation. We cover how to ask for adjustments, what to disclose and when, how to approach a career redesign without burning everything down, and how to build a job search strategy based on sustainability, not just availability.</p>
+    </div>
+
+    <div class="nav-buttons" style="justify-content:center;margin-top:28px">
+      <a href="Lesson007-Your-7-Day-Next-Step.html" class="btn btn-primary">Next: Your 7-Day Next Step →</a>
+    </div>
+    <div class="nav-buttons" style="justify-content:center;gap:10px;flex-wrap:wrap;margin-top:14px">
+      <button class="btn btn-ghost btn-sm" id="btn-back">← Back to questions</button>
+      <button class="btn btn-ghost btn-sm" id="btn-pdf">⬇ Save as PDF</button>
+      <a href="workbook.html" class="btn btn-ghost btn-sm">📖 View my full workbook</a>
+      <button class="btn btn-ghost btn-sm" id="btn-restart">Clear all &amp; start again</button>
+    </div>
+    <p class="save-badge">💾 Everything is saved automatically</p>`;
+}
+
+/* ── Render ───────────────────────────────────────────────────────────────── */
+function render() {
+  const app = document.getElementById('app');
+  switch (state.screen) {
+    case 'q2':     app.innerHTML = renderQ2(); break;
+    case 'q3':     app.innerHTML = renderQ3(); break;
+    case 'q4':     app.innerHTML = renderQ4(); break;
+    case 'result': app.innerHTML = renderResult(); break;
+    default:       app.innerHTML = renderQ1();
+  }
+  attachListeners();
+  const expEl = document.getElementById('experiment');
+  if (expEl) expEl.addEventListener('input', () => { state.experiment = expEl.value; saveState(); });
+}
+
+/* ── Listeners ────────────────────────────────────────────────────────────── */
+function attachListeners() {
+  /* Option cards — radio */
+  ['options-q1', 'options-q2', 'options-q4'].forEach(id => {
+    const container = document.getElementById(id);
+    if (!container) return;
+    const qKey = id.replace('options-', '');
+    container.querySelectorAll('.option-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const val = card.dataset.value;
+        state[qKey] = val;
+        saveState();
+        container.querySelectorAll('.option-card').forEach(c => {
+          const isSel = c.dataset.value === val;
+          c.classList.toggle('selected', isSel);
+          c.setAttribute('aria-checked', isSel);
+        });
+        const btnNext = document.getElementById('btn-next');
+        if (btnNext) btnNext.disabled = false;
+      });
+      card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); } });
+    });
+  });
+
+  /* Option cards — checkbox (Q3) */
+  const q3Container = document.getElementById('options-q3');
+  if (q3Container) {
+    q3Container.querySelectorAll('.option-card').forEach(card => {
+      card.addEventListener('click', () => {
+        if (card.classList.contains('disabled')) return;
+        const val = card.dataset.value;
+        const arr = state.q3 || [];
+        const idx = arr.indexOf(val);
+        if (idx >= 0) {
+          arr.splice(idx, 1);
+          card.classList.remove('selected');
+          card.setAttribute('aria-checked', false);
+        } else {
+          if (arr.length >= 2) return;
+          arr.push(val);
+          card.classList.add('selected');
+          card.setAttribute('aria-checked', true);
+        }
+        state.q3 = arr;
+        saveState();
+        // Update disabled states
+        const isFull = arr.length >= 2;
+        q3Container.querySelectorAll('.option-card').forEach(c => {
+          const isSelected = arr.includes(c.dataset.value);
+          c.classList.toggle('disabled', isFull && !isSelected);
+        });
+        // Max note
+        const maxNote = document.getElementById('max-note');
+        if (maxNote) maxNote.classList.toggle('visible', isFull);
+        // Next button
+        const btnNext = document.getElementById('btn-next');
+        if (btnNext) btnNext.disabled = arr.length === 0;
+      });
+      card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); } });
+    });
+  }
+
+  /* Nav */
+  const btnNext = document.getElementById('btn-next');
+  if (btnNext) {
+    btnNext.addEventListener('click', () => {
+      const nextMap = { q1: 'q2', q2: 'q3', q3: 'q4', q4: 'result' };
+      goTo(nextMap[state.screen] || 'result');
+    });
+  }
+  const btnBack = document.getElementById('btn-back');
+  if (btnBack) {
+    btnBack.addEventListener('click', () => {
+      const backMap = { q2: 'q1', q3: 'q2', q4: 'q3', result: 'q4' };
+      goTo(backMap[state.screen] || 'q1');
+    });
+  }
+
+  /* Experiment chips — pull through from the Lesson 5 starter list */
+  document.querySelectorAll('[data-exp-chip]').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const el = document.getElementById('experiment');
+      if (!el) return;
+      el.value = chip.dataset.expChip;
+      state.experiment = el.value;
+      saveState();
+      el.focus();
+    });
+  });
+
+  /* Toggle all pathways */
+  const btnToggleAll = document.getElementById('btn-toggle-all');
+  if (btnToggleAll) {
+    btnToggleAll.addEventListener('click', () => {
+      captureValues();
+      state.showAll = !state.showAll;
+      saveState();
+      render();
+      // Don't scroll — user is already on the result screen
+    });
+  }
+
+  /* PDF */
+  const btnPdf = document.getElementById('btn-pdf');
+  if (btnPdf) btnPdf.addEventListener('click', () => { captureValues(); window.print(); });
+
+  /* Restart */
+  const btnRestart = document.getElementById('btn-restart');
+  if (btnRestart) {
+    btnRestart.addEventListener('click', () => {
+      if (confirm('This will clear all your responses. Are you sure?')) {
+        localStorage.removeItem(STORAGE_KEY);
+        state = defaultState();
+        render();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+  }
+}
+
+/* ── Utility ─────────────────────────────────────────────────────────────── */
+function escHtml(str) {
+  return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ── Init ────────────────────────────────────────────────────────────────── */
+render();
+</script>
+</body>
+</html>
