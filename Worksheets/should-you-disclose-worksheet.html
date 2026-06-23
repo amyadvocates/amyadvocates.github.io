@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Should You Disclose? — Worksheet | Neurodiversity Works</title>
+  <style>
+    :root {
+      --bg: #FAF8F4;
+      --white: #FFFFFF;
+      --text: #1F3D37;
+      --heading: #222C93;
+      --accent: #5400FF;
+      --lavender: #C6C1D2;
+      --teal: #3A6A70;
+      --warm: #D8CBB8;
+      --border: #B8B3C4;
+      --card-bg: #FFFFFF;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 1rem;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    /* ── Accessibility ─────────────────────────────── */
+    .sr-only {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+
+    *:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    .skip-link {
+      position: absolute; top: -60px; left: 16px;
+      background: var(--accent); color: #fff;
+      padding: 10px 18px; border-radius: 6px;
+      font-weight: 700; text-decoration: none; z-index: 9999;
+    }
+    .skip-link:focus { top: 14px; }
+
+    /* ── Header ───────────────────────────────────── */
+    header {
+      background: #ffffff;
+      border-bottom: 2px solid #e8e4f0;
+      color: #111;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .brand { font-size: 1.05rem; font-weight: 700; color: #111; letter-spacing: -0.01em; }
+    .brand em { color: #5400FF; font-style: italic; font-weight: 700; }
+    .brand-sub { font-size: 0.78rem; color: #555; margin-top: 2px; font-weight: 400; }
+    .workshop-tag {
+      font-size: 0.82rem; color: #5400FF;
+      border: 1px solid #5400FF;
+      padding: 4px 10px; border-radius: 20px;
+      font-weight: 600;
+    }
+
+    /* ── Progress ─────────────────────────────────── */
+    .progress-track {
+      height: 5px; background: var(--lavender);
+    }
+    .progress-fill {
+      height: 5px; background: var(--accent);
+      transition: width 0.35s ease;
+    }
+    .progress-row {
+      background: var(--white);
+      border-bottom: 1px solid var(--lavender);
+      padding: 8px 24px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .progress-page-name { font-size: 0.85rem; font-weight: 700; color: var(--heading); }
+    .progress-count { font-size: 0.82rem; color: var(--teal); }
+
+    /* ── Main / pages ─────────────────────────────── */
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 32px 22px 110px;
+    }
+
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ── Page header ──────────────────────────────── */
+    .page-header {
+      margin-bottom: 26px;
+      padding-bottom: 14px;
+      border-bottom: 3px solid var(--accent);
+    }
+    .part-tag {
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--teal); margin-bottom: 4px;
+    }
+    h1 {
+      font-size: 1.6rem; font-weight: 700;
+      color: var(--heading); line-height: 1.2;
+    }
+    .page-intro {
+      margin-top: 8px; font-size: 0.94rem; color: var(--text);
+    }
+
+    h2 { font-size: 1.1rem; color: var(--heading); margin: 22px 0 10px; }
+    h3 { font-size: 0.96rem; font-weight: 700; color: var(--text); margin: 14px 0 6px; }
+
+    /* ── Boxes ────────────────────────────────────── */
+    .info-box {
+      background: var(--white);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 16px;
+      margin: 16px 0;
+      font-size: 0.91rem;
+    }
+    .info-box p + p { margin-top: 6px; }
+
+    .quote-box {
+      background: #EDE9F6;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 12px 0;
+      font-style: italic;
+      font-size: 0.91rem;
+      color: var(--text);
+      border-left: 3px solid var(--accent);
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
+      margin: 12px 0;
+    }
+
+    .legal-note {
+      background: var(--bg);
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 0.81rem;
+      color: var(--teal);
+      margin: 14px 0;
+    }
+
+    .warning-box {
+      background: #FFF5F5;
+      border: 2px solid #B71C1C;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 14px 0;
+      font-size: 0.89rem;
+    }
+    .warning-box strong { color: #B71C1C; }
+
+    /* ── Divider ──────────────────────────────────── */
+    .divider {
+      border: none;
+      height: 2px;
+      background: linear-gradient(to right, var(--accent), var(--lavender));
+      border-radius: 2px;
+      margin: 24px 0;
+    }
+
+    /* ── Radio / checkbox choices ─────────────────── */
+    .choice-group { display: flex; flex-direction: column; gap: 8px; }
+
+    .choice-label {
+      display: flex; align-items: flex-start; gap: 10px;
+      cursor: pointer;
+      padding: 11px 14px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      font-size: 0.91rem;
+      line-height: 1.45;
+      transition: border-color 0.14s, background 0.14s;
+    }
+    .choice-label:hover { border-color: var(--accent); background: var(--white); }
+    .choice-label input {
+      flex-shrink: 0; margin-top: 3px;
+      width: 18px; height: 18px;
+      accent-color: var(--accent);
+    }
+    .choice-label:has(input:checked) {
+      border-color: var(--accent); background: var(--white);
+    }
+    .choice-label:has(input:checked) span { font-weight: 600; }
+
+    /* ── 4-option response scale ──────────────────── */
+    .scale-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+    @media (min-width: 480px) {
+      .scale-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    .scale-label {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 5px; cursor: pointer;
+      padding: 10px 6px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      font-size: 0.84rem; text-align: center;
+      transition: border-color 0.14s, background 0.14s;
+    }
+    .scale-label:hover { border-color: var(--accent); background: var(--white); }
+    .scale-label input { width: 18px; height: 18px; accent-color: var(--accent); }
+    .scale-label:has(input:checked) {
+      border-color: var(--accent); background: var(--white); font-weight: 700;
+    }
+
+    /* ── Score 1–5 ────────────────────────────────── */
+    .score-row { display: flex; gap: 8px; margin-top: 8px; }
+    .score-label {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 4px; cursor: pointer;
+      width: 46px; padding: 8px 4px;
+      border: 2px solid var(--border); border-radius: 8px;
+      background: var(--bg); font-size: 1rem; font-weight: 700;
+      text-align: center; transition: border-color 0.14s, background 0.14s;
+    }
+    .score-label:hover { border-color: var(--accent); }
+    .score-label input { position: absolute; opacity: 0; width: 0; height: 0; }
+    .score-label:has(input:checked) {
+      background: var(--accent); border-color: var(--accent); color: var(--white);
+    }
+
+    /* ── Checklist ────────────────────────────────── */
+    .checklist { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+    .check-label {
+      display: flex; align-items: flex-start; gap: 10px;
+      cursor: pointer; font-size: 0.91rem; padding: 7px 0;
+      border-bottom: 1px solid var(--lavender);
+    }
+    .checklist li:last-child .check-label { border-bottom: none; }
+    .check-label input {
+      flex-shrink: 0; margin-top: 3px;
+      width: 18px; height: 18px; accent-color: var(--accent);
+    }
+
+    /* ── Textarea / text input ────────────────────── */
+    .field { margin: 16px 0; }
+    .field-label {
+      display: block; font-weight: 700; font-size: 0.91rem;
+      margin-bottom: 5px; color: var(--text);
+    }
+    .field-hint {
+      font-size: 0.82rem; color: var(--teal);
+      margin-bottom: 6px; font-style: italic;
+    }
+    textarea, input[type="text"] {
+      width: 100%; padding: 10px 13px;
+      border: 2px solid var(--border); border-radius: 8px;
+      font-family: inherit; font-size: 0.91rem; color: var(--text);
+      background: var(--white); resize: vertical;
+    }
+    textarea:focus, input[type="text"]:focus {
+      outline: 3px solid var(--accent); outline-offset: 2px;
+      border-color: var(--accent);
+    }
+    textarea { min-height: 80px; }
+
+    /* ── Question card ────────────────────────────── */
+    .q-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px; margin: 14px 0;
+    }
+    .q-num {
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 4px;
+    }
+    .q-text { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .q-hint { font-size: 0.84rem; color: var(--teal); margin-bottom: 10px; font-style: italic; }
+
+    /* ── Urgency cards ────────────────────────────── */
+    .urgency-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 12px 0; }
+    @media (max-width: 480px) { .urgency-grid { grid-template-columns: 1fr; } }
+    .urgency-label {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 6px; cursor: pointer;
+      padding: 14px 10px;
+      border: 2px solid var(--border); border-radius: 10px;
+      background: var(--bg); text-align: center;
+      transition: border-color 0.14s, background 0.14s;
+    }
+    .urgency-label:hover { border-color: var(--accent); background: var(--white); }
+    .urgency-label:has(input:checked) { border-color: var(--accent); background: var(--white); }
+    .urgency-label input { width: 18px; height: 18px; accent-color: var(--accent); }
+    .urgency-tag {
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent);
+    }
+    .urgency-title { font-size: 0.88rem; font-weight: 700; color: var(--text); }
+    .urgency-desc { font-size: 0.78rem; color: var(--teal); }
+
+    /* ── 2×2 matrix ───────────────────────────────── */
+    .matrix { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0; }
+    .matrix-cell {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 8px; padding: 12px;
+    }
+    .matrix-cell-title {
+      font-size: 0.73rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--teal); margin-bottom: 4px;
+    }
+    .matrix-cell-body { font-size: 0.85rem; color: var(--text); }
+
+    /* ── Route cards ──────────────────────────────── */
+    .route-card {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 16px; margin: 8px 0;
+    }
+    .route-title { font-weight: 700; color: var(--heading); font-size: 0.93rem; margin-bottom: 4px; }
+    .route-desc { font-size: 0.86rem; color: var(--text); line-height: 1.5; }
+
+    /* ── Outcome list (cover) ─────────────────────── */
+    .outcome-list { display: flex; flex-direction: column; gap: 0; }
+    .outcome-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 0; border-bottom: 1px solid var(--lavender);
+      font-size: 0.91rem;
+    }
+    .outcome-item:last-child { border-bottom: none; }
+    .outcome-num {
+      flex-shrink: 0; width: 24px; height: 24px;
+      background: var(--accent); color: #fff;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700;
+    }
+
+    /* ── Spectrum bar ─────────────────────────────── */
+    .spectrum-bar {
+      height: 10px; border-radius: 5px;
+      background: linear-gradient(to right, var(--lavender), var(--accent));
+      margin: 10px 0 4px;
+    }
+    .spectrum-ends {
+      display: flex; justify-content: space-between;
+      font-size: 0.78rem; color: var(--teal);
+    }
+
+    /* ── 3-column pillar ──────────────────────────── */
+    .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 14px 0; }
+    @media (max-width: 500px) { .pillars { grid-template-columns: 1fr; } }
+    .pillar {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px; text-align: center;
+    }
+    .pillar-icon { font-size: 1.6rem; display: block; margin-bottom: 6px; }
+    .pillar-title { font-weight: 700; font-size: 0.9rem; color: var(--heading); }
+    .pillar-desc { font-size: 0.8rem; color: var(--teal); margin-top: 4px; }
+
+    /* ── Nav bar ──────────────────────────────────── */
+    .nav-bar {
+      position: fixed; bottom: 34px; left: 0; right: 0;
+      background: var(--white);
+      border-top: 2px solid var(--lavender);
+      border-bottom: 1px solid var(--lavender);
+      padding: 12px 22px;
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 12px; z-index: 100;
+    }
+    .btn {
+      padding: 11px 22px; border: none; border-radius: 8px;
+      font-family: inherit; font-size: 0.91rem; font-weight: 700;
+      cursor: pointer;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover:not(:disabled) { background: #4400cc; }
+    .btn-secondary {
+      background: var(--bg); color: var(--text);
+      border: 2px solid var(--border);
+    }
+    .btn-secondary:hover:not(:disabled) { border-color: var(--accent); }
+    .btn:disabled { opacity: 0.38; cursor: default; }
+    .nav-count { font-size: 0.84rem; color: var(--teal); font-weight: 700; }
+
+    /* ── Print ────────────────────────────────────── */
+    @media print {
+      .nav-bar, .progress-track, .progress-row, .skip-link, .save-prompt, footer { display: none !important; }
+      .page { display: block !important; page-break-after: always; break-after: page; }
+      .page:last-of-type { page-break-after: avoid; break-after: avoid; }
+      main { padding: 16px 24px 24px; max-width: 100%; }
+      body { background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      textarea, input[type="text"] { border: 1px solid #B8B3C4 !important; background: white !important; }
+      .choice-label, .check-label { border: 1px solid #B8B3C4 !important; }
+      .scale-label, .score-label { border: 1px solid #B8B3C4 !important; }
+      .urgency-label { border: 1px solid #B8B3C4 !important; }
+      a[href]::after { content: none !important; }
+    }
+
+    /* ── Save prompt (last page only) ──────────────── */
+    .save-prompt {
+      margin-top: 28px;
+      padding: 20px 22px;
+      background: var(--white);
+      border: 2px solid var(--accent);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .save-prompt p {
+      font-size: 0.91rem;
+      color: var(--text);
+      margin: 0;
+      flex: 1;
+    }
+    .save-prompt p strong { color: var(--heading); }
+    .btn-pdf {
+      padding: 12px 22px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.93rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .btn-pdf:hover { background: #4400cc; }
+    .btn-pdf:active { transform: scale(0.97); }
+  </style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to worksheet content</a>
+
+<header>
+  <div class="header-left">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJoAAAChCAYAAAA/QqZ5AAAACXBIWXMAAAsSAAALEgHS3X78AAAgAElEQVR4nN1dy3XbSLP++B/vyYlAnAhERyBMBKYXvRYcgekIDEVgOgKDayyGimCgCExFMGAEI0bAu+hqotDoJ9B86H7n8IgC8Wg0ClXV9Zwcj0f8f4SYYAFgDmBh+PkNwA7Arjri7ULjmQHIAczY9QEA1RH1JcZwTUz+vxAaPcglfTIA08BD9wC2AMrq2D78BOOZ01gW9Ln3HHKAJL4awDblWG4B757Q6IEWkA81lLhseAVQVEdsE4znceRY9gBKyBegGXmuq+NdE5qYoACwgp3AXoCTWFJ/Z8BJrGYA7izH5bEPWEywgiSysQSv4wnA+lJi/hx4l4RGYrKGWRxtIEVPEFciDpSjT7AHAKvqiDLwPCXGczEXXiGJ/12K1HdHaKTkb9HnRBtIsdcMPO8Mkht91X764iO2CxCZwgFA9h6J7V0RGhHDDl0iS/qmiwmWkLoR526fbRzygkSm8C6J7b0R2g5dcfkMSWRJdRfimjVaYjsAmOvXIaL8O+W1A3EAsHhPi4T/XXsAoSDFnxPZpjpieQ4FmbjFim2aAlgbdjVtuwSmwPCV8TVw8xxNTJBBKuvcfPFaHY2G2DHXWECaEt7Y9hrAA9v1T8VFLsDNDvCvXjdo7W43vSL9cO0B2CAmyCGVc13pP0ASHd93Bsld5rSpgTQHePUYOvYftolzqRWA3+z/Jfs98517BF7p/Lo+quORPr/EZNxi6Ny4OdEpJsjEBA2AXzBP8ppPJulTDeSEP9DnEcBvIlYfFpbvSoS+sk1L276JcQ9p7ysjjnkE8K+YYE0vz03hpgiN9LB/0CWwPYBvAD5WR0yqIwrtsDXsImZNhBiKuWFbGXF8Siz9uxjxFUAded9nx80QGpkJvrNNB0gb1rw6msUgGVsf9O0MU/gfmO+BpDIjHCAt/H/Q5zOkjmXDGK50jxsjtpvQ0Qy2qFdIW5FPwZ0nuDx/oD2iqo6oxcR4nIvAdZhsX1sAWzGRDn2YuXIWcQ0dU0hi65llroGrczQSl5zInhFGZACSKL78HDEP5CViX+vChAzBheGnGeKI2YSbMYNcldCItXNxqaz8QQ+cFgW+B157fm9CrjUSzoddHbGG5HocuWX3V0gRvA+89gM5+6+Ka3M0bko4AGYDrJhg4dA3cvQfksImIKiwYd/PotMEuov0fUyiVIngAlKs2u5bR3HtlejVCI0Ih4sGow2I9LffkOaKo5h0rfF0zBxSsVYTrxYSuW8cdLwyYXyiBcY1EELkp4hgGncTeO4pcF2udk2Oxm98T+KjA7LY6w7rr7p9rDrijYhKcYWdKeJCTDC3vNl8352YIFf7pSA80kNdv+cIi2F7IDvjgo7xRe1y5BH7Jsc1CY2bHQrLPpllex57MSKYHYD/iIBPICJXXG0KaSz+T0xwBPBv7LUM+G4T/bQ9xmf6DySH/xU5hrtrmjuuQmh0w/wNjl0ZDVmuz9k1M8PvGbpegNTY6gRO/9dIH5FrQ+bd40y4Fkfj4uvFscosLdujoyZoUfAT0nzSO57GkEF6Ic5BcHcA/hET1IzgClyOyIDzus2cuJbBNmPfa9tO1RGNmOAzJGEot9Tz0PS06uhWiInY1tAIkURoKjxAEtxnSFE+1lYWg/kFr9XBxTka6UoZ2+QUg9UR2+rYmaCbcxgPxAphq8Y9gC8A/oJ0W8UYinXM+ULnkrgYodGKr4RUrvlbHKpvKQPlg5hge0t+PAM+QxKHy871AL8f9RUykrasjqjppcsgxfsQ3KFd6JSXNOVchNDIMr2DObZ+Hniagn3/hNau1pDecyuE940IooR/dVx4fjcasLVV8lA8QppyLmJfOzuhERf7ga7SyycpiEDowT0ZfrqD5A5Xd7MQ3izfTXDpZ3tPEGNMVMkB0qCtE+cUwA96RmfFWQnNEJXxDBkOzYkr2BpPrpe/6DwcL/BzBz6umZhgRZywpu+p9JYV467BYzLAN54m4BwqNGkOuYKfW/Z7PDexnW3VaSAyPT/yFa1le43AQD9acdaWa4aMa4Z+8vEDpD8wRRrbPaRYH4spjae2/J55jn8BiV7yTHz37P8oJmgMgaVJcBaORokbLiIDujayT5dg3+y6JtfNKX7rQuMIwdbEaWmuXGJ3Ux1lqJUhoNSF77pRORWSExpNTMk2PZn8jgaF9pEU+zz1mLSxfXLsMsU4cReK0KiLKYCGXlwl8mu4E5ZfVTCBIdYvBGXk/kE4B0cr0E2LKxz7LtGNq7qDzOg5Mv2pVhOdACELj3mia+k4QJo8/qiOmEGGc3+B3y7GIy9K+A28iigzhHMyjrtzvOxJCU20xeYUfJb4BvLh68o90GY0PeCKrpNEeIXMdD/ljVLESRloF1PE5VsgbNhKtRw4VuAMXD01R1ui5Wb7EFcRTfgSwEdIX6S+BH9FunDkHfxiK3XoszWgU4HUiC8JrlUAJ5Hpygf1IXmkR+pVJxdxUQ/MUIYgOUg5XqKbMMzxivQ6ytpjDwMg7YSW+LtQvLLr5APPwZEj4fNIzdG4on0TSRE6iMua3EMbhCfFxCBmHqKjUvTr0IsUw81eYPYyZCPG0kMyjqaz2isVAA72MlA2vOJsLyFh30MQY5erjth57G+u+6vpr2/htIck6K3OaYlIV5A6YUz0rhcpORpXVHt6EIUgH+kBnwuXjO0KQozHwbUv2fdc96cIOrP8ridkN/oOutM+pU3tXJ4B01uc0d87McHSVNjOcmMXK9F+JmQIF58ubpQ5ftuT/jmDWWxGFe+rjliLCd6QMBXxXIRmYvEl5GS9gbmQiF0XcLBqISvlrN4pwa0QQGiiLW1qwh5uBb+hvzbRuox1rYXW7g3FuZzqPRZfHdGQW0Rf6mfw6wOPYBZyB5Tx95aCIx98BlDRlt2yKfEzuA21Nf3NDL+F5LaeHaM5GnsTc227UTwaoFZaprdxhpYIpwD+FhN7PVnIN/sOwL3HIR2MRPakX0RsK52z0PlLuF82n+7Z0F/TWAvXgaJtvDFjx+/onMkK/I0iNJq8NcwTsUSAyCCl1GqvIULeon2j147z8hj8NRHb2IlKxR0fIKM6PipiE7LAi8v3GoqG/s617S8uG54jqkONKVmBv8Gik6ICfsH+tj2miIQgQlmiXcneOVZD3A51Dylu1xQnn/EPrufWUr7IOdIQGdAuvnSuWJp2Zs75EF+oKvA3yng7iNCELEvALdgqwO5PdJ3k5eCRMRCx8XNllv0adKNwp5CF6X5B2sz450eKsWk4wF/3THHYLNE11YrTdD7Tyl7F48VmX42KxI0mNBKXvOmDSqAoDGJQJZLMhw6QIXRpXkA+7NBqOymxJFtUDnOgwAHtC5M7zvMEeQ8/4ffNqnnROfSzRW1YY7gx9lFMhnkvonQ0Ihh+oV7BvOqIrZjgJ1pi/AQZ2PgMal0Icyx949ED+G9OsUeLBZUptYA59CdD+pzKhn036XY1cZ+F49o8SHRLelQNO3HU9DfTtpu42Qrjm298FROZkRVzUOxioEC3yYNR2a6OWJHBj+sAn+DRSZj75aO+OtMQpKDTOaznEWkTgwEZoVsC1pKn6uHYuMJP3X7FxOJ/jmvO0J/bDiGItusexx7DojzWRGzBC61g0UkD5W+DL/SlgAz9MYkQH0yExK81H3DOS+AO8uUycY0DJIdaws7NjFyC5tkUILmnl0m3L5rEZol+U7UF3PqkDXeIjOyI4WgF+/4SGGu2A7CkNy5D2yTVxZEamGvJcofzmFira6Ggv6Vjn3nkORVhFpbtAE7eF524M2CUKF0ZrmtFDKHxtyb4AsDpjdxifOjQidWLCfLUbpIz4pn8hzu4ja8rGAhR2KuPr2lx1imXb5gXXVR/gd9I7MM0wigfJjpJR+B5APWwsY1Gyb7/ErdfGgGguryku/ke7L3urmIGax0bSHWi0LZ3/jdE2z4jrPV2CHwuwRNCOVrGvo/lSmOwhrw5NUlqRav6kW+h9XOyISZ8ZwRe0XpIQle4C6Dj/1zCzAULyBev01KSczM6h65LbWEu4reHnEOfX5UjC9wveDHAT1iHHCBk+cstxaC9icn4gr2shpm+wJhCTs4PtKswH87NCZ8hH3KN8Ae3YaW1lFHcRGRPkISmrzRz7X/dPfgMs9rzk+LUlhSP9ifCanvchT7TIZ4Br+GUlM/faCdiCrka26UgNkpm+QvmehL3CAuJ5oSWxHFMUF6SBv12Qy5sWD7mAnYl/RXoWQAAaX87PRtL/sEnw3heK61uHNkzM4Tlnwa9sKGEdnojfWLJkEDMcYdEPS4rWcYpr45YVEdM0M0iegyIDuW/lynGBCl+akhOprfMtuEAmWSdA52mtLZ932AmslL943kGOlwmlSTPCjhP4GMO98pqSQ7dUNSQmUROAjdkEa1hedt0h3aslduBO4RzsBdIfbJk41rB7YNVKgKHqdxEETEOF5KpF+cgNJ9oNE2WCw+QFXrWAQVICrSEdk8rvU5krmEVN8SgPAYbaC176AWJ9UHuIbvM1HyjwRftQ+b47eKExu1Xc49PsoY7/EStEG2YoT/hU8gCJEs4UuIqWfOW+1kfITnoFlJnmqHPcUvHWFKiE9dFBL/EMO7zk87VmQcSu7Fl4Y2MwWCfG4VQQmvYRRdwJC1Ushucy4dWVIbmFTqYN2EJxqUgCdn6ppGfdcaOmcKuWH9JKDZteIXkqjXQad09xCL/TOdq9B+IMGKJDOhHRi8g5zy0bkdvLCaELgY4Bwox0i1hDtP5FkJkwGl1qUJuPqJdAfWMmoZjc7SrUn0cqvrhnxfwLGxALasp+LKBXInGEBkf79KQizmj0J0hRHZaqSpTFKS1ILg4TGjkbShHq9GKo6WYYOZxqO8gK0Av0XKfbWwmDj8f6VtqDBk8Iq9yFOy7EL7QAiWHu0uyDa9oE32Nc03csUS8iDtA6ndbOk+OYdG+wfptEKFRjNkBcrJUGaUi5Dik8yTUaAnt1t1O3yANxzvEK/hbeOp1sLjAIcShWlUqTjZEr1OoQ3eMWXWu0bLU72IynEMNRMO+J03XT4wN2giUEC6mom5L33yO1O8Aaa8rtPONYQRl6I4xnoE1tHyAC/kLAZzE8clSLdIV50sJ5S/8G34iewbwuTpiVh37aXgKQvZnWA3U7xSUjlew8+Z0vqFlJDYxgY/BHK1qSz79pk2qQXxPQY0Bse4Mcpm986wCt2gnusDtVSzawm1wPdA+zvQ1Nic5hnPvPSTH6Ri7mddgTAbWAZGhYsGERm+AfvJ7yFSsDSTrr2MuLgx5hWQasaXwF2ijGe5JB1pD5htEXfsMeIU74cRa1oHZ1DLYozVCx7CFZeE1YmFiQoYI0Tk5Ht1h86R4lgiz5ruyyPXzLiFFjAkHyFKcpoeifIHXqBz0QtENIDdayJx0lG8F0WaI5xjOtV4g52IH2GP4GZNIHZls9E6Y4ORoRAwlwh/qAuHizGVPmwKnt68DMnVkGB8hegmcIjIUaOwrxIku5U2p6W8TsHCY0XVynC/0/Q6yU19nkWGCldAslmYl92u2LUNbJShGZ/Ld/BIWYqRJXpATWi0KFHfZI2G5JZhdYiHQIyoySK4SwgU5p9rF6MDEHHKky4JX2ECGJ83Rf3bfyTWZ2w42EpqByFws0rQtBbwrGvIyJAtlMYEIxFbz1oZvisgClW+lW9UuMURqwwztA1dQ/6fOUwXQr71B4yjQvadHMTl5ZXroERpNLCeyZ0giC17KBoK36DHh1laUoXhWbjZ6IFuYubeSDqXFd6lWnguki/GPgVG3BDrZbbpqZSW2DqEZQmh6OkZCrOCojv2OMpw4DkAvgFHXb/eQHKLUD6YHpz4pFzu+l1qHNTmcgzxGObqLukchk4tLvq9usC3Bsp1wxnLsJCL+Qt/p/YqEFaHFBDvKW0h2TgdWVVvyoEY/YfeJYvNLNr455VO8QT4wW57AEKi6tSoKOTShO7i6JlkZ9OTmtdDqrZw4Gj0ILnO94lJzmvuMraZB1pDO9wVaQ7A3XDwUdE/qTV7hvE72PTnR5+gTWU8MibaAYUyQYtR4ILlSozYwkVfAHqFxGCBNtujqh6qnVq42cI7GT/7kWj5TaEoJ+QZ+p8/fxD2iHd50LZVkcp+Q++wg3zZlke+B7kXVTZuPuFZJf7foZx5lGpGtIFfG5yIywKL7AadyFbZqS2Wi63fq430ATm++UlgP8K/kdApWuIcc6JDoihqsf6dIUK2xatPzehDdkqhTtv3U5zLyciVxCq4LPVfH1icr+tUrQxGrYwF+7t3AvEgpI68D2J93AeJqiqNxXcxZt5SUP9dE3Zu4GnEOVYfDhDVYcCPaYMFzOe63kBxF14ce0H3RQghOcQcujjouKZqTBsNMEBn8XfBMx8TiEBuRI/rFfzge1fP7IPolj3zcbB5wfRNxlHSdvekcFO+/QmtauaPvv8QErwh74DUCAiwDXpbYsqg1uvPWaTSWwG1WI56j5XA7vueGbVE6Ns2R75gcwPp/6IZmh1B0HTMYBkUoVo8AKaGmPk336LZVtH2+QxYkTvGy8PP6MIf2srIklBS+WRORHSBXkX/ArG/dCUvdWSKQwWJTyCoEJYB/LWPjyAApOrmYq30XoZWiL13exH1WkBnczt6URGxzyEwfV3nQF/bR9/sq3LmjqY3PfA73yu935gCAdXU8dZUpLPv8ELKxbq5tNxGgs+0lqT4FxcX9Rnhc3CdALgb4JIXK5xzuCazJ93V6oJ4J6YD2XdFHPTBnAy9DePODmKCwOHtLuOPGeKeShWdfoDsPBY1HKf6XiDJpHL89QM5FQxlqM5jDmQrbCVgk7qB7ERMsPqArGuqQAymCYo622g3QrfE/hXyYy97BAxCioJKoWhJLV2+bSjx+0/Z9o9WlSSwq/WoHdMqdhoDboEqERU0o00sNqdsqX2bmOf47PYMd4vpzrmDwVnhsZ4XhmBjMBmeq08PL+TbNGf9JTLAKTa9LiBXahzQFTv44HUu0FXuAwOhXD7bAyZDti5440FhdWU4ruLnpI8JF2BsRpslQa/UAETcb66zPkpZEYJZxdTM/RNuCZgjeDAGDCxeHI261RvuAMtP12YuSDxybCVvR1jVzwZhprqNqu8wNzVJS2JMUMs3bs8ejU5qOgbzHAoFEmLzpGOlEfLHwiH4zidBPZwVJYjFkVcknbj74ZiJBD2wFt8j7Qskoob7EEvE2NB1rmjN9hXgKAjBBmHuzq5zQmqKNQ+qouQmNVizHAa6ZDOMnR6Fh35V9zqn7jUmWGQF1vzYxdIAsa18OOPeQY/h1AbO7y+oBIUlkErONdkzQC/MB7lrzSsHPEZH1olw/RKAZWuU2Fm/ocqe19teIM3oTXFBmBJvSbIztCkQz8DjAnpn1xRPrX1q2q5IUW4SLzrcP6Pq8MnRXnm9os6d7YM5vY9cT2mYbcDSq8DIHGfvepLq+Bw3s3OxbbGSLhqEvzh7mxYKpptoJFjHL8QtxeuPuA7o1Vjs+StK3CsNAFtAiR8UEP6vj+eLXIlGw7/UFr2t6OKeI2xEYOq82/cpK9CK+vloIdv9D90F88okdZu3Wb+KrGNH9LAUoiHCL9oFbw4POgLlhmzJhDAYp5ClyAV4gm8O5iGwBc0LSGLxWR7x9qPr1zGx2J4UC7h6dW6R38YRgif6b6DUhJERm2OYs1sIh2rpkQNtdZoHxnoUXyHmoA66v7/OC8av2LdBG2JZoVxgF3ITmM0TakoIvjY1PZDEbn+KAr5APZQgX1LnOyefpGUOO9Mm9ipMHVQ9whJ6vMf55lkBr3lij2+E3H3nya+IAqXznrp3oHmt09ap7yEhh57GBKDzXz8iA+gvpiOwZMvplXh3DMsjZPOicM0OY2HeZsTaKo38AOtZ0xdVUm7zGcLAv2vMn4kXnHO3qSJV94sjRPownyzl2CMjgBk4OeNeqaS0m2I0wRzh1Q0/M/pDr1PAErEaO4wvCOqj4bKWF+sJdUJzQppDuFFM4dQ575Maglafolm3vsXseah4ijgLgc/YrH+lQQjO2CRLpKvlsIQlr0EJHuOupqEqVIfdewt17tFH/nDwDholRZak6q1B6yxdou5YcICn7yw2ZN3w4t0G3tGyv0SeyA8JS4NQcz0gsRhOZiimDDFh0EVkBf0Cjat5hW6x06MnnVL8H0AhZA61WG4lSc8+xt4yQt3UoN9ubRK4wd7c7oK0NZ+NyvZIEQ+BZdKiEYVVAJ0SsF3BLho5N9sTRRDfFjYdSTyErxtTiMkm4ZwdxA1+fo6GE1uM0wtzLXPV0WpiOod8/EvdqhgxEdJOTbYuOZ8jFg0qVDOGUL+RZcBFaR2rYONoOrfxVrPEBkuCUS6pGZKWbG0MO+9L929iYNAV6eLqvUWVI1TCLKG8ZKBdEWEWhPWRG+paNs0aY3W4l7M1qjbAR2pxkdY2+0ngHaRj9SgNUg27od9fF99XxvGE7zJE/g6zOY+RMlawb8RHdds/BheVsMByrK8vKW1Cj/1BPIiz2uiK8boeyj50ij0VcHbxvVVuOPxic0PjN3Ym2FU8m2mrQtpu4Q5gt6FwF4awrOjGxV0NiE2Zd8Uais9wX5l7mS5jLe74CcfWAI4gLoOIyYGYQEV+WYUPBmAv4I3s7L8uJ0MiWxm1kakI6URN0kQVa14Ryl9igJlo1aBgCRSSuILs1zKLiExLmL3hQa/8X2v9PtE0Xl68IqN4DdErAhxCXMoWsdS45wCPBi/6EPEczoRFKtPrEynRCGvBQRXkolKipTT8Kd7Y0IIMFspHcKgQNG1OGLkHtIV8YncN5iYxlLq3gJwynnW2gy+s0RjLsh+hmNf9HJ7QtWkK7u1JySQ8kTlzjmAecJsP5Q4Ya9j3Xflujz+FUxR8jkYm2Du0Kbu6lFmjGphj0IuYYVs+Wd0bOESZmn3UVoENolSxLsAGr5U+uqEtzsHMg1i0WDY1j6qJ6jr7T2hVKvYI7UiaEuNTqc0i1yANYJ0IR1z2vxxRMq84VWvk/haySM7qyz5nRBOxz7pdF7+rSq4+m7W/slmKIKNFh7emQgLgUXoDWfkfiMnTB8NM0tl5yChEUfxuVK2oeOdggkLuD6xJbEdl+hybE5cZ5vYB+xokm0367R5fwfppCqS0RJQBViwTwhx6VIdoWPjtI19IPw/Gh2EO6oTKSbnMycQVH3NrckLYsqLn2vyojlXTlRuf7ju5DmGJYqE4O86rU19HkHMgcvykzQwdkZvmFvqh8grRrdoI4xeTUWXkscQFyjr5UrOwpMYAdIqN7bd4jm8HWRFCKADpsdSiEP9F2LSbhoS+034KIdwWaoOp4sZaLDfvueug9m55my1PozbNI26TCaPpwrEpVG00fMhgWXTZCy9j3n+hWRXyA7P/00aJj8IE+QyqUJv0oh3uyXOUMrCCL/wLnqbnvQgPY32jCsyEEqkSfyDqdmiNWnz4YTR8BBPxCv/82/KbDaFM19RmYoXszW0jCWYPVqbAQWYGu5/8TyLNg2N9l5I3Z59bg4qAd/cVAZD0XVMDq04dXtIGRtXZ9tXDwxcepBUoIjPdv4midHdngciKkHIYVnLAXEJnCHFKyteyv7/PeYHs5NpoYLNAlMlNn4BLxutcBRFhAN0qamEiG+F4GU8M4bNWYjIgq8kKDLiw/uxYKvcknPyO32ek4vNPIEBtHK9QXtghS6HgHhL+KkA5lUzNxrTnaFo1jIns5fkLez3+hB6SsJlQPOGYFew+j6a14JiJh4mgnSzkLo1Y4GW4jQ72NLbI1rpUhfXbVCtL4XcccmIzQiEPZ6njMLce8QepwOSQneKO/aqJ/qNXpjRuMfSi170pkKZ2sofus4ReVL5DEdTqnaHNClwHHm/CM9qWfA9Zi0g0GltDyEhoLFwrBEuY4qzuXU1s3XmpK8nfI6oYvkLqhj+BmuEykho45/TXld24BYzXwFb2gIUTWSQSODBEKOidaE01piVELIWKjB6ZHaJXMXOeYQ3PxECHMITnNSWFnMefqQXPuVApZRM/LmaojcnpL+Y094PImixjMLdsVkel2ww0Fl/qI7ABJkCUZaUsMJy5VRr+Gp0w+mYlWiOdgxudr42hcBC7Ql8dcge+sDPUwItG2hL6D9C4UJveLARnGp6bdAmr6W6Aljj1kOLSPyJRIy8XE2ulE4RWU20rn7FXLjAXLiIrR82rTRlfOACc0Hc+QBGA8qYYCbbvEO8gGFb/QRqM27HPyBCifKz0MNYbMMV7+JuUIr+2aCsbVJnGGObr+QtUFr4adyJ6AUzFkE/c6GV/h6KeeADUi5tKmHtkIbYuWk/T0neoYrgORKP6Cfvjyg/YXkG6nFed4NIE1/VsjAAP8pClgIgb1MhV8GxHfGnZVYA+zFyCqpsYVYA1ssDnVuTicjnWmE+EsIENcXJhCcryVZz8f5iOPHwTR74GlyuRzjpDTfLoiIu7QJbI9ImtqJEQWsa/VwG7kaMTWuTF15TpJCKo26Tg3+APV6kmJ6x/kUG/GXPMK0AmtQZebbSBFfBl4vj0s3Yo5mHrB1QyON5B6EaO3iUmUHc7Z59Nl3uC+zQchs9WNxMaszybOp26yVm+i4Y2sSems0eosBfp9DBa0vb5RQ66P0AqEpbV1olt1aNb+LOB8/FggoGaa6Lc998H5PKxVuYnyucxVS3HbRX7A3AjsE6Qt7B8xwZuYnHoR6Nd7Q9fp/Gi43pLO9+NcgZgjsUA35S5HSwQbdM09NmwgRWTnwYk267xBG4P2CcPMHCoZ3Fh9gHTcJuLc3h6vvj4DK7QhylMYir4QQrnLFJJL7kwKO71hvJSliUMA/nIG18IDui4oTlRruOfpAOAv0sFOK0gh66jVkMT1HWldSorg3ojoatGWT4ghYG/fBCehkY7EuYytwlBdHTHRP5At/v6C7GjHuaNS+nPDZTm7zrTrlJAPY3bD+pvJXPGCrg5q+n2uhWgrAvsH5zdUT9FKoFgO+Wqhq8IAAAcPSURBVBxiF/V2TqGT8NWiIjaj3Ug79o2IcE0mkT/RJbi1gUPW7HtuOGetb3sHKGGvnviTYvTfgJOIrOEnsFfIuXxin2eY20qeC8Fh8kFOdXIJAe3i4B6yVU5UMZKq7UBXo317cnRFSs2+34kJyspTJvTGcUA/1U6hU+/fEDjKYQ0FsoH0rwzDne0uqFLyQYbi4OgNA7EB0tmdI2AJroEbK5dghGYwrai20yVgLXd6y9jCzM1OROYJcnyG9CnXaoMnXPxkwqjaUhYFXWOFNB6TPViryRDEBj7mQqZ18aA85VYqwMogecAHaBIPK3Tj1E4OdQpFKmM46ZUxQ5+bcSLLYXZcv0By+zlkKFWBwHLwoq3wVKPrQM/JI1FiOId7gSPx2Ybo7na07P4T/UK5d3DHy/NzNJ7f3yrZOe0L+vrGHSQnLUOudWXs0bescyIrYW4goQpO/wupq31HvKJ+B8m9fgH4T0xONYl3NCafl0bHAW3OZ7RfdVAbxeqIhgjhI7oEF0RoIQsJuk5ZyXpqn9Hvsf441jV2Aejc7JsKDSLJYBNjX5E+auUTyHYGyDq4CCM27v4qh158VL9OejsKtikbcz7HdbaV7HE5R3dycssh54pkiAUnMlVbzBcadLYacoQHtHbMFfz9Nkt64UfN6ejGsKRwnoy6IVxGUyKDGouyY3O0nM321o+Kw3LA5hnx4ZX0Wx+RGY+FNF38pX2USUNXYUIwhRSpS/ibVozycSukyhnYIt4Br9K1moHX+wpYW1/XsBchHoOhVXliiGxD+zUeM8bpNzE8wfgXpFhU8YU6jBXGhyAVoRXoOuDzAHm+gqXfeQAa9r3HZdiyPjnEBLNIMVKgjXp1EdkTunVlZyQdFmhVErUK39M5VbDCFtKEsUV4wWOFNY3RRGhlxHmcSEJoVb+umrfFjR7yHQl+XIbL9uRcRFzvhfSyLTzh2lWbjpejDR6wQdUMfoBsX7mnc2zJxhZSukBhCrNu7XWUx2C0jsZQoOuAVyHM0aC3OXNEi1wSzYhjV2T/MhHNAcBncs29iW4/gNgV5x1kAR6V4/knfUL1X9P1gq3+IUhGaFW/m4pKRgkyZSgwXeYfjFTqUxDqCE/EBrCWiXgFcUYixAb98l0mqHZItuiVR+BkfmowvFzXJtDwHoyUHA00uCe2aQrpEy1CHrpomyooMTN2qb8WExyvlEOgLPA6ntEGLDYIIzCFjOyXGQJCpYi7xYZUnWrWpkRSQgNO3eeetM3fIXtKrS2Bdipf8Te6usyXkcOZa3+joXPkQIf2BuYKQBtILrNFfMzXhvkwd7DoT/ylIndT7DVy714DkLL2xgnV8RQJym90Cuq4Qr44rs/p8DaZD8QO8Fb09sHGiRvYw3h0fzAgOVmJuMhVF+aW7Ty5J9Qc4wwdT4GzEBpwSj6t0TV9cNgm21lRkjhiwTYtxaTNR9DG4DNGhoBzNG4cbSz788YPfNsObX7rEDzSC1rSmFxRGDH2viQVPH1ILjo5SCnNIVdAG7j1hT1YoV7TDiQW9IDAe0gfXpZgyCbw8/LFiW1FNkNXtzyg1cXG4hHy/mNKWtnwDBmtbJ3vlDgbR+PgKyDRbfGTo30ozpg2EdCeGoFO/VDQAoYv/Wv23bYi1hcwb3CbK57ovHOYe0Slwh5k4AUun8p4EULj4IZa0uMU8RRwW6J9PtTUEaRAVwQeqm5BG70Yjgm2Ml4Keq1aRQipie3sXQV9OKvoDMAWrTi9I5uSDRc13hIH5YRWGnbztah2EdleV77pJTRdZyyKM5wzClcltKqfy/ndYeD1rUB7+h+ZTdYDPRS6GDOtyMasihvL9tQhTvsxcWSpcG2OprKsuKvEmGFFb7srJMb00EtIk0oROJwFcFp0cL3qyaTTGMYegwf9BRBtF7uUSH2+Qbg6oRFy9BOVTZxtCXt3FJMpY4c2e8iGOfue0XU599rDbYcbY0JRTnDueksZ+Gjsy3QNTI7H47XHAMCYpKGKCNeWfef0b2MTDSKgLKroN9TSFXhj4w7POW4BL+SuugncDKEB1oygUY3sA67ZwM5FvoTqNxQKdCvVKYM7Gl8KtyI6AZx0Ht2/+V1M0JzDIEv+1dFERsgxXF9LiRfcGJEBN8bRFIS5IjQQUG4p8Pwz2OvjnooTDzx3icuXNVX4mcjtlhw3SWhAp/GDyXGtFPRoCzeJZ5sFvtMmZyg81zgH9sDFK0FG4WYJTUH4m82rVaWK1Giqbv+jDJTtDXvZ9ANkvH6RYMjqujN0ixmeAyrc+uYbftw8oSmwPMSUrqY9JNc824MizlxgXOMJHYqjj863vBTeDaEpkJ0rh+RQQ4hO1aTo9Ky8BETb7SRDvL3sBQGNKG4V747QOERbJDijTZlhtx3aOrq7W6lGxMY+hz2IcQepCrw7wtLxf+51xmRwfgthAAAAAElFTkSuQmCC" width="42" height="42" alt="Neurodiversity Works logo" style="display:block;flex-shrink:0;">
+    <div>
+      <div class="brand">Neurodiversity <em>Works</em></div>
+      <div class="brand-sub">Should You Disclose?</div>
+    </div>
+  </div>
+  <div class="workshop-tag">Workshop Worksheet</div>
+</header>
+
+<div class="progress-track" role="progressbar" aria-label="Worksheet progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="progressBar">
+  <div class="progress-fill" id="progressFill" style="width:0%"></div>
+</div>
+
+<div class="progress-row">
+  <span class="progress-page-name" id="pageName" aria-live="polite" aria-atomic="true">Introduction</span>
+  <span class="progress-count" id="pageCount">Page 1 of 9</span>
+</div>
+
+<main id="main" tabindex="-1">
+
+  <!-- ═══════════════════════════════════════════════
+       PAGE 0 · INTRODUCTION
+  ════════════════════════════════════════════════ -->
+  <section class="page active" id="p0" aria-label="Introduction">
+    <div class="page-header">
+      <p class="part-tag">Workshop Worksheet</p>
+      <h1>"Should You Disclose?"</h1>
+      <p class="page-intro">A structured guide to help you decide whether, when, and how to discuss neurodivergence or disability at work.</p>
+    </div>
+
+    <div class="info-box">
+      <p>This worksheet follows the 30-minute workshop. Work through each page at your own pace — pause, reflect, and return at any time.</p>
+      <p>There are no right or wrong answers. The aim is to make the most <strong>informed</strong> decision available to you now.</p>
+    </div>
+
+    <div class="card">
+      <h2 style="margin-top:0;">By the end of this worksheet, you will have:</h2>
+      <div class="outcome-list">
+        <div class="outcome-item"><div class="outcome-num" aria-hidden="true">1</div><span>Assessed your manager and organisation</span></div>
+        <div class="outcome-item"><div class="outcome-num" aria-hidden="true">2</div><span>Considered the benefits and risks of disclosure</span></div>
+        <div class="outcome-item"><div class="outcome-num" aria-hidden="true">3</div><span>Chosen a primary and backup route</span></div>
+        <div class="outcome-item"><div class="outcome-num" aria-hidden="true">4</div><span>Decided what to share and what to ask for</span></div>
+        <div class="outcome-item"><div class="outcome-num" aria-hidden="true">5</div><span>Identified one concrete next step</span></div>
+      </div>
+    </div>
+
+    <p style="font-size:0.88rem;color:var(--teal);margin-top:18px;">You do not need a formal diagnosis, a perfect explanation of how your brain works, or a complete list of workplace adjustments to take part. You simply need to be considering whether something about your health, neurodivergence, or way of working needs to be discussed at work.</p>
+
+    <p style="font-size:0.88rem;margin-top:14px;">Have your notes ready — or use the text boxes on each page. Use the <strong>Next</strong> button below to move through the worksheet one section at a time.</p>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════
+       PAGE 1 · DISCLOSURE IS A SPECTRUM
+  ════════════════════════════════════════════════ -->
+  <section class="page" id="p1" aria-label="Disclosure is a spectrum">
+    <div class="page-header">
+      <p class="part-tag">Setting the Scene</p>
+      <h1>Disclosure is a spectrum — not a single yes-or-no.</h1>
+      <p class="page-intro">You don't have to decide everything at once, or share everything at once.</p>
+    </div>
+
+    <div class="card">
+      <p style="font-size:0.9rem;font-weight:700;color:var(--heading);margin-bottom:8px;">How much personal information might I share?</p>
+      <div class="spectrum-bar" aria-hidden="true"></div>
+      <div class="spectrum-ends">
+        <span>Share nothing personal yet</span>
+        <span>Share a diagnosis</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:0.78rem;color:var(--teal);margin-top:6px;padding:0 2px;">
+        <span>Describe the work impact</span>
+        <span>Mention a condition</span>
+      </div>
+    </div>
+
+    <div class="info-box" style="margin-top:12px;">
+      <p><strong>Gathering information is an action you can take at any stage</strong> — not a disclosure level. Reading your employer's policy, speaking to a union representative, or asking HR how the process works are all things you can do before, during or instead of sharing any personal information.</p>
+    </div>
+
+    <p style="font-size:0.91rem;margin:18px 0 10px;">It also helps to separate two decisions:</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
+      <div class="card" style="margin:0;">
+        <strong style="font-size:0.9rem;color:var(--heading);">What am I willing to share?</strong>
+        <p style="font-size:0.82rem;margin-top:4px;color:var(--teal);">The personal information you're comfortable disclosing to this person, at this point.</p>
+      </div>
+      <div class="card" style="margin:0;">
+        <strong style="font-size:0.9rem;color:var(--heading);">What do I want them to do?</strong>
+        <p style="font-size:0.82rem;margin-top:4px;color:var(--teal);">The action or response you're looking for from the other person.</p>
+      </div>
+    </div>
+
+    <hr class="divider" aria-hidden="true">
+
+    <h2>Where are you starting?</h2>
+    <p style="font-size:0.86rem;color:var(--teal);margin-bottom:10px;">Choose the option that comes closest to where you are right now. There is no correct place to be.</p>
+
+    <fieldset style="border:none;padding:0;">
+      <legend style="font-size:0.93rem;font-weight:700;color:var(--text);margin-bottom:10px;">At the moment, I am:</legend>
+      <div class="choice-group">
+        <label class="choice-label">
+          <input type="radio" name="start" value="considering">
+          <span><strong>Considering disclosure</strong> — I think I may want to share something, but I haven't decided yet.</span>
+        </label>
+        <label class="choice-label">
+          <input type="radio" name="start" value="support-no-label">
+          <span><strong>Looking for support without disclosing a label</strong> — I want help, but I'm not ready to share a diagnosis or condition.</span>
+        </label>
+        <label class="choice-label">
+          <input type="radio" name="start" value="unsure">
+          <span><strong>Unsure and gathering information</strong> — I want to understand my options before deciding anything.</span>
+        </label>
+        <label class="choice-label">
+          <input type="radio" name="start" value="already-disclosed">
+          <span><strong>Already disclosed but unsure what to do next</strong> — I've shared something, but I'm not clear on the next steps.</span>
+        </label>
+      </div>
+    </fieldset>
+
+    <div class="field" style="margin-top:20px;">
+      <label class="field-label" for="need-possible">What would I like to be clearer, easier or different after my next step?</label>
+      <p class="field-hint">You might want to understand your options, identify the right person to approach, get a practical change, or reduce some of the uncertainty. You don't need to solve the whole situation today.</p>
+      <textarea id="need-possible" rows="3" placeholder="Write your thoughts here…"></textarea>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════
+       PAGE 2 · ASSESS YOUR MANAGER
+  ════════════════════════════════════════════════ -->
+  <section class="page" id="p2" aria-label="Part One: Assess your manager">
+    <div class="page-header">
+      <p class="part-tag">Part One: Read the Room</p>
+      <h1>What has your manager actually shown you?</h1>
+      <p class="page-intro">Assess behaviour — not personality. Look for evidence, not impressions.</p>
+    </div>
+
+    <div class="info-box">
+      <p>A manager can be warm and friendly while being unreliable with sensitive issues. A direct, task-focused manager may be consistent, fair, and willing to make practical changes.</p>
+      <p>For each question, choose: <strong>Yes / Mixed / No / Not enough evidence.</strong> Don't force an answer when you haven't seen enough — "not enough evidence" is different from having seen mixed behaviour.</p>
+    </div>
+
+    <!-- Q1 -->
+    <div class="q-card">
+      <p class="q-num">Question 1 of 6</p>
+      <p class="q-text">Does my manager listen before reaching a conclusion?</p>
+      <p class="q-hint">When you explain a difficulty, do they ask questions and try to understand — or do they interrupt, minimise it, or immediately tell you what they think the problem is?</p>
+      <fieldset style="border:none;padding:0;">
+        <legend class="sr-only">Question 1: Does my manager listen before reaching a conclusion?</legend>
+        <div class="scale-grid">
+          <label class="scale-label"><input type="radio" name="q1" value="yes"><span>Yes</span></label>
+          <label class="scale-label"><input type="radio" name="q1" value="mixed"><span>Mixed</span></label>
+          <label class="scale-label"><input type="radio" name="q1" value="no"><span>No</span></label>
+          <label class="scale-label"><input type="radio" name="q1" value="unsure"><span>Not enough evidence</span></label>
+        </div>
+      </fieldset>
+    </div>
+
+    <!-- Q2 -->
+    <div class="q-card">
+      <p class="q-num">Question 2 of 6</p>
+      <p class="q-text">Can they respond to a concern without becoming defensive?</p>
+      <p class="q-hint">What happens when you say an instruction was unclear, a workload is unrealistic, or something isn't working? Do they treat it as useful information — or hear it as criticism?</p>
+      <fieldset style="border:none;padding:0;">
+        <legend class="sr-only">Question 2: Can they respond to a concern without becoming defensive?</legend>
+        <div class="scale-grid">
+          <label class="scale-label"><input type="radio" name="q2" value="yes"><span>Yes</span></label>
+          <label class="scale-label"><input type="radio" name="q2" value="mixed"><span>Mixed</span></label>
+          <label class="scale-label"><input type="radio" name="q2" value="no"><span>No</span></label>
+          <label class="scale-label"><input type="radio" name="q2" value="unsure"><span>Not enough evidence</span></label>
+        </div>
+      </fieldset>
+    </div>
+
+    <!-- Q3 -->
+    <div class="q-card">
+      <p class="q-num">Question 3 of 6</p>
+      <p class="q-text">Do they follow through?</p>
+      <p class="q-hint">They may respond warmly in the moment — but do they remember what was agreed? Do they make the change? Do they check in again? Supportive words without follow-through may leave you doing all the work of raising the issue repeatedly.</p>
+      <fieldset style="border:none;padding:0;">
+        <legend class="sr-only">Question 3: Do they follow through?</legend>
+        <div class="scale-grid">
+          <label class="scale-label"><input type="radio" name="q3" value="yes"><span>Yes</span></label>
+          <label class="scale-label"><input type="radio" name="q3" value="mixed"><span>Mixed</span></label>
+          <label class="scale-label"><input type="radio" name="q3" value="no"><span>No</span></label>
+          <label class="scale-label"><input type="radio" name="q3" value="unsure"><span>Not enough evidence</span></label>
+        </div>
+      </fieldset>
+    </div>
+
+    <!-- Q4 -->
+    <div class="q-card">
+      <p class="q-num">Question 4 of 6</p>
+      <p class="q-text">Do they handle sensitive information carefully?</p>
+      <p class="q-hint">Have you seen them gossip about employees, speculate about someone's health, or share information that didn't need to be shared? Or do they demonstrate discretion? You can only assess the evidence available to you — not guarantee confidentiality.</p>
+      <fieldset style="border:none;padding:0;">
+        <legend class="sr-only">Question 4: Do they handle sensitive information carefully?</legend>
+        <div class="scale-grid">
+          <label class="scale-label"><input type="radio" name="q4" value="yes"><span>Yes</span></label>
+          <label class="scale-label"><input type="radio" name="q4" value="mixed"><span>Mixed</span></label>
+          <label class="scale-label"><input type="radio" name="q4" value="no"><span>No</span></label>
+          <label class="scale-label"><input type="radio" name="q4" value="unsure"><span>Not enough evidence</span></label>
+        </div>
+      </fieldset>
+    </div>
+
+    <!-- Q5 -->
+    <div class="q-card">
+      <p class="q-num">Question 5 of 6</p>
+      <p class="q-text">Can they adapt how they manage different people?</p>
+      <p class="q-hint">Do they accept that one person may need written instructions, another more notice, another regular check-ins — or do they see treating everyone identically as fairness? A manager doesn't need to understand every form of neurodivergence, but they do need some willingness to adapt.</p>
+      <fieldset style="border:none;padding:0;">
+        <legend class="sr-only">Question 5: Can they adapt how they manage different people?</legend>
+        <div class="scale-grid">
+          <label class="scale-label"><input type="radio" name="q5" value="yes"><span>Yes</span></label>
+          <label class="scale-label"><input type="radio" name="q5" value="mixed"><span>Mixed</span></label>
+          <label class="scale-label"><input type="radio" name="q5" value="no"><span>No</span></label>
+          <label class="scale-label"><input type="radio" name="q5" value="unsure"><span>Not enough evidence</span></label>
+        </div>
+      </fieldset>
+    </div>
+
+    <!-- Q6 -->
+    <div class="q-card">
+      <p class="q-num">Question 6 of 6</p>
+      <p class="q-text">Can they say, "I don't know, but I'll find out"?</p>
+      <p class="q-hint">A manager doesn't need to be a neurodiversity expert. A manager who confidently assumes they understand your diagnosis may sometimes be harder to work with than someone who acknowledges the limits of their knowledge and seeks advice.</p>
+      <fieldset style="border:none;padding:0;">
+        <legend class="sr-only">Question 6: Can they say "I don't know, but I'll find out"?</legend>
+        <div class="scale-grid">
+          <label class="scale-label"><input type="radio" name="q6" value="yes"><span>Yes</span></label>
+          <label class="scale-label"><input type="radio" name="q6" value="mixed"><span>Mixed</span></label>
+          <label class="scale-label"><input type="radio" name="q6" value="no"><span>No</span></label>
+          <label class="scale-label"><input type="radio" name="q6" value="unsure"><span>Not enough evidence</span></label>
+        </div>
+      </fieldset>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════
+       PAGE 3 · MANAGER SUMMARY
+  ════════════════════════════════════════════════ -->
+  <section class="page" id="p3" aria-label="Part One: What does the evidence tell you?">
+    <div class="page-header">
+      <p class="part-tag">Part One: Read the Room</p>
+      <h1>What does the evidence tell you?</h1>
+      <p class="page-intro">Don't just total the answers. Look for the weight of the evidence — and pay attention to any serious red flags.</p>
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="mgr-confidence">What is the strongest reason for confidence?</label>
+      <p class="field-hint">Try to use a specific example, not a general impression. For example: "When I raised an unrealistic deadline, she listened and helped me reprioritise."</p>
+      <textarea id="mgr-confidence" rows="3" placeholder="A specific example that gives you confidence…"></textarea>
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="mgr-caution">What is the strongest reason for caution?</label>
+      <p class="field-hint">For example: "He agreed to confirm instructions in writing but stopped doing it after one week."</p>
+      <textarea id="mgr-caution" rows="3" placeholder="A specific example that gives you pause…"></textarea>
+    </div>
+
+    <div class="warning-box" role="note">
+      <strong>Note on red flags:</strong> One serious concern can outweigh several positive answers. A manager who <em>repeatedly</em> dismisses concerns, breaks confidence, retaliates, changes expectations without warning, or fails to follow agreed actions gives you meaningful evidence to take seriously — even if other answers were mostly positive.
+    </div>
+
+    <hr class="divider" aria-hidden="true">
+
+    <h2>How would you summarise your overall read?</h2>
+    <fieldset style="border:none;padding:0;margin:10px 0;">
+      <legend style="font-size:0.93rem;font-weight:700;color:var(--text);margin-bottom:10px;">My overall read of my manager:</legend>
+      <div class="choice-group">
+        <label class="choice-label">
+          <input type="radio" name="mgr-read" value="mostly-yes">
+          <span><strong>Mostly yes</strong> — A direct conversation with them may be a reasonable starting point.</span>
+        </label>
+        <label class="choice-label">
+          <input type="radio" name="mgr-read" value="mixed">
+          <span><strong>Mixed</strong> — Not necessarily a reason to avoid them, but the conversation may need to be more structured, bounded, and specific.</span>
+        </label>
+        <label class="choice-label">
+          <input type="radio" name="mgr-read" value="red-flag">
+          <span><strong>Several no answers or a serious red flag</strong> — Consider whether you need support, advice, or a formal route before sharing personal information directly with them.</span>
+        </label>
+      </div>
+    </fieldset>
+
+    <div class="info-box" style="margin-top:18px;">
+      <p>A manager who is uncomfortable or inexperienced is not necessarily unsafe. But one who repeatedly dismisses concerns, breaks confidence, or fails to follow through gives you important information to act on.</p>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════
+       PAGE 4 · ASSESS THE ORGANISATION
+  ════════════════════════════════════════════════ -->
+  <section class="page" id="p4" aria-label="Part One: Assess the organisation">
+    <div class="page-header">
+      <p class="part-tag">Part One: Read the Room</p>
+      <h1>Assess the organisation</h1>
+      <p class="page-intro">Your manager is only one part of the system. Assess two things separately: how mature the process is, and what the culture is actually like.</p>
+    </div>
+
+    <h2>What support structures exist?</h2>
+    <p style="font-size:0.85rem;color:var(--teal);margin-bottom:10px;">Tick what you know your employer has. If you're unsure, leave it blank — finding out can become your first step.</p>
+
+    <ul class="checklist" aria-label="Support structures checklist">
+      <li><label class="check-label"><input type="checkbox" name="struct" value="hr"><span>HR or People team</span></label></li>
+      <li><label class="check-label"><input type="checkbox" name="struct" value="oh"><span>Occupational Health service</span></label></li>
+      <li><label class="check-label"><input type="checkbox" name="struct" value="network"><span>Disability or neurodiversity employee network</span></label></li>
+      <li><label class="check-label"><input type="checkbox" name="struct" value="union"><span>Trade union or employee representative</span></label></li>
+      <li><label class="check-label"><input type="checkbox" name="struct" value="policy"><span>Adjustments or accommodations policy</span></label></li>
+      <li><label class="check-label"><input type="checkbox" name="struct" value="passport"><span>Workplace adjustment passport</span></label></li>
+      <li><label class="check-label"><input type="checkbox" name="struct" value="lead"><span>Disability, wellbeing, or inclusion lead</span></label></li>
+      <li><label class="check-label"><input type="checkbox" name="struct" value="intranet"><span>Guidance available on the staff intranet</span></label></li>
+    </ul>
+
+    <hr class="divider" aria-hidden="true">
+
+    <div style="margin-bottom:20px;">
+      <p style="font-size:0.93rem;font-weight:700;color:var(--text);margin-bottom:4px;">Process clarity — how clear is the route to support?</p>
+      <p style="font-size:0.83rem;color:var(--teal);margin-bottom:8px;"><strong>1</strong> = no idea; support appears improvised &nbsp;|&nbsp; <strong>5</strong> = clear accessible route; I know who is responsible for what</p>
+      <fieldset style="border:none;padding:0;">
+        <legend class="sr-only">Rate process clarity from 1 to 5</legend>
+        <div class="score-row">
+          <label class="score-label"><input type="radio" name="proc" value="1"><span>1</span></label>
+          <label class="score-label"><input type="radio" name="proc" value="2"><span>2</span></label>
+          <label class="score-label"><input type="radio" name="proc" value="3"><span>3</span></label>
+          <label class="score-label"><input type="radio" name="proc" value="4"><span>4</span></label>
+          <label class="score-label"><input type="radio" name="proc" value="5"><span>5</span></label>
+        </div>
+      </fieldset>
+    </div>
+
+    <div>
+      <p style="font-size:0.93rem;font-weight:700;color:var(--text);margin-bottom:4px;">Culture safety — how safe does the culture appear?</p>
+      <p style="font-size:0.83rem;color:var(--teal);margin-bottom:8px;"><strong>1</strong> = people are judged or sidelined when they need support &nbsp;|&nbsp; <strong>5</strong> = people can discuss disability and access needs without it affecting how their capability is viewed</p>
+      <fieldset style="border:none;padding:0;">
+        <legend class="sr-only">Rate culture safety from 1 to 5</legend>
+        <div class="score-row">
+          <label class="score-label"><input type="radio" name="cult" value="1"><span>1</span></label>
+          <label class="score-label"><input type="radio" name="cult" value="2"><span>2</span></label>
+          <label class="score-label"><input type="radio" name="cult" value="3"><span>3</span></label>
+          <label class="score-label"><input type="radio" name="cult" value="4"><span>4</span></label>
+          <label class="score-label"><input type="radio" name="cult" value="5"><span>5</span></label>
+        </div>
+      </fieldset>
+    </div>
+
+    <hr class="divider" aria-hidden="true">
+
+    <h2>What do your scores suggest?</h2>
+    <p style="font-size:0.83rem;color:var(--teal);margin-bottom:10px;">A large organisation can have impressive policy but a difficult culture. A small organisation may have no formal programme but still respond flexibly. This is why we assess them separately.</p>
+
+    <div class="matrix" role="list" aria-label="Score interpretation guide">
+      <div class="matrix-cell" role="listitem">
+        <div class="matrix-cell-title">Both scores high</div>
+        <div class="matrix-cell-body">You likely have several viable routes available.</div>
+      </div>
+      <div class="matrix-cell" role="listitem">
+        <div class="matrix-cell-title">Good culture, unclear process</div>
+        <div class="matrix-cell-body">An informal conversation may work, but you may need to help create structure around what's agreed.</div>
+      </div>
+      <div class="matrix-cell" role="listitem">
+        <div class="matrix-cell-title">Clear process, unsafe culture</div>
+        <div class="matrix-cell-body">Consider a formal route with support or advice, rather than relying on an informal manager conversation.</div>
+      </div>
+      <div class="matrix-cell" role="listitem">
+        <div class="matrix-cell-title">Both scores low</div>
+        <div class="matrix-cell-body">Get independent support before sharing personal information — a union, employment adviser, disability organisation, or lawyer.</div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════
+       PAGE 5 · LEGAL CONTEXT + CONVERSATION TYPE
+  ════════════════════════════════════════════════ -->
+  <section class="page" id="p5" aria-label="Part Two: Legal context and conversation type">
+    <div class="page-header">
+      <p class="part-tag">Part Two: Understand What Disclosure May Change</p>
+      <h1>Legal context and practical principles</h1>
+      <p class="page-intro">A brief overview of what telling an employer can change — not individual legal advice.</p>
+    </div>
+
+    <div class="legal-note" role="note">
+      <strong>General information only.</strong> Employment and disability law varies between countries and depends on your employer's size, your employment status, and the facts of your situation. Seek appropriate local advice if you face dismissal, disciplinary action, serious discrimination, retaliation or an urgent risk to your health or safety.
+    </div>
+
+    <h2>Three practical principles</h2>
+
+    <div class="card">
+      <h3 style="margin-top:0;color:var(--heading);">1. You don't usually need to share your whole medical history.</h3>
+      <p style="font-size:0.88rem;">There is a difference between explaining the work-related effects of a condition and sharing your entire personal history. You can describe the impact without sharing everything.</p>
+      <div class="quote-box">"I have a condition that affects working memory and processing speed. I would like important instructions and changes to priorities confirmed in writing."</div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0;color:var(--heading);">2. Your employer generally needs enough information to recognise there may be a disability-related need.</h3>
+      <p style="font-size:0.88rem;">There's a meaningful difference between "I prefer written instructions" and "Because of a condition that affects how I process verbal information, I need important instructions confirmed in writing." The amount you share can affect how the request is interpreted and handled.</p>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0;color:var(--heading);">3. Legal protection does not guarantee an emotionally safe or competent response from every manager.</h3>
+      <p style="font-size:0.88rem;">The law is one part of your decision. The evidence you have about your workplace is another.</p>
+    </div>
+
+    <hr class="divider" aria-hidden="true">
+
+    <h2>What kind of conversation am I beginning?</h2>
+    <p style="font-size:0.86rem;color:var(--teal);margin-bottom:10px;">These can overlap — but they may require different levels of clarity and information. Choose the one that best fits your current intention.</p>
+
+    <fieldset style="border:none;padding:0;">
+      <legend style="font-size:0.93rem;font-weight:700;color:var(--text);margin-bottom:10px;">For my next step, I am beginning:</legend>
+      <div class="choice-group">
+        <label class="choice-label">
+          <input type="radio" name="conv-type" value="preference">
+          <span><strong>A conversation about working preferences</strong> — describing how I work best, without framing it as a health or disability-related need.</span>
+        </label>
+        <label class="choice-label">
+          <input type="radio" name="conv-type" value="notice">
+          <span><strong>Notice of a health or disability-related difficulty</strong> — making my employer aware there is a condition or health issue affecting my work.</span>
+        </label>
+        <label class="choice-label">
+          <input type="radio" name="conv-type" value="informal">
+          <span><strong>An informal request for support</strong> — exploring what might help, without starting a formal process.</span>
+        </label>
+        <label class="choice-label">
+          <input type="radio" name="conv-type" value="formal">
+          <span><strong>A formal accommodations or adjustments request</strong> — starting an official process with the employer.</span>
+        </label>
+      </div>
+    </fieldset>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════
+       PAGE 6 · BENEFITS, CONCERNS & URGENCY
+  ════════════════════════════════════════════════ -->
+  <section class="page" id="p6" aria-label="Part Three: Benefits, concerns, and urgency">
+    <div class="page-header">
+      <p class="part-tag">Part Three: Weigh Up the Decision</p>
+      <h1>Benefits, concerns, and urgency</h1>
+      <p class="page-intro">Think about whether starting a particular conversation, with a particular person, at this point, is likely to improve your situation.</p>
+    </div>
+
+    <h2>What might improve if I start a conversation?</h2>
+    <p style="font-size:0.85rem;color:var(--teal);margin-bottom:8px;">Choose the two benefits that matter most to you.</p>
+    <ul class="checklist" aria-label="Possible benefits — choose two that matter most">
+      <li><label class="check-label"><input type="checkbox" name="benefits" value="practical"><span>I could gain practical support</span></label></li>
+      <li><label class="check-label"><input type="checkbox" name="benefits" value="understand"><span>My manager could understand changes in my work</span></label></li>
+      <li><label class="check-label"><input type="checkbox" name="benefits" value="masking"><span>I could reduce masking or compensating</span></label></li>
+      <li><label class="check-label"><input type="checkbox" name="benefits" value="route"><span>I could access a formal support route</span></label></li>
+      <li><label class="check-label"><input type="checkbox" name="benefits" value="record"><span>It could create a record that my employer is aware</span></label></li>
+      <li><label class="check-label"><input type="checkbox" name="benefits" value="alone"><span>I would no longer be managing the issue entirely alone</span></label></li>
+      <li><label class="check-label"><input type="checkbox" name="benefits" value="prevent"><span>It could prevent the situation becoming more serious</span></label></li>
+    </ul>
+
+    <hr class="divider" aria-hidden="true">
+
+    <h2>What am I concerned could happen?</h2>
+    <p style="font-size:0.85rem;color:var(--teal);margin-bottom:10px;">Try not to dismiss your concerns as negativity — some are based on uncertainty, others on genuine evidence. Choose the two that feel most important.</p>
+
+    <div class="card">
+      <h3 style="margin-top:0;">How I may be perceived</h3>
+      <p style="font-size:0.82rem;color:var(--teal);margin-bottom:8px;">Capability · judgement · personality</p>
+      <ul class="checklist">
+        <li><label class="check-label"><input type="checkbox" name="concerns" value="reinterpret"><span>I worry my manager will interpret ordinary mistakes differently after knowing my diagnosis.</span></label></li>
+        <li><label class="check-label"><input type="checkbox" name="concerns" value="seen-others"><span>I have seen other employees treated badly after disclosing.</span></label></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0;">How the information may be handled</h3>
+      <p style="font-size:0.82rem;color:var(--teal);margin-bottom:8px;">Confidentiality · requests for evidence · discrimination or retaliation</p>
+      <ul class="checklist">
+        <li><label class="check-label"><input type="checkbox" name="concerns" value="conf"><span>I worry private information will travel further than I intended.</span></label></li>
+        <li><label class="check-label"><input type="checkbox" name="concerns" value="evidence"><span>I am concerned about being asked to prove or document my condition in ways that feel intrusive.</span></label></li>
+        <li><label class="check-label"><input type="checkbox" name="concerns" value="retaliation"><span>I am concerned about potential discrimination or retaliation.</span></label></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0;">Whether the conversation will help</h3>
+      <p style="font-size:0.82rem;color:var(--teal);margin-bottom:8px;">No practical action · oversharing · unclear support · performance or formal processes</p>
+      <ul class="checklist">
+        <li><label class="check-label"><input type="checkbox" name="concerns" value="no-change"><span>I worry it will lead to no practical change.</span></label></li>
+        <li><label class="check-label"><input type="checkbox" name="concerns" value="overshare"><span>I'm concerned I might feel pressured and share more than I planned.</span></label></li>
+        <li><label class="check-label"><input type="checkbox" name="concerns" value="unclear"><span>I don't yet know what I want them to do, which makes the conversation feel premature.</span></label></li>
+        <li><label class="check-label"><input type="checkbox" name="concerns" value="timing"><span>I am in probation, restructuring, or a performance, capability, grievance or disciplinary process, and I'm unsure how disclosure might affect that.</span></label></li>
+      </ul>
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="concern-analysis">For each of your two most important concerns, ask: What evidence do I have? How likely does it seem? How serious would the impact be? What could reduce the risk?</label>
+      <p class="field-hint">A concern can still matter even if it has not happened before, particularly when the possible consequence is serious.</p>
+      <textarea id="concern-analysis" rows="5" placeholder="Concern 1:&#10;&#10;Concern 2:"></textarea>
+    </div>
+
+    <hr class="divider" aria-hidden="true">
+
+    <h2>How urgent is my need?</h2>
+    <fieldset style="border:none;padding:0;">
+      <legend class="sr-only">Select your urgency level</legend>
+      <div class="urgency-grid">
+        <label class="urgency-label">
+          <input type="radio" name="urgency" value="low">
+          <span class="urgency-tag">Low</span>
+          <span class="urgency-title">I am planning ahead</span>
+          <span class="urgency-desc">I have time to gather information, build a clearer case, and choose the right moment.</span>
+        </label>
+        <label class="urgency-label">
+          <input type="radio" name="urgency" value="moderate">
+          <span class="urgency-tag">Moderate</span>
+          <span class="urgency-title">It's affecting my energy, health, or work</span>
+          <span class="urgency-desc">Doing nothing may itself carry a cost.</span>
+        </label>
+        <label class="urgency-label">
+          <input type="radio" name="urgency" value="high">
+          <span class="urgency-tag">High</span>
+          <span class="urgency-title">Near burnout, struggling to work safely, or facing formal concerns</span>
+          <span class="urgency-desc">High urgency doesn't mean an unplanned disclosure to an unsafe manager — it may mean a more formal route.</span>
+        </label>
+      </div>
+    </fieldset>
+
+    <div class="info-box" style="margin-top:16px;">
+      <p><strong>Higher risk does not always mean "do not disclose."</strong> It may mean: do not disclose alone, informally, or without preparation. It could mean speaking to a union representative, putting the request in writing, or seeking advice about what to disclose and how to document it.</p>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════
+       PAGE 7 · CHOOSE YOUR ROUTE AND LEVEL
+  ════════════════════════════════════════════════ -->
+  <section class="page" id="p7" aria-label="Part Four: Choose your route and plan your first step">
+    <div class="page-header">
+      <p class="part-tag">Part Four: Choose Your Route and Plan Your First Step</p>
+      <h1>Who should you approach? What are you willing to share? What do you want them to do?</h1>
+      <p class="page-intro">Choose the route most likely to give you useful movement with an acceptable level of risk — and pick a backup.</p>
+    </div>
+
+    <h2>The five routes</h2>
+
+    <div class="route-card">
+      <div class="route-title">Route 1: Your manager</div>
+      <div class="route-desc">Best when there is reasonable trust, they control the relevant parts of your work, and they've shown some ability to listen and act. Most useful for small practical changes around meetings, workload, communication, or deadlines.</div>
+    </div>
+    <div class="route-card">
+      <div class="route-title">Route 2: HR or People team</div>
+      <div class="route-desc">May be better when you need to understand policy, create a formal record, or avoid your manager being the sole gatekeeper. HR represents the organisation. Before sharing details, you can ask: "How would this information be recorded, who would have access, and what are the next steps?"</div>
+    </div>
+    <div class="route-card">
+      <div class="route-title">Route 3: Occupational Health (or equivalent)</div>
+      <div class="route-desc">Useful when work is affecting you but you can't yet identify the right changes. The availability and independence of OH varies — find out what it can and cannot do before assuming it is confidential or decisive.</div>
+    </div>
+    <div class="route-card">
+      <div class="route-title">Route 4: Union or employee representative</div>
+      <div class="route-desc">Can help you understand your rights, prepare for a meeting, review written communication, or accompany you. Particularly important if a performance, capability, grievance, or disciplinary process has already begun.</div>
+    </div>
+    <div class="route-card">
+      <div class="route-title">Route 5: Employee network or trusted internal contact</div>
+      <div class="route-desc">Can provide useful information about how processes work in practice. But a network is not automatically a confidential legal or clinical service — ask about its boundaries before sharing identifiable information.</div>
+    </div>
+
+    <div class="field" style="margin-top:20px;">
+      <label class="field-label" for="primary-route">My primary route:</label>
+      <input type="text" id="primary-route" placeholder="e.g. My manager / HR / Union representative…">
+    </div>
+    <div class="field">
+      <label class="field-label" for="backup-route">My backup route:</label>
+      <p class="field-hint">Your backup matters because your first contact may not be able to resolve the issue.</p>
+      <input type="text" id="backup-route" placeholder="e.g. If that doesn't work, I will…">
+    </div>
+
+    <hr class="divider" aria-hidden="true">
+
+    <h2>Two decisions for my first step</h2>
+    <p style="font-size:0.85rem;color:var(--teal);margin-bottom:10px;">You're not choosing what you'll share forever — you're choosing what you currently feel comfortable making known, to this person, for this purpose. You can revise this later.</p>
+
+    <fieldset style="border:none;padding:0;margin-bottom:20px;">
+      <legend style="font-size:0.93rem;font-weight:700;color:var(--text);margin-bottom:10px;">What am I willing to share?</legend>
+      <div class="choice-group">
+        <label class="choice-label">
+          <input type="radio" name="share-level" value="questions">
+          <span><strong>Share nothing personal yet and ask general questions</strong> — gathering information without disclosing anything personal.</span>
+        </label>
+        <label class="choice-label">
+          <input type="radio" name="share-level" value="impact">
+          <span><strong>Describe the work impact</strong> — e.g. "I'm struggling to process verbal instructions when several tasks are discussed at once."</span>
+        </label>
+        <label class="choice-label">
+          <input type="radio" name="share-level" value="condition">
+          <span><strong>Mention a condition or neurodivergence</strong> — e.g. "This is related to a neurodivergent condition that affects my working memory."</span>
+        </label>
+        <label class="choice-label">
+          <input type="radio" name="share-level" value="diagnosis">
+          <span><strong>Share a specific diagnosis</strong> — e.g. "I have recently been diagnosed with ADHD."</span>
+        </label>
+      </div>
+    </fieldset>
+
+    <h2>What do I want them to do?</h2>
+    <fieldset style="border:none;padding:0;">
+      <legend style="font-size:0.93rem;font-weight:700;color:var(--text);margin-bottom:10px;">I want them to:</legend>
+      <div class="choice-group">
+        <label class="choice-label">
+          <input type="radio" name="ask-for" value="explain">
+          <span><strong>Explain the process</strong> — tell me how support requests work at this organisation.</span>
+        </label>
+        <label class="choice-label">
+          <input type="radio" name="ask-for" value="informal-change">
+          <span><strong>Agree an informal practical change</strong> — a specific, manageable adjustment without a formal process.</span>
+        </label>
+        <label class="choice-label">
+          <input type="radio" name="ask-for" value="identify-support">
+          <span><strong>Help identify suitable support</strong> — work with me to understand what might help.</span>
+        </label>
+        <label class="choice-label">
+          <input type="radio" name="ask-for" value="formal">
+          <span><strong>Begin a formal adjustments or accommodations process</strong> — you can make a formal request without sharing your whole medical history.</span>
+        </label>
+      </div>
+    </fieldset>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════
+       PAGE 8 · YOUR NEXT STEP
+  ════════════════════════════════════════════════ -->
+  <section class="page" id="p8" aria-label="Part Five: Your next step">
+    <div class="page-header">
+      <p class="part-tag">Part Five: Decide What Happens Next</p>
+      <h1>Your first step</h1>
+      <p class="page-intro">A good next step gives you more information, support, or control. It doesn't have to be "disclose to my manager."</p>
+    </div>
+
+    <div class="info-box">
+      <p>You have now considered: what your manager has shown you; how mature the organisation appears; the possible benefits and risks; the urgency of your need; and the primary and backup routes you might use, what you are willing to share, and what you want the other person to do.</p>
+      <p style="margin-top:6px;">The final task is to turn that thinking into <strong>one manageable action.</strong></p>
+    </div>
+
+    <h2>Some possible next steps</h2>
+    <ul style="list-style:none;padding:0;margin:0 0 14px;display:flex;flex-direction:column;gap:0;">
+      <li style="font-size:0.88rem;padding:7px 0;border-bottom:1px solid var(--lavender);">Read the disability or accommodations policy.</li>
+      <li style="font-size:0.88rem;padding:7px 0;border-bottom:1px solid var(--lavender);">Ask HR to explain the process without yet sharing personal information.</li>
+      <li style="font-size:0.88rem;padding:7px 0;border-bottom:1px solid var(--lavender);">Contact a union representative.</li>
+      <li style="font-size:0.88rem;padding:7px 0;border-bottom:1px solid var(--lavender);">Ask whether Occupational Health is available.</li>
+      <li style="font-size:0.88rem;padding:7px 0;border-bottom:1px solid var(--lavender);">Speak to someone in an employee network about their experience.</li>
+      <li style="font-size:0.88rem;padding:7px 0;border-bottom:1px solid var(--lavender);">Write a draft email and leave it overnight.</li>
+      <li style="font-size:0.88rem;padding:7px 0;border-bottom:1px solid var(--lavender);">Book a meeting with your manager.</li>
+      <li style="font-size:0.88rem;padding:7px 0;border-bottom:1px solid var(--lavender);">Ask a trusted person to review what you plan to say.</li>
+      <li style="font-size:0.88rem;padding:7px 0;">Decide you're not ready, and set a specific date to reconsider.</li>
+    </ul>
+
+    <div class="field">
+      <label class="field-label" for="next-step">My next step is:</label>
+      <p class="field-hint">Make it specific enough that you'll know when you've done it. Instead of "Look into support" — write "Search the intranet for the adjustments or accommodations policy on Monday morning." Instead of "Talk to my manager" — write "Draft a three-sentence email asking for a private meeting."</p>
+      <textarea id="next-step" rows="3" placeholder="Write your specific next step here…"></textarea>
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="what-i-need">Before I do it, I need:</label>
+      <textarea id="what-i-need" rows="3" placeholder="Write what you need before you can take this step…"></textarea>
+    </div>
+
+    <hr class="divider" aria-hidden="true">
+
+    <h2>Three things to keep in mind before any conversation</h2>
+    <div class="pillars">
+      <div class="pillar">
+        <span class="pillar-icon" aria-hidden="true">🎯</span>
+        <div class="pillar-title">Purpose</div>
+        <p class="pillar-desc">Be clear about what you're asking for and why — before you begin.</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-icon" aria-hidden="true">🗺️</span>
+        <div class="pillar-title">Route</div>
+        <p class="pillar-desc">Choose a route that reflects the evidence you have about your workplace.</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-icon" aria-hidden="true">🛡️</span>
+        <div class="pillar-title">Boundary</div>
+        <p class="pillar-desc">Know what you are — and are not — ready to share before you start.</p>
+      </div>
+    </div>
+
+    <div class="quote-box">"I'm not asking you to be an expert. I'd like to explain what I've noticed about how this is affecting me at work and agree an appropriate next step."</div>
+
+    <div class="info-box" style="margin-top:14px;">
+      <p><strong>After any substantive conversation:</strong> send a short written summary of what was discussed, what was agreed, who will take the next action, and when it will be reviewed.</p>
+      <p style="margin-top:6px;"><strong>Think of the process as: Prepare → Ask → Confirm in writing → Review.</strong></p>
+    </div>
+
+    <p style="font-size:0.91rem;font-style:italic;color:var(--text);margin-top:20px;padding:14px 0;border-top:1px solid var(--lavender);">The aim is not to make the bravest decision. It is to make the most informed decision available to you now.</p>
+
+    <div class="legal-note" role="note" style="margin-top:10px;">
+      This workshop provides general educational information, not legal advice. Employment and disability law varies by jurisdiction and individual circumstances. Seek appropriate local advice if you are facing dismissal, disciplinary action, serious discrimination, retaliation or an urgent risk to your health or safety.
+    </div>
+
+    <div class="save-prompt" role="complementary" aria-label="Save your worksheet">
+      <p><strong>Save your completed worksheet as a PDF.</strong> Your answers will be included — open your browser's Print dialog, choose "Save as PDF", and keep a copy for reference.</p>
+      <button class="btn-pdf" onclick="window.print()" aria-label="Save worksheet as PDF">⬇ Save as PDF</button>
+    </div>
+  </section>
+
+</main>
+
+<!-- Navigation -->
+<nav class="nav-bar" aria-label="Worksheet navigation">
+  <button class="btn btn-secondary" id="prevBtn" onclick="changePage(-1)" aria-label="Go to previous page" disabled>← Back</button>
+  <span class="nav-count" aria-hidden="true" id="navCount">1 / 9</span>
+  <button class="btn btn-primary" id="nextBtn" aria-label="Go to next page">Next →</button>
+</nav>
+
+<script>
+  const PAGES = 9;
+  const PAGE_NAMES = [
+    "Introduction",
+    "Disclosure as a Spectrum",
+    "Part 1: Manager Assessment",
+    "Part 1: Reading the Evidence",
+    "Part 1: Organisation Assessment",
+    "Part 2: Legal Context",
+    "Part 3: Benefits, Concerns & Urgency",
+    "Part 4: Route and Disclosure Level",
+    "Part 5: Your Next Step"
+  ];
+
+  let cur = 0;
+
+  function changePage(dir) {
+    document.getElementById('p' + cur).classList.remove('active');
+    cur = Math.max(0, Math.min(PAGES - 1, cur + dir));
+    document.getElementById('p' + cur).classList.add('active');
+    sync();
+    const main = document.getElementById('main');
+    main.focus();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function sync() {
+    const pct = Math.round((cur / (PAGES - 1)) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressBar').setAttribute('aria-valuenow', pct);
+    document.getElementById('pageName').textContent = PAGE_NAMES[cur];
+    document.getElementById('pageCount').textContent = 'Page ' + (cur + 1) + ' of ' + PAGES;
+    document.getElementById('navCount').textContent = (cur + 1) + ' / ' + PAGES;
+    document.getElementById('prevBtn').disabled = cur === 0;
+
+    const next = document.getElementById('nextBtn');
+    if (cur === PAGES - 1) {
+      next.textContent = '⬇ Save as PDF';
+      next.setAttribute('aria-label', 'Save worksheet as PDF');
+      next.onclick = () => window.print();
+      next.disabled = false;
+      next.style.background = 'var(--accent)';
+    } else {
+      next.textContent = 'Next →';
+      next.setAttribute('aria-label', 'Go to next page');
+      next.onclick = () => changePage(1);
+      next.disabled = false;
+      next.style.background = '';
+    }
+  }
+
+  // Initialise next button onclick
+  document.getElementById('nextBtn').onclick = () => changePage(1);
+
+  // Arrow key navigation (not when typing in inputs)
+  document.addEventListener('keydown', function(e) {
+    if (['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) return;
+    if (e.key === 'ArrowRight' && cur < PAGES - 1) changePage(1);
+    if (e.key === 'ArrowLeft' && cur > 0) changePage(-1);
+    if (e.key === 'p' && (e.ctrlKey || e.metaKey)) { /* let browser handle */ }
+  });
+
+  sync();
+</script>
+
+<footer style="position:fixed;bottom:0;left:0;right:0;text-align:center;padding:8px 24px;font-size:0.75rem;color:#777;border-top:1px solid #e8e4f0;background:#fff;z-index:99;">
+  &copy; <script>document.write(new Date().getFullYear())</script> <a href="https://www.skool.com/neurodiversityworks/about" target="_blank" rel="noopener noreferrer" style="color:#5400FF;text-decoration:none;font-weight:600;">Neurodiversity Works</a>. All rights reserved.
+</footer>
+</body>
+</html>
