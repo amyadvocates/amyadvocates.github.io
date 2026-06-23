@@ -1,0 +1,1990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Should You Disclose? — Neurodiversity Works Workshop v4</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,400;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { background: #FAF8F4; font-family: 'Inter', sans-serif; }
+  .nw-btn:focus-visible { outline: 2px solid #5400FF; outline-offset: 2px; }
+
+  @media print {
+    @page { size: 16in 9in; margin: 0; }
+    *, *::before, *::after {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    .hide-on-print { display: none !important; }
+    .print-slide {
+      display: block !important;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      page-break-after: always;
+      break-after: page;
+      container-type: inline-size;
+      position: relative;
+    }
+    .print-slide:last-child {
+      page-break-after: auto;
+      break-after: auto;
+    }
+  }
+  @media screen {
+    .hide-on-screen { display: none !important; }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback } = React;
+
+const C = {
+  bg: "#FAF8F4", dark: "#1F3D37", purple: "#5400FF",
+  teal: "#6A8D91", strongPurple: "#222C93", lavender: "#C6C1D2",
+  warm: "#D8CBB8", white: "#FFFFFF", muted: "#6E6B65",
+  border: "#E5DFD5", card: "#F2EDE6",
+};
+
+const ACCENTS = { purple: "#5400FF", teal: "#6A8D91", lavender: "#C6C1D2" };
+
+// ─── PRESENTER MODE ──────────────────────────────────────────────────────────
+const IS_PRESENTER = typeof window !== 'undefined' &&
+  new URLSearchParams(window.location.search).has('presenter');
+
+let syncChannel = null;
+try { syncChannel = new BroadcastChannel('nw-deck-sync'); } catch(e) {}
+
+function getSlideTitle(slide) {
+  if (!slide) return '';
+  switch (slide.type) {
+    case 'cover':      return slide.titleA + ' ' + slide.titleB;
+    case 'statement':  return slide.statement;
+    case 'question':   return 'Q' + slide.questionNum + ': ' + slide.question;
+    case 'concerns':   return slide.prompt;
+    case 'nextstep':   return slide.statement;
+    case 'closure':    return 'Before We Finish';
+    case 'disclaimer': return 'Workshop Information';
+    default:           return slide.title || slide.headline || slide.statement || '';
+  }
+}
+
+function getSlideLabel(slide) {
+  if (!slide) return '';
+  return slide.eyebrow || slide.type.charAt(0).toUpperCase() + slide.type.slice(1);
+}
+
+
+// ─── SLIDE DATA ──────────────────────────────────────────────────────────────
+
+const SLIDES = [
+
+  // ── S1: COVER ──────────────────────────────────────────────────────────────
+  {
+    type:"cover",
+    eyebrow:"Neurodiversity Works · Workshop",
+    titleA:"Should You",
+    titleB:"Disclose?",
+    subtitle:"Before you tell your manager you're neurodivergent, ask yourself: have they actually shown you that they're safe to tell?",
+    accent:"purple",
+    notes:"Let the hook sit before you speak. Most participants are already living this question. The workshop is designed to give them a structure for an answer they can actually use.",
+  },
+
+  // ── S2: OUTCOMES ───────────────────────────────────────────────────────────
+  {
+    type:"agenda",
+    eyebrow:"By the End, You Will Have:",
+    title:"Your Workshop Outcomes",
+    items:[
+      "Assessed your manager and organisation",
+      "Considered the benefits and risks",
+      "Chosen a primary and backup route",
+      "Chosen what to share and what to ask for",
+      "Identified one next step",
+    ],
+    accent:"teal",
+    notes:"Read each item slowly. This is a promise to participants. Take under two minutes here — the content does the heavy lifting. Remind them: you don't need a diagnosis, a perfect explanation, or a complete list of adjustments to take part.",
+  },
+
+  // ── S3: DISCLOSURE SPECTRUM (REVISED) ─────────────────────────────────────
+  // Change: 4 steps focused on how much to share; remove "formal request";
+  // add note that gathering information is an action, not a disclosure level
+  {
+    type:"continuum",
+    eyebrow:"How Much Information Might I Share?",
+    statement:"Disclosure is a spectrum — not a single yes-or-no decision.",
+    steps:[
+      "Say nothing yet",
+      "Describe the work impact",
+      "Mention a condition",
+      "Share a diagnosis",
+    ],
+    note:"Gathering information is an action you can take at any stage — not a disclosure level.",
+    accent:"lavender",
+    notes:"Walk through each point on the spectrum. Emphasise: you can disclose different amounts to different people, and the question of what to ask for is separate — that comes next.",
+  },
+
+  // ── S4: TWO DECISIONS ──────────────────────────────────────────────────────
+  {
+    type:"twodecisions",
+    eyebrow:"Separating Two Decisions",
+    headline:"You do not have to decide everything at once.",
+    rows:[
+      "How much do I want to share?",
+      "What do I want to ask for?",
+    ],
+    accent:"teal",
+    notes:"These two decisions are independent. You can share a diagnosis without asking for any change. You can make a formal request while sharing only focused information about work impact. The exact process will depend on your employer and the country where you work.",
+  },
+
+  // ── S5: STARTING POINT REFLECTION (REVISED prompt) ────────────────────────
+  // Change: new prompt wording that works for all starting positions
+  {
+    type:"reflection",
+    eyebrow:"Pause — Worksheet Prompt",
+    title:"At the Moment, I Am…",
+    items:[
+      "Considering disclosure",
+      "Looking for support without disclosing a label",
+      "Unsure and gathering information",
+      "Already disclosed but unsure what to do next",
+    ],
+    prompt:"What would I like to be clearer, easier or different after my next step?",
+    accent:"teal",
+    notes:"Leave this on screen for about 20 seconds. There is no correct place to be. The prompt works equally well whether the participant wants to gather information, ask for support, or decide to wait.",
+  },
+
+  // ── S6: PART ONE — ASSESS BEHAVIOUR ───────────────────────────────────────
+  {
+    type:"statement",
+    eyebrow:"Part One · Read the Room",
+    statement:"Assess behaviour — not personality.",
+    subtext:"You are looking for evidence, not impressions.",
+    paths:null,
+    dark:false,
+    accent:"purple",
+    notes:"This distinction matters. A manager can be warm and friendly while being unreliable with sensitive issues. A direct manager can be consistent, fair, and willing to act. You are looking for track record, not vibe.",
+  },
+
+  // ── S7–S12: MANAGER ASSESSMENT QUESTIONS ──────────────────────────────────
+  {
+    type:"question",
+    eyebrow:"Manager Assessment",
+    questionNum:1,
+    question:"Does my manager listen before reaching a conclusion?",
+    options:["Yes","Mixed","No","Not enough evidence"],
+    accent:"purple",
+    notes:"Pause for approximately 15 seconds. Think about what happens when you explain a difficulty. Do they ask questions and try to understand? Or do they interrupt, minimise, or immediately tell you what the problem is?",
+  },
+  {
+    type:"question",
+    eyebrow:"Manager Assessment",
+    questionNum:2,
+    question:"Can they respond to a concern without becoming defensive?",
+    options:["Yes","Mixed","No","Not enough evidence"],
+    accent:"purple",
+    notes:"Pause for approximately 15 seconds. What happens when you say an instruction was unclear or a workload is unrealistic? Can they treat that as useful information — or do they hear it as criticism, disloyalty, or an excuse?",
+  },
+  {
+    type:"question",
+    eyebrow:"Manager Assessment",
+    questionNum:3,
+    question:"Do they follow through?",
+    options:["Yes","Mixed","No","Not enough evidence"],
+    accent:"purple",
+    notes:"Pause for approximately 15 seconds. A manager may respond warmly in the moment — but do they remember what was agreed? Do they make the change? Do they check in again? Supportive words without follow-through may leave you raising the issue repeatedly.",
+  },
+  {
+    type:"question",
+    eyebrow:"Manager Assessment",
+    questionNum:4,
+    question:"Do they handle sensitive information carefully?",
+    options:["Yes","Mixed","No","Not enough evidence"],
+    accent:"purple",
+    notes:"Pause for approximately 15 seconds. Have you seen them gossip about employees, speculate about health, or share information unnecessarily? Remember: you may not know what they have said privately. You are assessing the evidence available to you.",
+  },
+  {
+    type:"question",
+    eyebrow:"Manager Assessment",
+    questionNum:5,
+    question:"Can they adapt how they manage different people?",
+    options:["Yes","Mixed","No","Not enough evidence"],
+    accent:"purple",
+    notes:"Pause for approximately 15 seconds. Do they accept that one employee may need written instructions, another more notice, another regular check-ins? Or do they interpret fairness as treating everybody in exactly the same way?",
+  },
+  {
+    type:"question",
+    eyebrow:"Manager Assessment",
+    questionNum:6,
+    question:'Can they say, "I don\'t know, but I\'ll find out"?',
+    options:["Yes","Mixed","No","Not enough evidence"],
+    accent:"purple",
+    notes:"Pause for approximately 15 seconds. A manager does not need to be a neurodiversity expert. The useful question: can they seek advice rather than avoid the issue or invent an answer?",
+  },
+
+  // ── S13: EVIDENCE REFLECTION (REVISED — prominent callout) ────────────────
+  // Change: red-flag warning moved into a prominent shaded callout
+  {
+    type:"reflection",
+    eyebrow:"Pause — Worksheet Prompt",
+    title:"What Does Your Evidence Show?",
+    items:[
+      "What is the strongest reason for confidence in your manager?",
+      "What is the strongest reason for caution?",
+    ],
+    callout:"Do not simply total your answers. One serious red flag may outweigh several positive signs.",
+    accent:"teal",
+    notes:"Leave on screen for about 40 seconds. Mostly Yes = direct conversation may be reasonable. Mixed = structure matters more. Mostly No = consider a different route first. Uncomfortable or inexperienced ≠ unsafe. Retaliation, broken confidence, or repeated dismissal = meaningful evidence.",
+  },
+
+  // ── S14: ORGANISATION SYSTEM ───────────────────────────────────────────────
+  {
+    type:"content",
+    eyebrow:"Assessing the Organisation",
+    title:"Your Manager Is Only One Part of the System",
+    items:[
+      "A good manager can be constrained by a poor system",
+      "A less confident manager may be much easier to work with when the organisation has a clear process and specialist support",
+      "Assess two separate things: the maturity of the process, and the culture around using it",
+      "They are not the same",
+    ],
+    accent:"lavender",
+    notes:"This framing prevents participants treating the manager assessment as the whole picture. A strong process can compensate for a less confident manager. A warm culture can make up for limited formal infrastructure.",
+  },
+
+  // ── S15: SUPPORT STRUCTURES (shorter scale labels) ────────────────────────
+  // Change: scaleMin/scaleMax shortened for mobile readability
+  {
+    type:"structures",
+    eyebrow:"Organisation Assessment",
+    title:"What Support Structures Exist?",
+    structures:[
+      "HR or People team",
+      "Occupational Health",
+      "Disability or neurodiversity network",
+      "Trade union or employee representative",
+      "Adjustments or accommodations policy",
+      "Workplace adjustment passport",
+      "Disability, wellbeing or inclusion lead",
+      "Guidance on the staff intranet",
+    ],
+    scaleLabel:"Score 1–5 for clarity of process",
+    scaleMin:"1 — No clear route",
+    scaleMax:"5 — Clear route and named responsibility",
+    accent:"lavender",
+    notes:"Pause for 15 seconds after the scoring prompt. Not knowing the answers is itself useful information — finding out can become your first step.",
+  },
+
+  // ── S16: CULTURE SCALE (shorter scale labels) ─────────────────────────────
+  // Change: scaleMin/scaleMax shortened for mobile readability
+  {
+    type:"scale",
+    eyebrow:"Organisation Assessment",
+    title:"How Safe Does the Culture Appear?",
+    indicators:[
+      "Have you seen other people receive support?",
+      "How do managers talk about sickness, burnout, disability or mental health?",
+      "Are adjustments treated as ordinary tools — or as favours and inconveniences?",
+      "Do senior leaders talk about inclusion, and does everyday behaviour match what they say?",
+    ],
+    scaleLabel:"Score 1–5 for confidence in culture",
+    scaleMin:"1 — Support feels unsafe",
+    scaleMax:"5 — Support is normalised",
+    accent:"lavender",
+    notes:"Pause for 15 seconds. A large company may have an impressive policy but a poor culture. A small organisation may have no formal programme but still respond flexibly and humanely. This is why you score them separately.",
+  },
+
+  // ── S17: PROCESS + CULTURE MATRIX (revised quadrant labels) ───────────────
+  // Change: clearer quadrant headings; no axis labels needed
+  {
+    type:"matrix",
+    eyebrow:"Reading Your Scores",
+    title:"Process × Culture",
+    fill:"Process: ___ / 5          Culture: ___ / 5",
+    quadrants:[
+      { label:"Supportive culture · Clear process",     route:"Several viable routes available",                                                    color:C.dark },
+      { label:"Supportive culture · Unclear process",   route:"Informal conversation may work — build structure around any agreements",              color:C.teal },
+      { label:"Unsupportive culture · Clear process",   route:"Consider a formal route — ideally with advice or support",                 color:C.strongPurple },
+      { label:"Unsupportive culture · Unclear process", route:"Get independent support before sharing personal information",                          color:"#8B2500" },
+    ],
+    accent:"purple",
+    notes:"Walk through each quadrant. The bottom-left is most important — participants here sometimes feel pressure to disclose quickly. The guidance is the opposite: gather support and information before making yourself more vulnerable.",
+  },
+
+  // ── S18: LEGAL DISCLAIMER STATEMENT ───────────────────────────────────────
+  {
+    type:"statement",
+    eyebrow:"Part Two · Understand What Disclosure May Change",
+    statement:"General information — not individual legal advice.",
+    subtext:"Employment and disability law varies between countries. It may also depend on employer size, employment status, and individual circumstances. Check local law.",
+    paths:null,
+    dark:false,
+    accent:"teal",
+    notes:"Set this expectation clearly and immediately. Note that terminology differs: 'reasonable adjustments' (UK) vs 'reasonable accommodation' (EU and US).",
+  },
+
+  // ── S19: THREE PRACTICAL PRINCIPLES (revised title) ───────────────────────
+  // Change: title → "Common Practical Principles — Check Local Law"
+  {
+    type:"threecards",
+    eyebrow:"Three Practical Principles",
+    title:"Common Practical Principles — Check Local Law",
+    cards:[
+      {
+        heading:"You do not usually need to share your whole medical history",
+        body:"Describing the work-related effects of a condition is often enough to begin.",
+      },
+      {
+        heading:"Your employer needs enough information to respond",
+        body:"There is a difference between a working preference and a disability-related need. The amount you disclose can affect how the request is handled.",
+      },
+      {
+        heading:"Rights and workplace safety are related — but not identical",
+        body:"Legal protection does not guarantee an emotionally safe or competent response from every manager. The law is one part of your decision.",
+      },
+    ],
+    accent:"teal",
+    notes:"These three principles do the most practical work of the legal section. If time is short, spend most of it here. The third principle is critical: legal rights exist, but the evidence about your specific workplace also matters.",
+  },
+
+  // ── S20: UK (fix Acas casing) ──────────────────────────────────────────────
+  {
+    type:"content",
+    eyebrow:"United Kingdom",
+    title:"Equality Act 2010",
+    items:[
+      "A formal neurodivergence diagnosis is not required. Protection depends on whether the effects meet the Equality Act definition of disability.",
+      "The duty to make reasonable adjustments can arise when an employer knows, or could reasonably be expected to know, that the person is disabled and experiencing a disability-related disadvantage.",
+      "Acas advises employers to support neurodivergent workers whether or not they have a diagnosis",
+      "You can start by describing effects — but naming the disability-related connection may affect how the request is interpreted and handled",
+    ],
+    footer:"Source: Equality Act 2010 · Acas",
+    accent:"lavender",
+    notes:"Keep this brief. The key takeaway: you can start by describing effects, but naming the disability-related connection may affect how seriously the request is treated.",
+  },
+
+  // ── S21: EU ────────────────────────────────────────────────────────────────
+  {
+    type:"content",
+    eyebrow:"European Union",
+    title:"National Law Based on a Shared Framework",
+    items:[
+      "The Employment Equality Directive establishes a framework against disability discrimination in employment",
+      "It requires reasonable accommodation unless this would impose a disproportionate burden",
+      "All EU member states implement this through their own national (and sometimes regional) laws — which may provide more favourable protection",
+      "Check the process and legal definition in the specific country where you work",
+    ],
+    footer:"Source: EUR-Lex / Employment Equality Directive",
+    accent:"lavender",
+    notes:"Keep this brief. Direct EU participants to check their national law — the shared framework is not uniform in practice.",
+  },
+
+  // ── S22: US PATHWAY (revised — takeaway, softer last step, expanded footer) ─
+  // Changes: add takeaway above pathway; soften "must be kept confidential";
+  // expand footer with employee-count note
+  {
+    type:"pathway",
+    eyebrow:"United States",
+    title:"Americans with Disabilities Act",
+    takeaway:"You do not need to use legal wording to begin a request.",
+    steps:[
+      "Workplace change needed",
+      "Explain that it relates to a medical condition or disability",
+      "Employer may request limited relevant documentation",
+      "Medical information is subject to confidentiality requirements",
+    ],
+    footer:"Source: EEOC / ADA Title I · Federal coverage generally begins at 15 employees — state or local law may provide wider protection",
+    accent:"lavender",
+    notes:"You do not need to use phrases like 'ADA' or 'reasonable accommodation' — you need to communicate that you require a workplace change for a reason connected to a medical condition. Also check applicable state and local law.",
+  },
+
+  // ── S23: CONVERSATION TYPES ────────────────────────────────────────────────
+  {
+    type:"fourcards",
+    eyebrow:"Putting It Together",
+    title:"Ask Yourself: What Kind of Conversation Am I Beginning?",
+    cards:[
+      "A conversation about working preferences?",
+      "Notice of a health or disability-related difficulty?",
+      "An informal request for support?",
+      "A formal accommodations or adjustments request?",
+    ],
+    note:"These conversations can overlap — but they may require different levels of clarity and information.",
+    accent:"teal",
+    notes:"Bridge from the legal overview into decision-making. Let participants sit with the question. They don't need to answer it right now — but naming the type of conversation they want to have helps them prepare.",
+  },
+
+  // ── S24: PART THREE TRANSITION ─────────────────────────────────────────────
+  {
+    type:"statement",
+    eyebrow:"Part Three · Weigh Up the Decision",
+    statement:"What might improve if I start a conversation?",
+    subtext:"Begin with the possible benefit.",
+    paths:null,
+    dark:false,
+    accent:"purple",
+    notes:"Ask participants to look at the benefit options that follow and mark any that apply.",
+  },
+
+  // ── S25: BENEFIT CARDS (revised cta prominence) ───────────────────────────
+  // Change: separate `cta` prop, made more visually prominent below the pills
+  {
+    type:"benefitcards",
+    eyebrow:"The Possible Benefits",
+    title:"Mark Any That Apply",
+    cta:"Then choose the two that matter most.",
+    cards:[
+      "I could gain practical support",
+      "My manager could understand changes in my work",
+      "I could reduce masking or compensating",
+      "I could access a formal support route",
+      "It could create a record that my employer is aware",
+      "I would no longer be managing the issue alone",
+      "It could prevent the situation becoming more serious",
+    ],
+    accent:"teal",
+    notes:"Pause for approximately 25 seconds. Walk through the options briefly. Perhaps you need practical changes, or you need your manager to understand why things have changed, or you need to stop managing the problem entirely alone.",
+  },
+
+  // ── S26: CONCERN TRANSITION ────────────────────────────────────────────────
+  {
+    type:"statement",
+    eyebrow:"Part Three · Concern",
+    statement:"What am I concerned could happen?",
+    subtext:"Try not to dismiss your concerns as negativity. Some fears are based on uncertainty. Others are based on genuine evidence.",
+    paths:null,
+    dark:false,
+    accent:"lavender",
+    notes:"Introduce this calmly. Naming concerns is part of risk assessment, not pessimism.",
+  },
+
+  // ── S27: CONCERN HEADINGS (revised sub labels) ────────────────────────────
+  // Changes: "proof" → "requests for evidence"; "existing processes" → "performance or formal processes"
+  {
+    type:"concerns",
+    eyebrow:"The Possible Concerns",
+    groups:[
+      { heading:"How I may be perceived",             sub:"Capability · judgement · personality" },
+      { heading:"How the information may be handled", sub:"Confidentiality · requests for evidence · discrimination or retaliation" },
+      { heading:"Whether the conversation will help", sub:"No practical action · oversharing · unclear support · performance or formal processes" },
+    ],
+    prompt:"Which two concerns matter most in my situation?",
+    accent:"lavender",
+    notes:"Pause for approximately 35 seconds. Then take each concern through four questions: What evidence do I have? How likely does it seem? How serious would the impact be? What could reduce the risk?",
+  },
+
+  // ── S28: URGENCY SCALE ─────────────────────────────────────────────────────
+  {
+    type:"urgency",
+    eyebrow:"Part Three · Urgency",
+    title:"How Urgent Is My Need?",
+    levels:[
+      { label:"Low",      desc:"I am planning ahead",                                                               color:C.teal },
+      { label:"Moderate", desc:"It is affecting my energy, health or work",                                          color:C.strongPurple },
+      { label:"High",     desc:"I am near burnout, struggling to work safely or facing formal concerns",             color:C.dark },
+    ],
+    accent:"purple",
+    notes:"Pause for about 15 seconds. High urgency does not mean an unplanned conversation with an unsafe person — it may mean seeking support and using a more formal route.",
+  },
+
+  // ── S29: HIGHER RISK STATEMENT ─────────────────────────────────────────────
+  {
+    type:"statement",
+    eyebrow:null,
+    statement:"Higher risk does not always mean “do not disclose.”",
+    subtext:"It may mean: do not disclose alone, informally, or without preparation.",
+    paths:["Greater preparation", "More support", "A more formal route"],
+    dark:true,
+    accent:"teal",
+    notes:"Read it slowly. Let it sit. The path leads not to silence but to a better-prepared, better-supported conversation.",
+  },
+
+  // ── S30: FIVE ROUTES (condensed to title + short cue) ─────────────────────
+  // Change: descriptions cut to ~4 words each for mobile readability
+  {
+    type:"routes",
+    eyebrow:"Part Four · Choose Your Route and Level",
+    title:"Choose a Primary Route and a Backup Route",
+    routes:[
+      { label:"Your Manager",          desc:"Direct practical changes" },
+      { label:"Human Resources",       desc:"Process and formal records" },
+      { label:"Occupational Health",   desc:"Identify work-related support" },
+      { label:"Union or Rep",          desc:"Advice and representation" },
+      { label:"Employee Network",      desc:"Learn how things work in practice" },
+    ],
+    accent:"purple",
+    notes:"Walk through each route. HR represents the organisation — neither helpful nor unhelpful by definition, but worth understanding before sharing details. An employee network is not automatically a confidential legal or clinical service. Ask participants to choose a primary and backup route.",
+  },
+
+  // ── S31: ROUTE REFLECTION (slightly larger note font — handled in component) ─
+  {
+    type:"reflection",
+    eyebrow:"Pause — Worksheet Prompt",
+    title:"My Route",
+    items:[
+      "My primary route: __________",
+      "My backup route: __________",
+    ],
+    note:"Choose the route most likely to give useful movement with an acceptable level of risk. Your backup matters — if the first contact cannot resolve the issue, you need somewhere to go.",
+    accent:"purple",
+    notes:"Pause for about 25 seconds. Naming a backup closes the loop that 'if this doesn't work, I have nowhere to go' — which often keeps people stuck.",
+  },
+
+  // ── S32: DISCLOSURE LEVEL (revised title) ─────────────────────────────────
+  // Change: title → "Two Decisions for My First Step"
+  {
+    type:"twocolumn",
+    eyebrow:"Part Four · Planning Your First Step",
+    title:"Two Decisions for My First Step",
+    left:{
+      label:"What am I willing to share?",
+      items:[
+        "Share nothing personal yet / ask general questions",
+        "Describe the work impact",
+        "Mention a condition or neurodivergence",
+        "Share a diagnosis",
+      ],
+    },
+    right:{
+      label:"What do I want them to do?",
+      items:[
+        "Explain the process",
+        "Agree an informal practical change",
+        "Help identify suitable support",
+        "Begin a formal adjustments or accommodations process",
+      ],
+    },
+    accent:"teal",
+    notes:"Make two separate choices for your first step: how much personal information you want to share, and what you want the other person to do. You can make a formal request without sharing your whole medical history.",
+  },
+
+  // ── S33: NEXT STEP OPTIONS ─────────────────────────────────────────────────
+  {
+    type:"nextstep",
+    eyebrow:"Part Five · Decide What Happens Next",
+    statement:"A good next step gives you more information, support or control.",
+    options:[
+      "Read the disability or accommodations policy",
+      "Ask HR to explain the process without sharing personal information yet",
+      "Contact a union representative",
+      "Ask whether Occupational Health is available",
+      "Speak to somebody in an employee network about their experience",
+      "Write a draft email and leave it overnight",
+      "Ask a trusted person to review what you plan to say",
+      "Book a meeting with your manager",
+      "Decide you are not ready — and set a specific date to reconsider",
+    ],
+    accent:"teal",
+    notes:"The action does not need to be 'disclose to my manager'. Any of these is a real step.",
+  },
+
+  // ── S34: NEXT STEP REFLECTION (slightly larger note font — handled in component) ─
+  {
+    type:"reflection",
+    eyebrow:"Pause — Worksheet Prompt",
+    title:"My Next Step",
+    items:[
+      "My next step is: __________",
+      "Before I do it, I need: __________",
+    ],
+    note:"Make it specific: instead of “look into support” → “Search the intranet for the adjustments policy on Monday morning”.",
+    accent:"purple",
+    notes:"Leave on screen for about 35 seconds. The specificity prompt is the most important part — vague intentions rarely become actions.",
+  },
+
+  // ── S35: CLOSURE (split — disclaimer removed to S36) ──────────────────────
+  // Change: disclaimer moved to dedicated S36; this slide ends on memorable idea
+  {
+    type:"closure",
+    eyebrow:"Before We Finish",
+    anchors:[
+      { label:"A purpose",   desc:"A reasonably clear reason for the conversation." },
+      { label:"A route",     desc:"One that reflects the evidence you have about your workplace." },
+      { label:"A boundary",  desc:"Around what you are and are not ready to share." },
+    ],
+    loop:["Prepare","Ask","Confirm","Review"],
+    frame:"“I’m not asking you to be an expert. I’d like to explain what I’ve noticed about how this is affecting me at work and agree an appropriate next step.”",
+    accent:"teal",
+    notes:"Read the frame sentence out loud. This is something participants can actually use. Silence after a close is not a problem to fill. The aim is not the bravest decision — it is the most informed decision available now.",
+  },
+
+  // ── S36: WORKSHOP INFORMATION / DISCLAIMER (new slide) ────────────────────
+  // Change: legal disclaimer now has its own final slide; workshop ends on S35
+  {
+    type:"disclaimer",
+    eyebrow:"Workshop Information",
+    disclaimer:"This workshop provides general educational information, not legal advice. Employment and disability law varies by jurisdiction and individual circumstances. Seek appropriate local advice if you are facing dismissal, disciplinary action, serious discrimination, retaliation or an urgent risk to your health or safety.",
+    resources:[
+      "Worksheet: provided with workshop materials",
+      "Neurodiversity Works: community.neurodiversity.works",
+    ],
+    accent:"teal",
+    notes:"Leave on screen during any break or close of session. Participants can photograph it.",
+  },
+];
+
+// ─── COMPONENTS ──────────────────────────────────────────────────────────────
+
+function Eyebrow({ children, color = C.muted, dark = false }) {
+  return (
+    <div style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(11px,1.4cqi,15px)",
+      letterSpacing:2.5, color:dark?"rgba(255,255,255,0.6)":color,
+      textTransform:"uppercase", fontWeight:600, marginBottom:"clamp(12px,1.8cqi,22px)" }}>
+      {children}
+    </div>
+  );
+}
+
+// ── S1: Cover ─────────────────────────────────────────────────────────────────
+function SlideCover({ slide }) {
+  return (
+    <div style={{ height:"100%", display:"flex", flexDirection:"column", justifyContent:"center",
+      alignItems:"center", textAlign:"center", padding:"clamp(28px,5%,72px)",
+      background:C.bg, boxSizing:"border-box",
+      backgroundImage:"radial-gradient(ellipse at 60% 40%, rgba(84,0,255,0.08) 0%, transparent 65%), radial-gradient(ellipse at 20% 80%, rgba(106,141,145,0.12) 0%, transparent 55%)" }}>
+      <Eyebrow color={C.muted}>{slide.eyebrow}</Eyebrow>
+      <h1 style={{ margin:0, fontFamily:"'Playfair Display',Georgia,serif",
+        fontSize:"clamp(38px,7.5cqi,96px)", fontWeight:800, lineHeight:1.05,
+        letterSpacing:"-0.02em", marginBottom:"clamp(16px,2.5cqi,32px)", color:C.dark }}>
+        {slide.titleA}{" "}
+        <em style={{ color:C.purple, fontStyle:"italic" }}>{slide.titleB}</em>
+      </h1>
+      <p style={{ margin:0, fontFamily:"'Inter',sans-serif", fontSize:"clamp(15px,2cqi,23px)",
+        color:C.dark, lineHeight:1.6, maxWidth:"72%", fontWeight:400 }}>
+        {slide.subtitle}
+      </p>
+      <div style={{ marginTop:"clamp(24px,3.5cqi,44px)", width:"clamp(48px,6cqi,80px)",
+        height:3, background:C.purple, borderRadius:2 }} />
+    </div>
+  );
+}
+
+// ── S2: Agenda ────────────────────────────────────────────────────────────────
+function SlideAgenda({ slide, accent }) {
+  return (
+    <div style={{ height:"100%", display:"flex", flexDirection:"column", justifyContent:"center",
+      padding:"clamp(32px,6%,80px)", background:C.white, boxSizing:"border-box" }}>
+      <Eyebrow color={C.dark}>{slide.eyebrow}</Eyebrow>
+      <h2 style={{ margin:0, fontFamily:"'Playfair Display',Georgia,serif",
+        fontSize:"clamp(26px,4.5cqi,56px)", fontWeight:700, color:C.dark, lineHeight:1.15,
+        letterSpacing:"-0.02em", marginBottom:"clamp(20px,3cqi,36px)" }}>{slide.title}</h2>
+      <ul style={{ listStyle:"none", padding:0, margin:0, display:"flex",
+        flexDirection:"column", gap:"clamp(9px,1.3cqi,15px)" }}>
+        {slide.items.map((item,i) => (
+          <li key={i} style={{ display:"flex", alignItems:"baseline",
+            gap:"clamp(12px,1.5cqi,20px)", fontFamily:"'Inter',sans-serif",
+            fontSize:"clamp(14px,2cqi,23px)", color:C.dark, lineHeight:1.4 }}>
+            <span style={{ flexShrink:0, fontFamily:"'Inter',monospace",
+              fontSize:"clamp(10px,1.2cqi,14px)", color:accent, fontWeight:700,
+              letterSpacing:1, minWidth:"clamp(22px,2.8cqi,36px)" }}>0{i+1}</span>
+            <span style={{ fontWeight:500 }}>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+// ── S3: Continuum (revised — 4 steps + note) ──────────────────────────────────
+function SlideContinuum({ slide, accent }) {
+  const steps = slide.steps;
+  return (
+    <div style={{ height:"100%", display:"flex", flexDirection:"column", justifyContent:"center",
+      padding:"clamp(28px,5%,68px)", background:C.bg, boxSizing:"border-box" }}>
+      <Eyebrow color={C.muted}>{slide.eyebrow}</Eyebrow>
+      <h2 style={{ margin:0, fontFamily:"'Playfair Display',Georgia,serif",
+        fontSize:"clamp(20px,3.5cqi,44px)", fontWeight:700, color:C.dark, lineHeight:1.2,
+        letterSpacing:"-0.02em", marginBottom:"clamp(28px,4.5cqi,52px)" }}>
+        <em style={{ fontStyle:"italic" }}>{slide.statement}</em>
+      </h2>
+      {/* Horizontal continuum */}
+      <div style={{ position:"relative", marginBottom:"clamp(16px,2.5cqi,28px)" }}>
+        {/* Connecting line */}
+        <div style={{ position:"absolute", top:"clamp(5px,0.7cqi,9px)", left:"clamp(8px,1cqi,12px)",
+          right:"clamp(8px,1cqi,12px)", height:2,
+          background:`linear-gradient(to right, ${C.border}, ${accent})` }} />
+        <div style={{ display:"flex", justifyContent:"space-between", position:"relative" }}>
+          {steps.map((step, i) => (
+            <div key={i} style={{ display:"flex", flexDirection:"column", alignItems:"center",
+              gap:"clamp(8px,1.2cqi,14px)", flex:1, minWidth:0 }}>
+              <div style={{ width:"clamp(10px,1.3cqi,16px)", height:"clamp(10px,1.3cqi,16px)",
+                borderRadius:"50%", background:i===steps.length-1?accent:C.bg,
+                border:`2px solid ${i===0?C.border:accent}`, flexShrink:0,
+                boxShadow:i===steps.length-1?`0 0 8px ${accent}40`:"none" }} />
+              <div style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(10px,1.3cqi,15px)",
+                color:i===steps.length-1?C.dark:C.muted, fontWeight:i===steps.length-1?600:400,
+                lineHeight:1.3, textAlign:"center", padding:"0 2px" }}>{step}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+      {/* Note about gathering info */}
+      {slide.note && (
+        <div style={{ display:"flex", alignItems:"center", gap:"clamp(8px,1.2cqi,14px)",
+          background:C.white, border:`1px solid ${C.border}`,
+          borderLeft:`3px solid ${accent}`, borderRadius:6,
+          padding:"clamp(9px,1.3cqi,14px) clamp(12px,1.8cqi,20px)" }}>
+          <span aria-hidden="true" style={{ fontSize:"clamp(13px,1.7cqi,19px)", flexShrink:0 }}>💡</span>
+          <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(12px,1.5cqi,17px)",
+            color:C.dark, fontStyle:"italic", lineHeight:1.4 }}>{slide.note}</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── S4: Two Decisions ─────────────────────────────────────────────────────────
+function SlideTwoDecisions({ slide, accent }) {
+  return (
+    <div style={{ height:"100%", display:"flex", flexDirection:"column", justifyContent:"center",
+      padding:"clamp(32px,6%,80px)", background:C.bg, boxSizing:"border-box" }}>
+      <Eyebrow color={C.muted}>{slide.eyebrow}</Eyebrow>
+      <h2 style={{ margin:0, fontFamily:"'Playfair Display',Georgia,serif",
+        fontSize:"clamp(24px,4.2cqi,52px)", fontWeight:800, color:C.dark, lineHeight:1.1,
+        letterSpacing:"-0.02em", marginBottom:"clamp(24px,4cqi,48px)" }}>
+        <em style={{ fontStyle:"italic", color:C.dark }}>{slide.headline}</em>
+      </h2>
+      <div style={{ display:"flex", flexDirection:"column", gap:"clamp(10px,1.5cqi,18px)" }}>
+        {slide.rows.map((row, i) => (
+          <div key={i} style={{ padding:"clamp(14px,2.2cqi,26px) clamp(18px,2.8cqi,34px)",
+            background:C.white, borderRadius:8, border:`1px solid ${C.border}`,
+            borderLeft:`clamp(4px,0.5cqi,6px) solid ${i===0?accent:C.dark}`,
+            fontFamily:"'Inter',sans-serif", fontSize:"clamp(15px,2.3cqi,27px)",
+            fontWeight:600, color:C.dark, lineHeight:1.35 }}>
+            {row}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Reflection (S5 / S13 / S31 / S34) ────────────────────────────────────────
+// Updated: supports `callout` (prominent box) and `note` (enlarged font for mobile)
+function SlideReflection({ slide, accent }) {
+  const eyebrowColor = (accent === ACCENTS.teal || accent === ACCENTS.lavender) ? C.dark : accent;
+  const borderColor  = accent === ACCENTS.lavender ? C.dark : accent;
+  return (
+    <div style={{ height:"100%", display:"flex", flexDirection:"column", justifyContent:"center",
+      padding:"clamp(32px,6%,80px)", background:C.white, boxSizing:"border-box",
+      borderLeft:`clamp(4px,0.5cqi,6px) solid ${borderColor}` }}>
+      <div style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(11px,1.3cqi,14px)",
+        letterSpacing:2.5, color:eyebrowColor, textTransform:"uppercase", fontWeight:700,
+        marginBottom:"clamp(12px,1.8cqi,22px)", display:"flex", alignItems:"center",
+        gap:"clamp(8px,1cqi,12px)" }}>
+        <span aria-hidden="true" style={{ fontSize:"clamp(14px,1.6cqi,18px)" }}>✎</span>
+        {slide.eyebrow}
+      </div>
+      <h2 style={{ margin:0, fontFamily:"'Playfair Display',Georgia,serif",
+        fontSize:"clamp(22px,4cqi,50px)", fontWeight:700, color:C.dark, lineHeight:1.15,
+        letterSpacing:"-0.02em", marginBottom:"clamp(18px,2.8cqi,36px)" }}>{slide.title}</h2>
+      <ul style={{ listStyle:"none", padding:0, margin:0, display:"flex",
+        flexDirection:"column", gap:"clamp(10px,1.5cqi,16px)" }}>
+        {slide.items.map((item,i) => (
+          <li key={i} style={{ display:"flex", alignItems:"baseline",
+            gap:"clamp(12px,1.5cqi,18px)", fontFamily:"'Inter',sans-serif",
+            fontSize:"clamp(14px,2cqi,23px)", color:C.dark, lineHeight:1.45 }}>
+            <span aria-hidden="true" style={{ flexShrink:0, width:"clamp(16px,1.8cqi,22px)",
+              height:"clamp(16px,1.8cqi,22px)", border:`2px solid ${borderColor}`, borderRadius:4,
+              display:"inline-block", opacity:0.45 }} />
+            <span style={{ fontWeight:400, fontStyle:item.includes("__")?"italic":"normal",
+              color:item.includes("__")?C.muted:C.dark }}>{item}</span>
+          </li>
+        ))}
+      </ul>
+      {/* Prominent callout (S13) */}
+      {slide.callout && (
+        <div style={{ marginTop:"clamp(18px,2.8cqi,30px)",
+          background:`${borderColor}18`, border:`1.5px solid ${borderColor}40`,
+          borderRadius:8, padding:"clamp(12px,1.8cqi,20px) clamp(14px,2.2cqi,24px)",
+          display:"flex", alignItems:"flex-start", gap:"clamp(10px,1.3cqi,14px)" }}>
+          <span aria-hidden="true" style={{ fontSize:"clamp(14px,1.8cqi,20px)", flexShrink:0 }}>⚑</span>
+          <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(13px,1.8cqi,20px)",
+            color:C.dark, fontWeight:600, lineHeight:1.45 }}>{slide.callout}</span>
+        </div>
+      )}
+      {/* Regular prompt (S5) */}
+      {slide.prompt && (
+        <div style={{ marginTop:"clamp(20px,3cqi,36px)", paddingTop:"clamp(14px,2cqi,22px)",
+          borderTop:`1px solid ${C.border}`, fontFamily:"'Playfair Display',Georgia,serif",
+          fontSize:"clamp(16px,2.4cqi,28px)", fontWeight:700, fontStyle:"italic",
+          color:C.dark, lineHeight:1.3 }}>
+          {slide.prompt}
+        </div>
+      )}
+      {/* Note (S31/S34) — slightly larger for mobile */}
+      {slide.note && (
+        <div style={{ marginTop:"clamp(12px,1.8cqi,18px)", fontFamily:"'Inter',sans-serif",
+          fontSize:"clamp(13px,1.6cqi,17px)", color:C.muted, fontStyle:"italic",
+          lineHeight:1.55, paddingLeft:"clamp(28px,3.5cqi,42px)" }}>
+          {slide.note}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Statement (S6 / S18 / S24 / S26 / S29) ───────────────────────────────────
+function SlideStatement({ slide, accent }) {
+  const isDarkSlide = slide.dark;
+  const bg    = isDarkSlide ? C.dark : C.bg;
+  const textC = isDarkSlide ? C.white : C.dark;
+  const subC  = isDarkSlide ? "rgba(255,255,255,0.7)" : C.muted;
+  return (
+    <div style={{ height:"100%", display:"flex", flexDirection:"column", justifyContent:"center",
+      padding:"clamp(32px,6%,80px)", background:bg, boxSizing:"border-box",
+      backgroundImage:isDarkSlide?"radial-gradient(ellipse at 30% 70%, rgba(84,0,255,0.1) 0%, transparent 60%)":"none" }}>
+      {slide.eyebrow && <Eyebrow dark={isDarkSlide} color={isDarkSlide?undefined:C.muted}>{slide.eyebrow}</Eyebrow>}
+      <h2 style={{ margin:0, fontFamily:"'Playfair Display',Georgia,serif",
+        fontSize:"clamp(28px,5.5cqi,68px)", fontWeight:800, color:textC, lineHeight:1.1,
+        letterSpacing:"-0.02em", marginBottom:"clamp(16px,2.5cqi,30px)" }}>
+        <em style={{ fontStyle:"italic" }}>{slide.statement}</em>
+      </h2>
+      <p style={{ margin:0, fontFamily:"'Inter',sans-serif",
+        fontSize:"clamp(14px,2cqi,23px)", color:subC, lineHeight:1.55, maxWidth:"80%" }}>
+        {slide.subtext}
+      </p>
+      {slide.paths && slide.paths.length > 0 && (
+        <div style={{ marginTop:"clamp(20px,3.5cqi,44px)", display:"flex",
+          gap:"clamp(8px,1.2cqi,14px)", flexWrap:"wrap" }}>
+          {slide.paths.map((p,i) => (
+            <div key={i} style={{ padding:"clamp(8px,1cqi,12px) clamp(14px,2cqi,24px)",
+              background:"rgba(255,255,255,0.12)", border:`1px solid ${accent}80`,
+              borderRadius:40, fontFamily:"'Inter',sans-serif",
+              fontSize:"clamp(12px,1.6cqi,18px)", color:isDarkSlide?C.white:C.dark,
+              fontWeight:600 }}>
+              {p}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Question (S7–S12) ─────────────────────────────────────────────────────────
+function SlideQuestion({ slide, accent }) {
+  return (
+    <div style={{ height:"100%", display:"flex", flexDirection:"column", justifyContent:"center",
+      padding:"clamp(32px,6%,80px)", background:C.bg, boxSizing:"border-box" }}>
+      <div style={{ display:"flex", alignItems:"center", gap:"clamp(10px,1.5cqi,18px)",
+        marginBottom:"clamp(16px,2.5cqi,30px)" }}>
+        <Eyebrow color={C.muted}>{slide.eyebrow}</Eyebrow>
+        <div style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(10px,1.2cqi,13px)",
+          letterSpacing:2, color:accent, fontWeight:700, textTransform:"uppercase",
+          background:`${accent}18`, padding:"3px 10px", borderRadius:20,
+          marginBottom:"clamp(12px,1.8cqi,22px)" }}>
+          {slide.questionNum} of 6
+        </div>
+      </div>
+      <h2 style={{ margin:0, fontFamily:"'Playfair Display',Georgia,serif",
+        fontSize:"clamp(22px,4cqi,50px)", fontWeight:700, color:C.dark, lineHeight:1.2,
+        letterSpacing:"-0.02em", marginBottom:"clamp(24px,4cqi,48px)" }}>
+        {slide.question}
+      </h2>
+      <div style={{ display:"flex", gap:"clamp(8px,1.2cqi,14px)", flexWrap:"wrap" }}>
+        {slide.options.map((opt,i) => (
+          <div key={i} style={{ padding:"clamp(10px,1.5cqi,18px) clamp(18px,2.8cqi,34px)",
+            background:C.white, borderRadius:100, border:`1.5px solid ${C.border}`,
+            fontFamily:"'Inter',sans-serif", fontSize:"clamp(13px,1.8cqi,21px)",
+            fontWeight:500, color:C.dark, lineHeight:1.3,
+            boxShadow:"0 2px 6px rgba(31,61,55,0.07)" }}>
+            {opt}
+          </div>
+        ))}
+      </div>
+      <div style={{ marginTop:"clamp(16px,2.5cqi,28px)", fontFamily:"'Inter',sans-serif",
+        fontSize:"clamp(10px,1.2cqi,13px)", color:C.muted, letterSpacing:1.5,
+        textTransform:"uppercase", fontWeight:600 }}>
+        Mark your answer on your worksheet — pause ~15 seconds
+      </div>
+    </div>
+  );
+}
+
+// ── Content (S14 / S20 / S21) ─────────────────────────────────────────────────
+function SlideContent({ slide, accent }) {
+  const dotAccent = accent === ACCENTS.lavender ? C.dark : accent;
+  return (
+    <div style={{ height:"100%", display:"flex", flexDirection:"column", justifyContent:"center",
+      padding:"clamp(32px,6%,80px)", background:C.bg, boxSizing:"border-box" }}>
+      <Eyebrow color={C.muted}>{slide.eyebrow}</Eyebrow>
+      <h2 style={{ margin:0, fontFamily:"'Playfair Display',Georgia,serif",
+        fontSize:"clamp(20px,3.8cqi,48px)", fontWeight:700, color:C.dark, lineHeight:1.2,
+        letterSpacing:"-0.02em", marginBottom:"clamp(18px,2.8cqi,36px)" }}>{slide.title}</h2>
+      <ul style={{ listStyle:"none", padding:0, margin:0, display:"flex",
+        flexDirection:"column", gap:"clamp(9px,1.4cqi,16px)", flex:1 }}>
+        {slide.items.map((item,i) => (
+          <li key={i} style={{ display:"flex", alignItems:"flex-start",
+            gap:"clamp(12px,1.6cqi,20px)", fontFamily:"'Inter',sans-serif",
+            fontSize:"clamp(13px,1.8cqi,21px)", color:C.dark, lineHeight:1.45, fontWeight:400 }}>
+            <span aria-hidden="true" style={{ flexShrink:0,
+              width:"clamp(5px,0.7cqi,9px)", height:"clamp(5px,0.7cqi,9px)",
+              background:dotAccent, borderRadius:"50%", marginTop:"clamp(6px,0.8cqi,11px)" }} />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+      {slide.footer && (
+        <div style={{ marginTop:"clamp(10px,1.5cqi,16px)", fontFamily:"'Inter',sans-serif",
+          fontSize:"clamp(9px,1.1cqi,12px)", color:C.muted, letterSpacing:1,
+          borderTop:`1px solid ${C.border}`, paddingTop:"clamp(8px,1cqi,12px)" }}>
+          {slide.footer}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Structures (S15 — shorter scale labels) ───────────────────────────────────
+function SlideStructures({ slide, accent }) {
+  const dotAccent = accent === ACCENTS.lavender ? C.dark : accent;
+  return (
+    <div style={{ height:"100%", display:"flex", flexDirection:"column", justifyContent:"center",
+      padding:"clamp(28px,5%,64px)", background:C.bg, boxSizing:"border-box" }}>
+      <Eyebrow color={C.muted}>{slide.eyebrow}</Eyebrow>
+      <h2 style={{ margin:0, fontFamily:"'Playfair Display',Georgia,serif",
+        fontSize:"clamp(20px,3.5cqi,44px)", fontWeight:700, color:C.dark, lineHeight:1.2,
+        letterSpacing:"-0.02em", marginBottom:"clamp(14px,2.2cqi,26px)" }}>{slide.title}</h2>
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)",
+        gap:"clamp(6px,0.9cqi,10px)", marginBottom:"clamp(14px,2.2cqi,26px)" }}>
+        {slide.structures.map((s,i) => (
+          <div key={i} style={{ background:C.white, border:`1px solid ${C.border}`,
+            borderRadius:6, padding:"clamp(8px,1.2cqi,14px)",
+            display:"flex", alignItems:"center", gap:"clamp(6px,0.9cqi,10px)" }}>
+            <span aria-hidden="true" style={{ color:dotAccent, fontSize:"clamp(10px,1.2cqi,14px)",
+              fontWeight:700, flexShrink:0 }}>◆</span>
+            <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(10px,1.2cqi,14px)",
+              fontWeight:500, color:C.dark, lineHeight:1.3 }}>{s}</span>
+          </div>
+        ))}
+      </div>
+      <div style={{ background:C.white, border:`1px solid ${C.border}`, borderRadius:8,
+        padding:"clamp(10px,1.5cqi,18px) clamp(14px,2cqi,22px)" }}>
+        <div style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(10px,1.2cqi,13px)",
+          letterSpacing:2, color:dotAccent, textTransform:"uppercase", fontWeight:700,
+          marginBottom:"clamp(8px,1.2cqi,14px)" }}>{slide.scaleLabel}</div>
+        <div style={{ display:"flex", alignItems:"center", gap:"clamp(6px,1cqi,12px)" }}>
+          <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(11px,1.4cqi,15px)",
+            color:C.dark, fontWeight:500, maxWidth:"32%", lineHeight:1.3 }}>{slide.scaleMin}</span>
+          <div style={{ flex:1, display:"flex", gap:"clamp(4px,0.6cqi,7px)", justifyContent:"center" }}>
+            {[1,2,3,4,5].map(n => (
+              <div key={n} style={{ width:"clamp(18px,2.5cqi,30px)", height:"clamp(18px,2.5cqi,30px)",
+                borderRadius:"50%", border:`2px solid ${dotAccent}`,
+                background:n===1?dotAccent:n===5?dotAccent:"transparent",
+                opacity:n===3?0.4:1 }} />
+            ))}
+          </div>
+          <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(11px,1.4cqi,15px)",
+            color:C.dark, fontWeight:500, maxWidth:"32%", lineHeight:1.3, textAlign:"right" }}>{slide.scaleMax}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Scale (S16 — shorter labels) ──────────────────────────────────────────────
+function SlideScale({ slide, accent }) {
+  const dotAccent = accent === ACCENTS.lavender ? C.dark : accent;
+  return (
+    <div style={{ height:"100%", display:"flex", flexDirection:"column", justifyContent:"center",
+      padding:"clamp(28px,5%,64px)", background:C.bg, boxSizing:"border-box" }}>
+      <Eyebrow color={C.muted}>{slide.eyebrow}</Eyebrow>
+      <h2 style={{ margin:0, fontFamily:"'Playfair Display',Georgia,serif",
+        fontSize:"clamp(20px,3.5cqi,44px)", fontWeight:700, color:C.dark, lineHeight:1.2,
+        letterSpacing:"-0.02em", marginBottom:"clamp(14px,2.2cqi,26px)" }}>{slide.title}</h2>
+      <div style={{ display:"flex", flexDirection:"column",
+        gap:"clamp(6px,0.9cqi,10px)", marginBottom:"clamp(14px,2.2cqi,24px)" }}>
+        {slide.indicators.map((ind,i) => (
+          <div key={i} style={{ display:"flex", alignItems:"flex-start",
+            gap:"clamp(10px,1.3cqi,16px)", fontFamily:"'Inter',sans-serif",
+            fontSize:"clamp(12px,1.6cqi,18px)", color:C.dark, lineHeight:1.4 }}>
+            <span aria-hidden="true" style={{ flexShrink:0, color:dotAccent,
+              fontSize:"clamp(8px,0.9cqi,11px)", marginTop:"clamp(5px,0.6cqi,8px)" }}>◆</span>
+            <span>{ind}</span>
+          </div>
+        ))}
+      </div>
+      <div style={{ background:C.white, border:`1px solid ${C.border}`, borderRadius:8,
+        padding:"clamp(10px,1.5cqi,18px) clamp(14px,2cqi,22px)" }}>
+        <div style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(10px,1.2cqi,13px)",
+          letterSpacing:2, color:dotAccent, textTransform:"uppercase", fontWeight:700,
+          marginBottom:"clamp(8px,1.2cqi,14px)" }}>{slide.scaleLabel}</div>
+        <div style={{ display:"flex", alignItems:"center", gap:"clamp(6px,1cqi,12px)" }}>
+          <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(11px,1.4cqi,15px)",
+            color:C.dark, fontWeight:500, maxWidth:"32%", lineHeight:1.3 }}>{slide.scaleMin}</span>
+          <div style={{ flex:1, height:"clamp(4px,0.5cqi,6px)", borderRadius:3,
+            background:`linear-gradient(to right, ${C.border}, ${dotAccent})` }} />
+          <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(11px,1.4cqi,15px)",
+            color:C.dark, fontWeight:500, maxWidth:"32%", lineHeight:1.3, textAlign:"right" }}>{slide.scaleMax}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Matrix (S17 — revised quadrant labels, no axis labels) ───────────────────
+function SlideMatrix({ slide }) {
+  const colors = ["#1F6B45", C.teal, C.strongPurple, "#8B2500"];
+  const Cell = ({ q, color, borderR, borderB }) => (
+    <div style={{ background:C.white, padding:"clamp(10px,1.5cqi,18px)",
+      display:"flex", flexDirection:"column", gap:"clamp(4px,0.6cqi,7px)",
+      border:"none",
+      borderRight:borderR?`1px solid ${C.border}`:"none",
+      borderBottom:borderB?`1px solid ${C.border}`:"none" }}>
+      <div style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(9px,1.1cqi,13px)",
+        letterSpacing:1.5, color:color, textTransform:"uppercase", fontWeight:700,
+        lineHeight:1.3 }}>{q.label}</div>
+      <div style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(10px,1.3cqi,15px)",
+        color:C.dark, lineHeight:1.4, fontWeight:400 }}>{q.route}</div>
+    </div>
+  );
+  // Order: top-left, top-right, bottom-left, bottom-right
+  const [tl, tr, bl, br] = [
+    slide.quadrants[1], slide.quadrants[0],
+    slide.quadrants[3], slide.quadrants[2],
+  ];
+  return (
+    <div style={{ height:"100%", display:"flex", flexDirection:"column", justifyContent:"center",
+      padding:"clamp(28px,5%,64px)", background:C.bg, boxSizing:"border-box" }}>
+      <Eyebrow color={C.muted}>{slide.eyebrow}</Eyebrow>
+      <h2 style={{ margin:0, fontFamily:"'Playfair Display',Georgia,serif",
+        fontSize:"clamp(20px,3.5cqi,42px)", fontWeight:700, color:C.dark, lineHeight:1.2,
+        letterSpacing:"-0.02em", marginBottom:"clamp(6px,1cqi,12px)" }}>{slide.title}</h2>
+      <div style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(11px,1.5cqi,17px)",
+        color:C.muted, fontStyle:"italic", marginBottom:"clamp(14px,2cqi,24px)" }}>{slide.fill}</div>
+      <div style={{ border:`1px solid ${C.border}`, borderRadius:8, overflow:"hidden",
+        display:"grid", gridTemplateColumns:"1fr 1fr", gridTemplateRows:"1fr 1fr",
+        height:"clamp(130px,22cqi,260px)" }}>
+        <Cell q={tl} color={colors[0]} borderR borderB />
+        <Cell q={tr} color={colors[1]} borderB />
+        <Cell q={bl} color={colors[3]} borderR />
+        <Cell q={br} color={colors[2]} />
+      </div>
+    </div>
+  );
+}
+
+// ── Three Cards (S19) ─────────────────────────────────────────────────────────
+function SlideThreeCards({ slide, accent }) {
+  const colors = [accent, C.dark, C.teal];
+  return (
+    <div style={{ height:"100%", display:"flex", flexDirection:"column", justifyContent:"center",
+      padding:"clamp(28px,5%,64px)", background:C.bg, boxSizing:"border-box" }}>
+      <Eyebrow color={C.muted}>{slide.eyebrow}</Eyebrow>
+      <h2 style={{ margin:0, fontFamily:"'Playfair Display',Georgia,serif",
+        fontSize:"clamp(20px,3.5cqi,42px)", fontWeight:700, color:C.dark, lineHeight:1.15,
+        letterSpacing:"-0.02em", marginBottom:"clamp(16px,2.5cqi,30px)" }}>{slide.title}</h2>
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)",
+        gap:"clamp(8px,1.2cqi,14px)", flex:1 }}>
+        {slide.cards.map((card,i) => (
+          <div key={i} style={{ background:C.white, border:`1px solid ${C.border}`,
+            borderTop:`3px solid ${colors[i%colors.length]}`,
+            borderRadius:8, padding:"clamp(14px,2.2cqi,26px)",
+            display:"flex", flexDirection:"column", gap:"clamp(8px,1.2cqi,14px)" }}>
+            <h3 style={{ margin:0, fontFamily:"'Playfair Display',Georgia,serif",
+              fontSize:"clamp(14px,1.9cqi,22px)", fontWeight:700, color:C.dark,
+              lineHeight:1.3 }}>{card.heading}</h3>
+            <p style={{ margin:0, fontFamily:"'Inter',sans-serif",
+              fontSize:"clamp(12px,1.5cqi,17px)", color:C.muted, lineHeight:1.5,
+              fontWeight:400 }}>{card.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Pathway (S22 — takeaway + softened step) ──────────────────────────────────
+function SlidePathway({ slide, accent }) {
+  const dotAccent = accent === ACCENTS.lavender ? C.dark : accent;
+  return (
+    <div style={{ height:"100%", display:"flex", flexDirection:"column", justifyContent:"center",
+      padding:"clamp(28px,5%,64px)", background:C.bg, boxSizing:"border-box" }}>
+      <Eyebrow color={C.muted}>{slide.eyebrow}</Eyebrow>
+      <h2 style={{ margin:0, fontFamily:"'Playfair Display',Georgia,serif",
+        fontSize:"clamp(20px,3.5cqi,44px)", fontWeight:700, color:C.dark, lineHeight:1.2,
+        letterSpacing:"-0.02em", marginBottom:"clamp(8px,1.2cqi,14px)" }}>{slide.title}</h2>
+      {/* Takeaway — prominent statement above the pathway */}
+      {slide.takeaway && (
+        <div style={{ fontFamily:"'Playfair Display',Georgia,serif",
+          fontSize:"clamp(14px,2cqi,23px)", fontStyle:"italic", color:dotAccent,
+          fontWeight:700, marginBottom:"clamp(16px,2.5cqi,28px)",
+          paddingLeft:"clamp(10px,1.5cqi,16px)",
+          borderLeft:`3px solid ${dotAccent}` }}>
+          {slide.takeaway}
+        </div>
+      )}
+      <div style={{ display:"flex", alignItems:"flex-start",
+        gap:"clamp(4px,0.5cqi,6px)", position:"relative",
+        marginBottom:slide.footer?"clamp(10px,1.5cqi,18px)":0 }}>
+        {slide.steps.map((step, i) => (
+          <React.Fragment key={i}>
+            <div style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center",
+              gap:"clamp(8px,1.2cqi,14px)", textAlign:"center" }}>
+              <div style={{ width:"clamp(24px,3.5cqi,44px)", height:"clamp(24px,3.5cqi,44px)",
+                borderRadius:"50%", background:i===slide.steps.length-1?dotAccent:C.white,
+                border:`2px solid ${dotAccent}`, display:"flex", alignItems:"center",
+                justifyContent:"center", flexShrink:0,
+                color:i===slide.steps.length-1?C.white:dotAccent,
+                fontFamily:"'Inter',sans-serif", fontWeight:700,
+                fontSize:"clamp(10px,1.3cqi,15px)" }}>{i+1}</div>
+              <div style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(11px,1.4cqi,16px)",
+                color:C.dark, fontWeight:i===slide.steps.length-1?600:400,
+                lineHeight:1.35 }}>{step}</div>
+            </div>
+            {i < slide.steps.length-1 && (
+              <div style={{ flexShrink:0, marginTop:"clamp(10px,1.6cqi,20px)",
+                color:dotAccent, fontSize:"clamp(14px,2cqi,24px)",
+                fontWeight:300, opacity:0.5 }}>→</div>
+            )}
+          </React.Fragment>
+        ))}
+      </div>
+      {slide.footer && (
+        <div style={{ fontFamily:"'Inter',sans-serif",
+          fontSize:"clamp(9px,1.1cqi,12px)", color:C.muted, letterSpacing:0.5,
+          borderTop:`1px solid ${C.border}`, paddingTop:"clamp(8px,1cqi,12px)" }}>
+          {slide.footer}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Four Cards (S23) ──────────────────────────────────────────────────────────
+function SlideFourCards({ slide, accent }) {
+  return (
+    <div style={{ height:"100%", display:"flex", flexDirection:"column", justifyContent:"center",
+      padding:"clamp(28px,5%,64px)", background:C.bg, boxSizing:"border-box" }}>
+      <Eyebrow color={C.muted}>{slide.eyebrow}</Eyebrow>
+      <h2 style={{ margin:0, fontFamily:"'Playfair Display',Georgia,serif",
+        fontSize:"clamp(20px,3.5cqi,42px)", fontWeight:700, color:C.dark, lineHeight:1.2,
+        letterSpacing:"-0.02em", marginBottom:"clamp(16px,2.5cqi,30px)" }}>{slide.title}</h2>
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)",
+        gap:"clamp(8px,1.2cqi,14px)", marginBottom:"clamp(12px,1.8cqi,20px)" }}>
+        {slide.cards.map((card,i) => (
+          <div key={i} style={{ background:C.white, border:`1px solid ${C.border}`,
+            borderLeft:`3px solid ${i%2===0?accent:C.dark}`,
+            borderRadius:6, padding:"clamp(12px,1.8cqi,22px)",
+            fontFamily:"'Inter',sans-serif", fontSize:"clamp(13px,1.7cqi,20px)",
+            fontWeight:500, color:C.dark, lineHeight:1.4 }}>{card}</div>
+        ))}
+      </div>
+      {slide.note && (
+        <p style={{ margin:0, fontFamily:"'Inter',sans-serif", fontSize:"clamp(11px,1.4cqi,15px)",
+          color:C.muted, fontStyle:"italic", lineHeight:1.5 }}>{slide.note}</p>
+      )}
+    </div>
+  );
+}
+
+// ── Benefit Cards (S25 — prominent CTA) ───────────────────────────────────────
+function SlideBenefitCards({ slide, accent }) {
+  return (
+    <div style={{ height:"100%", display:"flex", flexDirection:"column", justifyContent:"center",
+      padding:"clamp(28px,5%,64px)", background:C.bg, boxSizing:"border-box" }}>
+      <Eyebrow color={C.muted}>{slide.eyebrow}</Eyebrow>
+      <h2 style={{ margin:0, fontFamily:"'Playfair Display',Georgia,serif",
+        fontSize:"clamp(18px,3cqi,38px)", fontWeight:700, color:C.dark, lineHeight:1.2,
+        letterSpacing:"-0.02em", marginBottom:"clamp(16px,2.5cqi,28px)" }}>{slide.title}</h2>
+      <div style={{ display:"flex", flexWrap:"wrap", gap:"clamp(7px,1cqi,12px)",
+        marginBottom:"clamp(16px,2.5cqi,28px)" }}>
+        {slide.cards.map((card,i) => (
+          <div key={i} style={{ padding:"clamp(10px,1.5cqi,18px) clamp(14px,2cqi,24px)",
+            background:C.white, border:`1.5px solid ${C.border}`, borderRadius:100,
+            fontFamily:"'Inter',sans-serif", fontSize:"clamp(12px,1.6cqi,19px)",
+            fontWeight:500, color:C.dark, lineHeight:1.35,
+            boxShadow:"0 2px 6px rgba(31,61,55,0.06)" }}>
+            {card}
+          </div>
+        ))}
+      </div>
+      {/* Prominent CTA below the pills */}
+      {slide.cta && (
+        <div style={{ display:"flex", alignItems:"center", gap:"clamp(10px,1.4cqi,16px)",
+          borderTop:`2px solid ${accent}`, paddingTop:"clamp(12px,1.8cqi,20px)" }}>
+          <span aria-hidden="true" style={{ fontSize:"clamp(16px,2.2cqi,26px)", color:accent }}>↓</span>
+          <span style={{ fontFamily:"'Playfair Display',Georgia,serif",
+            fontSize:"clamp(15px,2.2cqi,26px)", fontWeight:700, color:C.dark,
+            fontStyle:"italic" }}>{slide.cta}</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Concerns (S27 — updated sub labels) ───────────────────────────────────────
+function SlideConcerns({ slide, accent }) {
+  const dotAccent = accent === ACCENTS.lavender ? C.dark : accent;
+  return (
+    <div style={{ height:"100%", display:"flex", flexDirection:"column", justifyContent:"center",
+      padding:"clamp(28px,5%,64px)", background:C.bg, boxSizing:"border-box" }}>
+      <Eyebrow color={C.muted}>{slide.eyebrow}</Eyebrow>
+      <div style={{ display:"flex", flexDirection:"column",
+        gap:"clamp(10px,1.6cqi,20px)", flex:1, justifyContent:"center" }}>
+        {slide.groups.map((g,i) => (
+          <div key={i} style={{ borderLeft:`clamp(3px,0.4cqi,4px) solid ${dotAccent}`,
+            paddingLeft:"clamp(14px,2.2cqi,26px)" }}>
+            <div style={{ fontFamily:"'Playfair Display',Georgia,serif",
+              fontSize:"clamp(16px,2.6cqi,32px)", fontWeight:700, color:C.dark,
+              lineHeight:1.2 }}>{g.heading}</div>
+            <div style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(11px,1.5cqi,18px)",
+              color:C.muted, marginTop:"clamp(3px,0.4cqi,5px)" }}>{g.sub}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ marginTop:"clamp(16px,2.5cqi,28px)", paddingTop:"clamp(12px,1.8cqi,20px)",
+        borderTop:`1px solid ${C.border}`, fontFamily:"'Playfair Display',Georgia,serif",
+        fontSize:"clamp(16px,2.4cqi,28px)", fontWeight:700, fontStyle:"italic",
+        color:C.dark }}>
+        {slide.prompt}
+      </div>
+    </div>
+  );
+}
+
+// ── Urgency (S28) ─────────────────────────────────────────────────────────────
+function SlideUrgency({ slide }) {
+  return (
+    <div style={{ height:"100%", display:"flex", flexDirection:"column", justifyContent:"center",
+      padding:"clamp(28px,5%,64px)", background:C.bg, boxSizing:"border-box" }}>
+      <Eyebrow color={C.muted}>{slide.eyebrow}</Eyebrow>
+      <h2 style={{ margin:0, fontFamily:"'Playfair Display',Georgia,serif",
+        fontSize:"clamp(20px,3.8cqi,48px)", fontWeight:700, color:C.dark, lineHeight:1.2,
+        letterSpacing:"-0.02em", marginBottom:"clamp(18px,3cqi,36px)" }}>{slide.title}</h2>
+      <div style={{ display:"flex", flexDirection:"column",
+        gap:"clamp(8px,1.2cqi,14px)" }}>
+        {slide.levels.map((lv,i) => (
+          <div key={i} style={{ display:"flex", alignItems:"center",
+            gap:"clamp(12px,1.8cqi,22px)", background:C.white, border:`1px solid ${C.border}`,
+            borderLeft:`clamp(4px,0.5cqi,6px) solid ${lv.color}`, borderRadius:6,
+            padding:"clamp(12px,1.8cqi,22px) clamp(16px,2.4cqi,28px)" }}>
+            <div style={{ fontFamily:"'Playfair Display',Georgia,serif",
+              fontSize:"clamp(16px,2.5cqi,30px)", fontWeight:800, color:lv.color,
+              minWidth:"clamp(40px,5.5cqi,66px)" }}>{lv.label}</div>
+            <div style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(13px,1.8cqi,21px)",
+              color:C.dark, fontWeight:400, lineHeight:1.4 }}>{lv.desc}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Routes (S30 — condensed) ──────────────────────────────────────────────────
+function SlideRoutes({ slide, accent }) {
+  return (
+    <div style={{ height:"100%", display:"flex", flexDirection:"column", justifyContent:"center",
+      padding:"clamp(24px,4.5%,56px)", background:C.bg, boxSizing:"border-box" }}>
+      <Eyebrow color={C.muted}>{slide.eyebrow}</Eyebrow>
+      <h2 style={{ margin:0, fontFamily:"'Playfair Display',Georgia,serif",
+        fontSize:"clamp(18px,3.2cqi,40px)", fontWeight:700, color:C.dark, lineHeight:1.2,
+        letterSpacing:"-0.02em", marginBottom:"clamp(14px,2.2cqi,26px)" }}>{slide.title}</h2>
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(5,1fr)",
+        gap:"clamp(6px,0.9cqi,10px)" }}>
+        {slide.routes.map((r,i) => (
+          <div key={i} style={{ background:C.white, border:`1px solid ${C.border}`,
+            borderTop:`3px solid ${accent}`, borderRadius:8,
+            padding:"clamp(12px,1.8cqi,22px)",
+            display:"flex", flexDirection:"column", gap:"clamp(6px,0.9cqi,10px)" }}>
+            <div style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(9px,1.1cqi,13px)",
+              letterSpacing:1.5, color:accent, textTransform:"uppercase",
+              fontWeight:700 }}>Route {i+1}</div>
+            <div style={{ fontFamily:"'Playfair Display',Georgia,serif",
+              fontSize:"clamp(13px,1.8cqi,21px)", fontWeight:700, color:C.dark,
+              lineHeight:1.2 }}>{r.label}</div>
+            <div style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(11px,1.5cqi,17px)",
+              color:C.muted, lineHeight:1.4, fontWeight:400 }}>{r.desc}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Two Column (S32 — revised title in data) ──────────────────────────────────
+function SlideTwoColumn({ slide, accent }) {
+  const [colA, colB] = [accent, C.dark];
+  return (
+    <div style={{ height:"100%", display:"flex", flexDirection:"column", justifyContent:"center",
+      padding:"clamp(28px,5%,64px)", background:C.bg, boxSizing:"border-box" }}>
+      <Eyebrow color={C.muted}>{slide.eyebrow}</Eyebrow>
+      <h2 style={{ margin:0, fontFamily:"'Playfair Display',Georgia,serif",
+        fontSize:"clamp(18px,3cqi,38px)", fontWeight:700, color:C.dark, lineHeight:1.2,
+        letterSpacing:"-0.02em", marginBottom:"clamp(16px,2.5cqi,30px)" }}>{slide.title}</h2>
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr",
+        gap:"clamp(10px,1.5cqi,18px)", flex:1, alignContent:"start" }}>
+        {[slide.left, slide.right].map((col, ci) => (
+          <div key={ci} style={{ background:C.white, border:`1px solid ${C.border}`,
+            borderTop:`3px solid ${ci===0?colA:colB}`, borderRadius:8,
+            padding:"clamp(12px,2cqi,24px)" }}>
+            <div style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(10px,1.3cqi,15px)",
+              letterSpacing:1.5, color:ci===0?colA:colB, textTransform:"uppercase",
+              fontWeight:700, marginBottom:"clamp(10px,1.5cqi,18px)" }}>{col.label}</div>
+            <ul style={{ listStyle:"none", padding:0, margin:0, display:"flex",
+              flexDirection:"column", gap:"clamp(7px,1cqi,12px)" }}>
+              {col.items.map((item,i) => (
+                <li key={i} style={{ display:"flex", alignItems:"baseline",
+                  gap:"clamp(10px,1.2cqi,14px)", fontFamily:"'Inter',sans-serif",
+                  fontSize:"clamp(12px,1.6cqi,18px)", color:C.dark, lineHeight:1.4,
+                  fontWeight:400 }}>
+                  <span aria-hidden="true" style={{ flexShrink:0,
+                    width:"clamp(14px,1.6cqi,18px)", height:"clamp(14px,1.6cqi,18px)",
+                    border:`1.5px solid ${ci===0?colA:colB}`, borderRadius:3,
+                    display:"inline-block", opacity:0.4 }} />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Next Step (S33) ───────────────────────────────────────────────────────────
+function SlideNextStep({ slide, accent }) {
+  const groups = [
+    { label:"Information", items: slide.options.slice(0,2), color:C.teal },
+    { label:"Support",     items: slide.options.slice(2,5), color:C.strongPurple },
+    { label:"Action",      items: slide.options.slice(5),   color:accent },
+  ];
+  return (
+    <div style={{ height:"100%", display:"flex", flexDirection:"column", justifyContent:"center",
+      padding:"clamp(28px,5%,64px)", background:C.bg, boxSizing:"border-box" }}>
+      <Eyebrow color={C.muted}>{slide.eyebrow}</Eyebrow>
+      <h2 style={{ margin:0, fontFamily:"'Playfair Display',Georgia,serif",
+        fontSize:"clamp(18px,3cqi,38px)", fontWeight:700, color:C.dark, lineHeight:1.15,
+        letterSpacing:"-0.02em", marginBottom:"clamp(14px,2.2cqi,26px)",
+        fontStyle:"italic" }}>
+        {slide.statement}
+      </h2>
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)",
+        gap:"clamp(8px,1.2cqi,14px)" }}>
+        {groups.map((g,gi) => (
+          <div key={gi} style={{ background:C.white, border:`1px solid ${C.border}`,
+            borderTop:`3px solid ${g.color}`, borderRadius:8,
+            padding:"clamp(10px,1.5cqi,18px)" }}>
+            <div style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(9px,1.1cqi,12px)",
+              letterSpacing:2, color:g.color, textTransform:"uppercase",
+              fontWeight:700, marginBottom:"clamp(8px,1.2cqi,14px)" }}>{g.label}</div>
+            <ul style={{ listStyle:"none", padding:0, margin:0, display:"flex",
+              flexDirection:"column", gap:"clamp(5px,0.7cqi,8px)" }}>
+              {g.items.map((item,ii) => (
+                <li key={ii} style={{ fontFamily:"'Inter',sans-serif",
+                  fontSize:"clamp(11px,1.4cqi,16px)", color:C.dark, lineHeight:1.4 }}>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Closure (S35 — disclaimer removed, lives in S36) ─────────────────────────
+function SlideClosure({ slide, accent }) {
+  return (
+    <div style={{ height:"100%", display:"flex", flexDirection:"column", justifyContent:"center",
+      padding:"clamp(28px,5%,64px)", background:C.bg, boxSizing:"border-box" }}>
+      <Eyebrow color={C.muted}>{slide.eyebrow}</Eyebrow>
+      {/* Three anchors */}
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)",
+        gap:"clamp(8px,1.2cqi,14px)", marginBottom:"clamp(14px,2.2cqi,26px)" }}>
+        {slide.anchors.map((a,i) => (
+          <div key={i} style={{ background:C.white, border:`1px solid ${C.border}`,
+            borderTop:`3px solid ${i===0?accent:i===1?C.dark:C.strongPurple}`,
+            borderRadius:8, padding:"clamp(12px,1.8cqi,22px)" }}>
+            <div style={{ fontFamily:"'Playfair Display',Georgia,serif",
+              fontSize:"clamp(15px,2.2cqi,26px)", fontWeight:800, color:C.dark,
+              marginBottom:"clamp(5px,0.7cqi,8px)" }}>{a.label}</div>
+            <div style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(12px,1.6cqi,18px)",
+              color:C.muted, lineHeight:1.4 }}>{a.desc}</div>
+          </div>
+        ))}
+      </div>
+      {/* 4-step loop */}
+      <div style={{ display:"flex", alignItems:"center", gap:"clamp(6px,0.9cqi,10px)",
+        marginBottom:"clamp(14px,2.2cqi,26px)", background:C.card, borderRadius:8,
+        padding:"clamp(12px,1.8cqi,22px) clamp(16px,2.4cqi,28px)" }}>
+        {slide.loop.map((step,i) => (
+          <React.Fragment key={i}>
+            <span style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(13px,1.8cqi,21px)",
+              fontWeight:700, color:accent, letterSpacing:0.5 }}>{step}</span>
+            {i < slide.loop.length-1 && (
+              <span style={{ color:C.border, fontSize:"clamp(10px,1.3cqi,15px)" }}>→</span>
+            )}
+          </React.Fragment>
+        ))}
+      </div>
+      {/* Frame quote — shaded box for visibility on phone */}
+      <blockquote style={{ margin:0, fontFamily:"'Playfair Display',Georgia,serif",
+        fontSize:"clamp(16px,2.4cqi,28px)", fontStyle:"italic", color:C.dark,
+        lineHeight:1.6,
+        background:`${accent}12`,
+        border:`1.5px solid ${accent}40`,
+        borderLeft:`4px solid ${accent}`,
+        borderRadius:8,
+        padding:"clamp(14px,2.2cqi,26px) clamp(16px,2.5cqi,30px)" }}>
+        {slide.frame}
+      </blockquote>
+    </div>
+  );
+}
+
+// ── Disclaimer (S36 — new component) ─────────────────────────────────────────
+function SlideDisclaimer({ slide, accent }) {
+  return (
+    <div style={{ height:"100%", display:"flex", flexDirection:"column", justifyContent:"center",
+      padding:"clamp(32px,6%,80px)", background:C.white, boxSizing:"border-box" }}>
+      <Eyebrow color={C.muted}>{slide.eyebrow}</Eyebrow>
+      <div style={{ flex:1, display:"flex", flexDirection:"column", justifyContent:"center",
+        gap:"clamp(18px,2.8cqi,32px)" }}>
+        <p style={{ margin:0, fontFamily:"'Inter',sans-serif",
+          fontSize:"clamp(14px,1.9cqi,22px)", color:C.dark, lineHeight:1.7,
+          borderLeft:`3px solid ${accent}`, paddingLeft:"clamp(16px,2.2cqi,26px)" }}>
+          {slide.disclaimer}
+        </p>
+        {slide.resources && slide.resources.length > 0 && (
+          <div style={{ display:"flex", flexDirection:"column",
+            gap:"clamp(7px,1cqi,12px)", paddingLeft:"clamp(19px,2.5cqi,29px)" }}>
+            {slide.resources.map((r,i) => (
+              <div key={i} style={{ fontFamily:"'Inter',sans-serif",
+                fontSize:"clamp(13px,1.7cqi,19px)", color:C.muted, fontStyle:"italic" }}>{r}</div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── RENDERER ────────────────────────────────────────────────────────────────
+
+function SlideRenderer({ slide }) {
+  const accent = ACCENTS[slide.accent] || ACCENTS.purple;
+  switch (slide.type) {
+    case "cover":        return <SlideCover slide={slide} accent={accent} />;
+    case "agenda":       return <SlideAgenda slide={slide} accent={accent} />;
+    case "continuum":    return <SlideContinuum slide={slide} accent={accent} />;
+    case "twodecisions": return <SlideTwoDecisions slide={slide} accent={accent} />;
+    case "reflection":   return <SlideReflection slide={slide} accent={accent} />;
+    case "statement":    return <SlideStatement slide={slide} accent={accent} />;
+    case "question":     return <SlideQuestion slide={slide} accent={accent} />;
+    case "content":      return <SlideContent slide={slide} accent={accent} />;
+    case "structures":   return <SlideStructures slide={slide} accent={accent} />;
+    case "scale":        return <SlideScale slide={slide} accent={accent} />;
+    case "matrix":       return <SlideMatrix slide={slide} accent={accent} />;
+    case "threecards":   return <SlideThreeCards slide={slide} accent={accent} />;
+    case "pathway":      return <SlidePathway slide={slide} accent={accent} />;
+    case "fourcards":    return <SlideFourCards slide={slide} accent={accent} />;
+    case "benefitcards": return <SlideBenefitCards slide={slide} accent={accent} />;
+    case "concerns":     return <SlideConcerns slide={slide} accent={accent} />;
+    case "urgency":      return <SlideUrgency slide={slide} accent={accent} />;
+    case "routes":       return <SlideRoutes slide={slide} accent={accent} />;
+    case "twocolumn":    return <SlideTwoColumn slide={slide} accent={accent} />;
+    case "nextstep":     return <SlideNextStep slide={slide} accent={accent} />;
+    case "closure":      return <SlideClosure slide={slide} accent={accent} />;
+    case "disclaimer":   return <SlideDisclaimer slide={slide} accent={accent} />;
+    default:             return null;
+  }
+}
+
+// ─── PRINT LAYER ─────────────────────────────────────────────────────────────
+
+function PrintSlides() {
+  return (
+    <div className="hide-on-screen" aria-hidden="true">
+      {SLIDES.map((slide, i) => (
+        <div key={i} className="print-slide">
+          <SlideRenderer slide={slide} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ─── PRESENTATION APP ────────────────────────────────────────────────────────
+
+function Presentation() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [showNotes, setShowNotes]       = useState(false);
+  const [fullscreen, setFullscreen]     = useState(false);
+  const containerRef = useRef(null);
+  const total   = SLIDES.length;
+  const slide   = SLIDES[currentSlide];
+  const progress= ((currentSlide + 1) / total) * 100;
+  const accent  = ACCENTS[slide.accent] || ACCENTS.purple;
+  const isDark  = slide.type === "statement" && slide.dark;
+
+  const goNext = () => setCurrentSlide(i => Math.min(total-1, i+1));
+  const goPrev = () => setCurrentSlide(i => Math.max(0, i-1));
+
+  const enterFullscreen = useCallback(async () => {
+    setFullscreen(true);
+    try {
+      const el = document.documentElement;
+      if (el.requestFullscreen) await el.requestFullscreen();
+      else if (el.webkitRequestFullscreen) await el.webkitRequestFullscreen();
+    } catch (e) {}
+  }, []);
+
+  const exitFullscreen = useCallback(async () => {
+    setFullscreen(false);
+    try {
+      if (document.fullscreenElement) await document.exitFullscreen();
+      else if (document.webkitFullscreenElement) await document.webkitExitFullscreen();
+    } catch (e) {}
+  }, []);
+
+  useEffect(() => {
+    const onFSChange = () => {
+      if (!document.fullscreenElement && !document.webkitFullscreenElement)
+        setFullscreen(false);
+    };
+    document.addEventListener("fullscreenchange", onFSChange);
+    document.addEventListener("webkitfullscreenchange", onFSChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", onFSChange);
+      document.removeEventListener("webkitfullscreenchange", onFSChange);
+    };
+  }, []);
+
+  // Broadcast slide index to presenter popup
+  useEffect(() => {
+    if (syncChannel) syncChannel.postMessage({ type: 'slide', index: currentSlide });
+  }, [currentSlide]);
+
+  // Listen for navigation commands from presenter
+  useEffect(() => {
+    if (!syncChannel) return;
+    const handler = (e) => { if (e.data.type === 'nav') setCurrentSlide(e.data.index); };
+    syncChannel.addEventListener('message', handler);
+    return () => syncChannel.removeEventListener('message', handler);
+  }, []);
+
+  useEffect(() => {
+    function handleKey(e) {
+      if (!containerRef.current) return;
+      if (!containerRef.current.contains(document.activeElement) &&
+          !containerRef.current.matches(":hover")) return;
+      if (["INPUT","TEXTAREA"].includes(document.activeElement?.tagName)) return;
+      if (e.key==="ArrowRight"||e.key===" ") { e.preventDefault(); goNext(); }
+      else if (e.key==="ArrowLeft")  { e.preventDefault(); goPrev(); }
+      else if (e.key==="Home")       { e.preventDefault(); setCurrentSlide(0); }
+      else if (e.key==="End")        { e.preventDefault(); setCurrentSlide(total-1); }
+      else if (e.key==="f"||e.key==="F") { e.preventDefault(); fullscreen?exitFullscreen():enterFullscreen(); }
+      else if (e.key==="n"||e.key==="N") { e.preventDefault(); setShowNotes(v=>!v); }
+    }
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [total, fullscreen, enterFullscreen, exitFullscreen]);
+
+  const btnBase = { fontFamily:"'Inter',sans-serif", fontSize:11, fontWeight:700,
+    letterSpacing:1.5, textTransform:"uppercase", cursor:"pointer", minHeight:44,
+    display:"flex", alignItems:"center", gap:6, borderRadius:6, padding:"10px 18px" };
+
+  const slideFrame = (
+    <div style={{ position:"relative", width:"100%", borderRadius:fullscreen?0:10,
+      overflow:"hidden", aspectRatio:"16/9", containerType:"inline-size",
+      boxShadow:fullscreen?"none":"0 6px 24px rgba(31,61,55,0.18)" }}>
+      <SlideRenderer slide={slide} />
+      <div style={{ position:"absolute", bottom:10, right:14, fontFamily:"'Inter',sans-serif",
+        fontSize:10, letterSpacing:2, color:isDark?"rgba(255,255,255,0.7)":C.muted, fontWeight:600,
+        background:isDark?"rgba(0,0,0,0.25)":"rgba(250,248,244,0.8)", padding:"3px 9px",
+        borderRadius:4, backdropFilter:"blur(4px)" }}>
+        {String(currentSlide+1).padStart(2,"0")} / {String(total).padStart(2,"0")}
+      </div>
+    </div>
+  );
+
+  return (
+    <>
+      <div ref={containerRef} className="hide-on-print"
+        style={{ background:C.bg, minHeight:"100vh", padding:"clamp(14px,2.5vw,28px)" }}>
+
+        {fullscreen && (
+          <div style={{ position:"fixed", inset:0, background:"#0d1f1c", zIndex:1000,
+            display:"flex", flexDirection:"column" }} role="dialog" aria-label="Fullscreen presentation">
+            <div style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center" }}>
+              <div style={{ width:"min(100vw, calc((100vh - 84px) * 16 / 9))", aspectRatio:"16/9" }}>
+                {slideFrame}
+              </div>
+            </div>
+            <div style={{ padding:18, background:"rgba(0,0,0,0.5)", display:"flex",
+              alignItems:"center", justifyContent:"space-between", gap:14, color:C.white }}>
+              <button className="nw-btn" onClick={goPrev} disabled={currentSlide===0} style={{
+                ...btnBase, background:"rgba(255,255,255,0.08)", color:C.white,
+                border:"1px solid rgba(255,255,255,0.18)", opacity:currentSlide===0?0.4:1,
+                cursor:currentSlide===0?"not-allowed":"pointer" }}>← Prev</button>
+              <span style={{ fontFamily:"'Inter',sans-serif", fontSize:12, letterSpacing:2, fontWeight:700 }}>
+                {currentSlide+1} / {total}
+              </span>
+              <div style={{ display:"flex", gap:8 }}>
+                <button className="nw-btn" onClick={exitFullscreen} style={{
+                  ...btnBase, background:"rgba(255,255,255,0.08)", color:C.white,
+                  border:"1px solid rgba(255,255,255,0.18)" }}>Exit (Esc)</button>
+                <button className="nw-btn" onClick={goNext} disabled={currentSlide===total-1} style={{
+                  ...btnBase, background:C.purple, color:C.white, border:"none",
+                  opacity:currentSlide===total-1?0.4:1,
+                  cursor:currentSlide===total-1?"not-allowed":"pointer" }}>Next →</button>
+              </div>
+            </div>
+            <div style={{ height:4, background:"rgba(255,255,255,0.08)" }}
+              role="progressbar" aria-valuenow={currentSlide+1} aria-valuemin={1} aria-valuemax={total}>
+              <div style={{ width:`${progress}%`, height:"100%", background:accent, transition:"width 0.3s ease" }} />
+            </div>
+          </div>
+        )}
+
+        <main style={{ background:C.white, border:`1px solid ${C.border}`, borderRadius:14,
+          overflow:"hidden", boxShadow:"0 4px 18px rgba(31,61,55,0.09)", maxWidth:1200, margin:"0 auto" }}>
+
+          <header style={{ background:C.dark, padding:"16px 20px", display:"flex",
+            alignItems:"center", justifyContent:"space-between", gap:12, flexWrap:"wrap",
+            backgroundImage:"radial-gradient(ellipse at 85% 50%, rgba(84,0,255,0.12) 0%, transparent 60%)" }}>
+            <div>
+              <div style={{ fontFamily:"'Inter',sans-serif", fontSize:10, letterSpacing:2.5,
+                color:C.lavender, textTransform:"uppercase", fontWeight:600 }}>
+                Neurodiversity Works · {total} Slides
+              </div>
+              <div style={{ fontFamily:"'Playfair Display',Georgia,serif", fontSize:18,
+                fontWeight:700, color:C.white, marginTop:2 }}>Should You Disclose? — Workshop Deck v4</div>
+            </div>
+            <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
+              <button className="nw-btn" onClick={()=>setShowNotes(!showNotes)} aria-pressed={showNotes} style={{
+                ...btnBase, background:showNotes?C.purple:"transparent",
+                color:showNotes?C.white:"rgba(255,255,255,0.8)",
+                border:`1px solid ${showNotes?C.purple:"rgba(255,255,255,0.22)"}` }}>
+                <span aria-hidden="true">✎</span> Notes
+              </button>
+              <button className="nw-btn" onClick={() => window.print()} style={{
+                ...btnBase, background:"transparent", color:"rgba(255,255,255,0.8)",
+                border:"1px solid rgba(255,255,255,0.22)" }}
+                title="Save all slides as PDF">
+                <span aria-hidden="true">⬇</span> Download PDF
+              </button>
+              <button className="nw-btn" onClick={() => {
+                const url = window.location.href.replace(/[?&]presenter/,'') + (window.location.href.includes('?') ? '&presenter' : '?presenter');
+                window.open(url, 'nw-presenter', 'width=960,height=660,left=0,top=0,menubar=no,toolbar=no,location=no,status=no');
+              }} style={{ ...btnBase, background:"rgba(255,255,255,0.1)", color:C.white,
+                border:"1px solid rgba(255,255,255,0.22)" }}>
+                <span aria-hidden="true">🖥</span> Presenter
+              </button>
+              <button className="nw-btn" onClick={enterFullscreen} style={{
+                ...btnBase, background:C.purple, color:C.white, border:"none" }}>
+                <span aria-hidden="true">⛶</span> Fullscreen
+              </button>
+            </div>
+          </header>
+
+          <div style={{ padding:"clamp(16px,3vw,28px)", background:C.card }}>
+            {slideFrame}
+            <div style={{ height:3, background:C.border, borderRadius:2, marginTop:14, overflow:"hidden" }}
+              role="progressbar" aria-valuenow={currentSlide+1} aria-valuemin={1} aria-valuemax={total}>
+              <div style={{ width:`${progress}%`, height:"100%", background:C.purple,
+                transition:"width 0.3s ease", boxShadow:`0 0 8px ${C.purple}80` }} />
+            </div>
+            <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between",
+              gap:12, marginTop:14, flexWrap:"wrap" }}>
+              <button className="nw-btn" onClick={goPrev} disabled={currentSlide===0} style={{
+                ...btnBase, background:currentSlide===0?C.bg:C.white, color:C.dark,
+                border:`1px solid ${C.border}`, opacity:currentSlide===0?0.4:1,
+                cursor:currentSlide===0?"not-allowed":"pointer" }}>← Previous</button>
+              <span style={{ fontFamily:"'Inter',sans-serif", fontSize:11, letterSpacing:2,
+                color:C.muted, fontWeight:600, textTransform:"uppercase" }}>
+                Slide {currentSlide+1} of {total}
+              </span>
+              <button className="nw-btn" onClick={goNext} disabled={currentSlide===total-1} style={{
+                ...btnBase, background:currentSlide===total-1?C.bg:accent,
+                color:currentSlide===total-1?C.muted:C.white,
+                border:`1px solid ${currentSlide===total-1?C.border:accent}`,
+                opacity:currentSlide===total-1?0.5:1,
+                cursor:currentSlide===total-1?"not-allowed":"pointer" }}>Next →</button>
+            </div>
+          </div>
+
+          {showNotes && (
+            <div style={{ padding:"20px 24px", background:C.bg, borderTop:`1px solid ${C.border}` }}
+              role="region" aria-label="Speaker notes">
+              <div style={{ fontFamily:"'Inter',sans-serif", fontSize:10, letterSpacing:2.5,
+                color:C.purple, textTransform:"uppercase", fontWeight:700, marginBottom:8 }}>
+                Speaker Notes · Slide {currentSlide+1}
+              </div>
+              <p style={{ margin:0, fontFamily:"'Inter',sans-serif",
+                fontSize:14, color:C.dark, lineHeight:1.65 }}>
+                {slide.notes || "No notes for this slide."}
+              </p>
+            </div>
+          )}
+
+          <div style={{ padding:"14px 18px", background:C.white, borderTop:`1px solid ${C.border}`,
+            overflowX:"auto" }}>
+            <div role="tablist" aria-label="Slide navigator"
+              style={{ display:"flex", gap:6, minWidth:"max-content" }}>
+              {SLIDES.map((s,i) => {
+                const active = i===currentSlide;
+                const a = ACCENTS[s.accent]||ACCENTS.purple;
+                const isDkSlide = s.type === "statement" && s.dark;
+                return (
+                  <button key={i} role="tab" aria-selected={active} className="nw-btn"
+                    aria-label={`Slide ${i+1}`}
+                    onClick={() => setCurrentSlide(i)}
+                    style={{ fontFamily:"'Inter',sans-serif", fontSize:10, fontWeight:700,
+                      letterSpacing:1.5, cursor:"pointer", minHeight:36, minWidth:40,
+                      padding:"5px 10px", border:`2px solid ${active?a:C.border}`,
+                      background:active?C.dark:isDkSlide?C.dark:"transparent",
+                      color:active?C.white:isDkSlide?"rgba(255,255,255,0.6)":C.muted,
+                      borderRadius:6, transition:"all 0.15s" }}>
+                    {i+1}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </main>
+      </div>
+      <PrintSlides />
+    </>
+  );
+}
+
+
+// ─── PRESENTER VIEW ───────────────────────────────────────────────────────────
+
+function PresenterView() {
+  const [slideIndex, setSlideIndex] = useState(0);
+  const [elapsed, setElapsed]       = useState(0);
+  const [running, setRunning]       = useState(false);
+
+  // Listen for slide changes broadcast from main deck
+  useEffect(() => {
+    if (!syncChannel) return;
+    const handler = (e) => {
+      if (e.data.type === 'slide') setSlideIndex(e.data.index);
+    };
+    syncChannel.addEventListener('message', handler);
+    return () => syncChannel.removeEventListener('message', handler);
+  }, []);
+
+  // Timer
+  useEffect(() => {
+    if (!running) return;
+    const id = setInterval(() => setElapsed(t => t + 1), 1000);
+    return () => clearInterval(id);
+  }, [running]);
+
+  const navigate = (idx) => {
+    const clamped = Math.max(0, Math.min(SLIDES.length - 1, idx));
+    setSlideIndex(clamped);
+    if (syncChannel) syncChannel.postMessage({ type: 'nav', index: clamped });
+  };
+
+  const slide     = SLIDES[slideIndex];
+  const nextSlide = SLIDES[slideIndex + 1];
+  const accent    = ACCENTS[slide.accent] || ACCENTS.purple;
+  const mins      = String(Math.floor(elapsed / 60)).padStart(2, '0');
+  const secs      = String(elapsed % 60).padStart(2, '0');
+
+  const btnP = {
+    fontFamily:"'Inter',sans-serif", fontWeight:700, fontSize:13, letterSpacing:1.5,
+    textTransform:"uppercase", cursor:"pointer", border:"none", borderRadius:6,
+    padding:"10px 20px", minHeight:44, display:"flex", alignItems:"center", gap:8,
+  };
+
+  return (
+    <div style={{ background:"#111816", minHeight:"100vh", display:"flex",
+      flexDirection:"column", fontFamily:"'Inter',sans-serif", color:C.white }}>
+
+      {/* ── Header bar ── */}
+      <div style={{ background:"#0d1411", padding:"12px 20px", display:"flex",
+        alignItems:"center", justifyContent:"space-between", gap:16,
+        borderBottom:"1px solid rgba(255,255,255,0.08)" }}>
+        <div style={{ fontSize:11, letterSpacing:2.5, color:"rgba(255,255,255,0.45)",
+          textTransform:"uppercase", fontWeight:600 }}>
+          Neurodiversity Works · Presenter View
+        </div>
+        <div style={{ display:"flex", alignItems:"center", gap:16 }}>
+          {/* Timer */}
+          <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+            <span style={{ fontFamily:"monospace", fontSize:22, fontWeight:700,
+              color:elapsed > 3600 ? "#E05050" : C.white, letterSpacing:2 }}>
+              {mins}:{secs}
+            </span>
+            <button onClick={() => setRunning(r => !r)} style={{
+              ...btnP, background:running?"rgba(255,255,255,0.08)":"rgba(84,0,255,0.5)",
+              color:C.white, fontSize:11, padding:"6px 12px" }}>
+              {running ? "⏸ Pause" : "▶ Start"}
+            </button>
+            <button onClick={() => { setElapsed(0); setRunning(false); }} style={{
+              ...btnP, background:"rgba(255,255,255,0.06)", color:"rgba(255,255,255,0.5)",
+              fontSize:11, padding:"6px 12px" }}>
+              Reset
+            </button>
+          </div>
+          {/* Slide counter */}
+          <div style={{ fontFamily:"monospace", fontSize:16, fontWeight:700,
+            color:"rgba(255,255,255,0.6)", letterSpacing:1 }}>
+            {slideIndex + 1} / {SLIDES.length}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Progress bar ── */}
+      <div style={{ height:3, background:"rgba(255,255,255,0.08)" }}>
+        <div style={{ width:`${((slideIndex + 1) / SLIDES.length) * 100}%`,
+          height:"100%", background:accent, transition:"width 0.3s ease" }} />
+      </div>
+
+      {/* ── Main content ── */}
+      <div style={{ flex:1, display:"grid", gridTemplateColumns:"1fr 320px",
+        gap:0, overflow:"hidden" }}>
+
+        {/* Left: current slide notes */}
+        <div style={{ padding:"28px 32px", display:"flex", flexDirection:"column",
+          gap:20, overflowY:"auto", borderRight:"1px solid rgba(255,255,255,0.08)" }}>
+          {/* Slide label */}
+          <div style={{ display:"flex", alignItems:"center", gap:12, flexWrap:"wrap" }}>
+            <span style={{ fontSize:10, letterSpacing:2.5, textTransform:"uppercase",
+              fontWeight:700, color:accent, background:`${accent}22`,
+              padding:"4px 12px", borderRadius:20 }}>
+              {getSlideLabel(slide)}
+            </span>
+            {slide.questionNum && (
+              <span style={{ fontSize:10, letterSpacing:2, textTransform:"uppercase",
+                fontWeight:700, color:"rgba(255,255,255,0.4)" }}>
+                Question {slide.questionNum} of 6
+              </span>
+            )}
+          </div>
+          {/* Slide title */}
+          <div style={{ fontFamily:"'Playfair Display',Georgia,serif", fontSize:24,
+            fontWeight:700, color:C.white, lineHeight:1.3, fontStyle:"italic" }}>
+            {getSlideTitle(slide)}
+          </div>
+          {/* Speaker notes */}
+          <div style={{ flex:1, background:"rgba(255,255,255,0.04)",
+            border:"1px solid rgba(255,255,255,0.08)", borderRadius:10,
+            padding:"20px 24px" }}>
+            <div style={{ fontSize:10, letterSpacing:2.5, textTransform:"uppercase",
+              fontWeight:700, color:"rgba(255,255,255,0.35)", marginBottom:14 }}>
+              Speaker Notes
+            </div>
+            <p style={{ margin:0, fontSize:16, color:"rgba(255,255,255,0.85)",
+              lineHeight:1.75, whiteSpace:"pre-wrap" }}>
+              {slide.notes || "No notes for this slide."}
+            </p>
+          </div>
+        </div>
+
+        {/* Right: next slide + navigation */}
+        <div style={{ padding:"24px 20px", display:"flex", flexDirection:"column",
+          gap:20, overflowY:"auto", background:"rgba(0,0,0,0.2)" }}>
+
+          {/* Next slide preview */}
+          <div>
+            <div style={{ fontSize:10, letterSpacing:2.5, textTransform:"uppercase",
+              fontWeight:700, color:"rgba(255,255,255,0.3)", marginBottom:12 }}>
+              Up Next
+            </div>
+            {nextSlide ? (
+              <div style={{ background:"rgba(255,255,255,0.05)",
+                border:"1px solid rgba(255,255,255,0.1)", borderRadius:10,
+                padding:"16px 18px" }}>
+                <div style={{ fontSize:10, letterSpacing:2, textTransform:"uppercase",
+                  fontWeight:700, color:ACCENTS[nextSlide.accent]||ACCENTS.purple,
+                  marginBottom:8 }}>
+                  {getSlideLabel(nextSlide)}
+                </div>
+                <div style={{ fontFamily:"'Playfair Display',Georgia,serif",
+                  fontSize:15, fontWeight:700, color:"rgba(255,255,255,0.75)",
+                  lineHeight:1.35, fontStyle:"italic" }}>
+                  {getSlideTitle(nextSlide)}
+                </div>
+              </div>
+            ) : (
+              <div style={{ background:"rgba(255,255,255,0.04)",
+                border:"1px dashed rgba(255,255,255,0.12)", borderRadius:10,
+                padding:"16px 18px", color:"rgba(255,255,255,0.25)",
+                fontSize:13, fontStyle:"italic" }}>
+                End of deck
+              </div>
+            )}
+          </div>
+
+          {/* Navigation */}
+          <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+            <div style={{ fontSize:10, letterSpacing:2.5, textTransform:"uppercase",
+              fontWeight:700, color:"rgba(255,255,255,0.3)", marginBottom:2 }}>
+              Navigate
+            </div>
+            <button onClick={() => navigate(slideIndex - 1)}
+              disabled={slideIndex === 0}
+              style={{ ...btnP, background:"rgba(255,255,255,0.07)", color:C.white,
+                opacity:slideIndex===0?0.3:1, justifyContent:"center",
+                cursor:slideIndex===0?"not-allowed":"pointer" }}>
+              ← Previous
+            </button>
+            <button onClick={() => navigate(slideIndex + 1)}
+              disabled={slideIndex === SLIDES.length - 1}
+              style={{ ...btnP, background:accent, color:C.white,
+                opacity:slideIndex===SLIDES.length-1?0.3:1, justifyContent:"center",
+                cursor:slideIndex===SLIDES.length-1?"not-allowed":"pointer" }}>
+              Next →
+            </button>
+            <button onClick={() => navigate(0)} style={{
+              ...btnP, background:"transparent", color:"rgba(255,255,255,0.35)",
+              fontSize:11, justifyContent:"center",
+              border:"1px solid rgba(255,255,255,0.12)" }}>
+              ↺ Restart
+            </button>
+          </div>
+
+          {/* Mini slide strip */}
+          <div>
+            <div style={{ fontSize:10, letterSpacing:2.5, textTransform:"uppercase",
+              fontWeight:700, color:"rgba(255,255,255,0.3)", marginBottom:10 }}>
+              All Slides
+            </div>
+            <div style={{ display:"flex", flexDirection:"column", gap:4,
+              maxHeight:240, overflowY:"auto" }}>
+              {SLIDES.map((s, i) => (
+                <button key={i} onClick={() => navigate(i)} style={{
+                  display:"flex", alignItems:"center", gap:10, padding:"6px 10px",
+                  background:i===slideIndex?"rgba(255,255,255,0.12)":"transparent",
+                  border:`1px solid ${i===slideIndex?"rgba(255,255,255,0.2)":"transparent"}`,
+                  borderRadius:6, cursor:"pointer", textAlign:"left", width:"100%" }}>
+                  <span style={{ fontFamily:"monospace", fontSize:10,
+                    color:"rgba(255,255,255,0.35)", minWidth:20 }}>{i+1}</span>
+                  <span style={{ fontSize:11, color:i===slideIndex?"rgba(255,255,255,0.9)":"rgba(255,255,255,0.45)",
+                    fontWeight:i===slideIndex?600:400, lineHeight:1.3,
+                    overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>
+                    {getSlideTitle(s) || getSlideLabel(s)}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(IS_PRESENTER ? <PresenterView /> : <Presentation />);
+</script>
+</body>
+</html>
