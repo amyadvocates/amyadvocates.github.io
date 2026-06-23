@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta charset="UTF-8">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-KB8P3XW5BN"></script>
 <script>
@@ -56,7 +57,6 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
 <img height="1" width="1" style="display:none;" alt="" src="https://px.ads.linkedin.com/collect/?pid=9011330&fmt=gif" />
 </noscript>
 <!-- LinkedIn Insight Tag Code End -->
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Should You Disclose? — Neurodiversity Works Workshop</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,400;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -136,6 +136,12 @@ function getSlideLabel(slide) {
   return slide.eyebrow || slide.type.charAt(0).toUpperCase() + slide.type.slice(1);
 }
 
+function getDisplaySlideNumber(slide, index) {
+  if (!slide) return String(index + 1);
+  if (slide.type === "disclaimer") return "1.5";
+  return String(slide.type === "cover" ? 1 : index);
+}
+
 
 // ─── SLIDE DATA ──────────────────────────────────────────────────────────────
 
@@ -150,6 +156,21 @@ const SLIDES = [
     subtitle:"Before you tell your manager you're neurodivergent, ask yourself: have they actually shown you that they're safe to tell?",
     accent:"purple",
     notes:"Let the hook sit before you speak. Most participants are already living this question. The workshop is designed to give them a structure for an answer they can actually use.",
+  },
+
+  // ── S1.5: WORKSHOP INFORMATION / DISCLAIMER ──────────────────────────────
+  // Moved up to follow the cover slide so external scripts can keep the 36-style
+  // reference without renumbering the rest of the deck.
+  {
+    type:"disclaimer",
+    eyebrow:"Workshop Information",
+    disclaimer:"This workshop provides general educational information and is not legal advice or a substitute for advice from a suitably qualified professional. Employment and disability law varies by jurisdiction and depends on the facts of each individual situation. The information provided may not apply to your circumstances, and you should not make significant legal, employment or health decisions solely in reliance on this workshop.\n\nPlease seek appropriate local legal, union, medical or other professional advice if you are facing dismissal, disciplinary action, serious discrimination, retaliation, a legal deadline, or an urgent risk to your health or safety.",
+    resources:[
+      "Follow along with interactive worksheet provided, or write your own notes",
+      "Neurodiversity Works: community.neurodiversity.works",
+    ],
+    accent:"teal",
+    notes:"Leave on screen during any break or close of session. Participants can photograph it.",
   },
 
   // ── S2: OUTCOMES ───────────────────────────────────────────────────────────
@@ -219,9 +240,9 @@ const SLIDES = [
   // ── S6: PART ONE — ASSESS BEHAVIOUR ───────────────────────────────────────
   {
     type:"statement",
-    eyebrow:"Part One · Read the Room",
-    statement:"Assess behaviour — not personality.",
-    subtext:"You are looking for evidence, not impressions.",
+    eyebrow:"Part One: Assess Your Workplace Context",
+    statement:"What Has Your Manager Actually Shown You?",
+    subtext:"How to look for evidence",
     paths:null,
     dark:false,
     accent:"purple",
@@ -236,7 +257,7 @@ const SLIDES = [
     question:"Does my manager listen before reaching a conclusion?",
     options:["Yes","Mixed","No","Not enough evidence"],
     accent:"purple",
-    notes:"Pause for approximately 15 seconds. Think about what happens when you explain a difficulty. Do they ask questions and try to understand? Or do they interrupt, minimise, or immediately tell you what the problem is?",
+    notes:"Think about what happens when you explain a difficulty. Do they ask questions and try to understand? Or do they interrupt, minimise, or immediately tell you what the problem is?",
   },
   {
     type:"question",
@@ -245,7 +266,7 @@ const SLIDES = [
     question:"Can they respond to a concern without becoming defensive?",
     options:["Yes","Mixed","No","Not enough evidence"],
     accent:"purple",
-    notes:"Pause for approximately 15 seconds. What happens when you say an instruction was unclear or a workload is unrealistic? Can they treat that as useful information — or do they hear it as criticism, disloyalty, or an excuse?",
+    notes:"What happens when you say an instruction was unclear or a workload is unrealistic? Can they treat that as useful information — or do they hear it as criticism, disloyalty, or an excuse?",
   },
   {
     type:"question",
@@ -254,7 +275,7 @@ const SLIDES = [
     question:"Do they follow through?",
     options:["Yes","Mixed","No","Not enough evidence"],
     accent:"purple",
-    notes:"Pause for approximately 15 seconds. A manager may respond warmly in the moment — but do they remember what was agreed? Do they make the change? Do they check in again? Supportive words without follow-through may leave you raising the issue repeatedly.",
+    notes:"A manager may respond warmly in the moment — but do they remember what was agreed? Do they make the change? Do they check in again? Supportive words without follow-through may leave you raising the issue repeatedly.",
   },
   {
     type:"question",
@@ -263,7 +284,7 @@ const SLIDES = [
     question:"Do they handle sensitive information carefully?",
     options:["Yes","Mixed","No","Not enough evidence"],
     accent:"purple",
-    notes:"Pause for approximately 15 seconds. Have you seen them gossip about employees, speculate about health, or share information unnecessarily? Remember: you may not know what they have said privately. You are assessing the evidence available to you.",
+    notes:"Have you seen them gossip about employees, speculate about health, or share information unnecessarily? Remember: you may not know what they have said privately. You are assessing the evidence available to you.",
   },
   {
     type:"question",
@@ -272,7 +293,7 @@ const SLIDES = [
     question:"Can they adapt how they manage different people?",
     options:["Yes","Mixed","No","Not enough evidence"],
     accent:"purple",
-    notes:"Pause for approximately 15 seconds. Do they accept that one employee may need written instructions, another more notice, another regular check-ins? Or do they interpret fairness as treating everybody in exactly the same way?",
+    notes:"Do they accept that one employee may need written instructions, another more notice, another regular check-ins? Or do they interpret fairness as treating everybody in exactly the same way?",
   },
   {
     type:"question",
@@ -281,7 +302,7 @@ const SLIDES = [
     question:'Can they say, "I don\'t know, but I\'ll find out"?',
     options:["Yes","Mixed","No","Not enough evidence"],
     accent:"purple",
-    notes:"Pause for approximately 15 seconds. A manager does not need to be a neurodiversity expert. The useful question: can they seek advice rather than avoid the issue or invent an answer?",
+    notes:"A manager does not need to be a neurodiversity expert. The useful question: can they seek advice rather than avoid the issue or invent an answer?",
   },
 
   // ── S13: EVIDENCE REFLECTION (REVISED — prominent callout) ────────────────
@@ -334,7 +355,7 @@ const SLIDES = [
     scaleMin:"1 — No clear route",
     scaleMax:"5 — Clear route and named responsibility",
     accent:"lavender",
-    notes:"Pause for 15 seconds after the scoring prompt. Not knowing the answers is itself useful information — finding out can become your first step.",
+    notes:"Not knowing the answers is itself useful information — finding out can become your first step.",
   },
 
   // ── S16: CULTURE SCALE (shorter scale labels) ─────────────────────────────
@@ -353,7 +374,7 @@ const SLIDES = [
     scaleMin:"1 — Support feels unsafe",
     scaleMax:"5 — Support is normalised",
     accent:"lavender",
-    notes:"Pause for 15 seconds. A large company may have an impressive policy but a poor culture. A small organisation may have no formal programme but still respond flexibly and humanely. This is why you score them separately.",
+    notes:"A large company may have an impressive policy but a poor culture. A small organisation may have no formal programme but still respond flexibly and humanely. This is why you score them separately.",
   },
 
   // ── S17: PROCESS + CULTURE MATRIX (revised quadrant labels) ───────────────
@@ -376,8 +397,8 @@ const SLIDES = [
   // ── S18: LEGAL DISCLAIMER STATEMENT ───────────────────────────────────────
   {
     type:"statement",
-    eyebrow:"Part Two · Understand What Disclosure May Change",
-    statement:"General information — not individual legal advice.",
+    eyebrow:"General information — not individual legal advice",
+    statement:"International legal context",
     subtext:"Employment and disability law varies between countries. It may also depend on employer size, employment status, and individual circumstances. Check local law.",
     paths:null,
     dark:false,
@@ -418,21 +439,30 @@ const SLIDES = [
       "A formal neurodivergence diagnosis is not required. Protection depends on whether the effects meet the Equality Act definition of disability.",
       "The duty to make reasonable adjustments can arise when an employer knows, or could reasonably be expected to know, that the person is disabled and experiencing a disability-related disadvantage.",
       "Acas advises employers to support neurodivergent workers whether or not they have a diagnosis",
-      "You can start by describing effects — but naming the disability-related connection may affect how the request is interpreted and handled",
+      "“Reasonable” is a context-specific test",
     ],
+    box:{
+      title:"Reasonable adjustments may involve:",
+      items:[
+        "Changing a policy, process or way of working",
+        "Removing or altering a physical barrier",
+        "Providing equipment, software or another aid",
+      ],
+    },
     footer:"Source: Equality Act 2010 · Acas",
     accent:"lavender",
-    notes:"Keep this brief. The key takeaway: you can start by describing effects, but naming the disability-related connection may affect how seriously the request is treated.",
+    notes:"Keep this brief. The key takeaway: 'reasonable' is judged against the specific role, workplace and impact — not what a manager personally finds convenient.",
   },
 
   // ── S21: EU ────────────────────────────────────────────────────────────────
   {
     type:"content",
     eyebrow:"European Union",
-    title:"National Law Based on a Shared Framework",
+    title:"National Law Based on a Common Minimum Framework",
     items:[
       "The Employment Equality Directive establishes a framework against disability discrimination in employment",
       "It requires reasonable accommodation unless this would impose a disproportionate burden",
+      "Measures may support access, participation, progression or training",
       "All EU member states implement this through their own national (and sometimes regional) laws — which may provide more favourable protection",
       "Check the process and legal definition in the specific country where you work",
     ],
@@ -467,7 +497,7 @@ const SLIDES = [
     title:"Ask Yourself: What Kind of Conversation Am I Beginning?",
     cards:[
       "A conversation about working preferences?",
-      "Notice of a health or disability-related difficulty?",
+      "A conversation about a health or disability-related difficulty?",
       "An informal request for support?",
       "A formal accommodations or adjustments request?",
     ],
@@ -505,7 +535,7 @@ const SLIDES = [
       "It could prevent the situation becoming more serious",
     ],
     accent:"teal",
-    notes:"Pause for approximately 25 seconds. Walk through the options briefly. Perhaps you need practical changes, or you need your manager to understand why things have changed, or you need to stop managing the problem entirely alone.",
+    notes:"Walk through the options briefly. Perhaps you need practical changes, or you need your manager to understand why things have changed, or you need to stop managing the problem entirely alone.",
   },
 
   // ── S26: CONCERN TRANSITION ────────────────────────────────────────────────
@@ -513,7 +543,7 @@ const SLIDES = [
     type:"statement",
     eyebrow:"Part Three · Concern",
     statement:"What am I concerned could happen?",
-    subtext:"Try not to dismiss your concerns as negativity. Some fears are based on uncertainty. Others are based on genuine evidence.",
+    subtext:"Try not to dismiss your concerns as negativity. Some fears are based on uncertainty, others may be based on gut feeling.",
     paths:null,
     dark:false,
     accent:"lavender",
@@ -532,7 +562,7 @@ const SLIDES = [
     ],
     prompt:"Which two concerns matter most in my situation?",
     accent:"lavender",
-    notes:"Pause for approximately 35 seconds. Then take each concern through four questions: What evidence do I have? How likely does it seem? How serious would the impact be? What could reduce the risk?",
+    notes:"Then take each concern through four questions: What evidence do I have? How likely does it seem? How serious would the impact be? What could reduce the risk?",
   },
 
   // ── S28: URGENCY SCALE ─────────────────────────────────────────────────────
@@ -546,7 +576,7 @@ const SLIDES = [
       { label:"High",     desc:"I am near burnout, struggling to work safely or facing formal concerns",             color:C.dark },
     ],
     accent:"purple",
-    notes:"Pause for about 15 seconds. High urgency does not mean an unplanned conversation with an unsafe person — it may mean seeking support and using a more formal route.",
+    notes:"High urgency does not mean an unplanned conversation with an unsafe person — it may mean seeking support and using a more formal route.",
   },
 
   // ── S29: HIGHER RISK STATEMENT ─────────────────────────────────────────────
@@ -589,7 +619,7 @@ const SLIDES = [
     ],
     note:"Choose the route most likely to give useful movement with an acceptable level of risk. Your backup matters — if the first contact cannot resolve the issue, you need somewhere to go.",
     accent:"purple",
-    notes:"Pause for about 25 seconds. Naming a backup closes the loop that 'if this doesn't work, I have nowhere to go' — which often keeps people stuck.",
+    notes:"Naming a backup closes the loop that 'if this doesn't work, I have nowhere to go' — which often keeps people stuck.",
   },
 
   // ── S32: DISCLOSURE LEVEL (revised title) ─────────────────────────────────
@@ -601,7 +631,7 @@ const SLIDES = [
     left:{
       label:"What am I willing to share?",
       items:[
-        "Share nothing personal yet / ask general questions",
+        "Share nothing personal yet and ask general questions",
         "Describe the work impact",
         "Mention a condition or neurodivergence",
         "Share a diagnosis",
@@ -654,8 +684,7 @@ const SLIDES = [
     notes:"Leave on screen for about 35 seconds. The specificity prompt is the most important part — vague intentions rarely become actions.",
   },
 
-  // ── S35: CLOSURE (split — disclaimer removed to S36) ──────────────────────
-  // Change: disclaimer moved to dedicated S36; this slide ends on memorable idea
+  // ── S35: CLOSURE ──────────────────────────────────────────────────────────
   {
     type:"closure",
     eyebrow:"Before We Finish",
@@ -670,18 +699,16 @@ const SLIDES = [
     notes:"Read the frame sentence out loud. This is something participants can actually use. Silence after a close is not a problem to fill. The aim is not the bravest decision — it is the most informed decision available now.",
   },
 
-  // ── S36: WORKSHOP INFORMATION / DISCLAIMER (new slide) ────────────────────
-  // Change: legal disclaimer now has its own final slide; workshop ends on S35
+  // ── S36: QUESTIONS ─────────────────────────────────────────────────────────
   {
-    type:"disclaimer",
-    eyebrow:"Workshop Information",
-    disclaimer:"This workshop provides general educational information, not legal advice. Employment and disability law varies by jurisdiction and individual circumstances. Seek appropriate local advice if you are facing dismissal, disciplinary action, serious discrimination, retaliation or an urgent risk to your health or safety.",
-    resources:[
-      "Worksheet: provided with workshop materials",
-      "Neurodiversity Works: community.neurodiversity.works",
-    ],
-    accent:"teal",
-    notes:"Leave on screen during any break or close of session. Participants can photograph it.",
+    type:"statement",
+    eyebrow:"Thank You",
+    statement:"Questions?",
+    subtext:"Open floor — bring your own context, examples or concerns.",
+    paths:null,
+    dark:true,
+    accent:"purple",
+    notes:"Open the floor. Let silence sit if needed — participants often need a moment before asking the first question.",
   },
 ];
 
@@ -958,7 +985,7 @@ function SlideQuestion({ slide, accent }) {
       <div style={{ marginTop:"clamp(16px,2.5cqi,28px)", fontFamily:"'Inter',sans-serif",
         fontSize:"clamp(10px,1.2cqi,13px)", color:C.muted, letterSpacing:1.5,
         textTransform:"uppercase", fontWeight:600 }}>
-        Mark your answer on your worksheet — pause ~15 seconds
+        Mark your answer on your worksheet
       </div>
     </div>
   );
@@ -987,6 +1014,29 @@ function SlideContent({ slide, accent }) {
           </li>
         ))}
       </ul>
+      {slide.box && (
+        <div style={{ marginTop:"clamp(14px,2cqi,22px)", background:C.white,
+          border:`1px solid ${C.border}`, borderRadius:8,
+          padding:"clamp(12px,1.8cqi,20px) clamp(16px,2.2cqi,26px)" }}>
+          <div style={{ fontFamily:"'Inter',sans-serif", fontSize:"clamp(11px,1.4cqi,15px)",
+            fontWeight:700, color:C.dark, marginBottom:"clamp(8px,1.1cqi,12px)" }}>
+            {slide.box.title}
+          </div>
+          <ul style={{ listStyle:"none", padding:0, margin:0, display:"flex",
+            flexDirection:"column", gap:"clamp(6px,0.9cqi,10px)" }}>
+            {slide.box.items.map((item,i) => (
+              <li key={i} style={{ display:"flex", alignItems:"flex-start",
+                gap:"clamp(10px,1.4cqi,16px)", fontFamily:"'Inter',sans-serif",
+                fontSize:"clamp(12px,1.6cqi,18px)", color:C.dark, lineHeight:1.4, fontWeight:400 }}>
+                <span aria-hidden="true" style={{ flexShrink:0,
+                  width:"clamp(4px,0.6cqi,7px)", height:"clamp(4px,0.6cqi,7px)",
+                  background:dotAccent, borderRadius:"50%", marginTop:"clamp(6px,0.8cqi,10px)" }} />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       {slide.footer && (
         <div style={{ marginTop:"clamp(10px,1.5cqi,16px)", fontFamily:"'Inter',sans-serif",
           fontSize:"clamp(9px,1.1cqi,12px)", color:C.muted, letterSpacing:1,
@@ -1508,7 +1558,8 @@ function SlideDisclaimer({ slide, accent }) {
         gap:"clamp(18px,2.8cqi,32px)" }}>
         <p style={{ margin:0, fontFamily:"'Inter',sans-serif",
           fontSize:"clamp(14px,1.9cqi,22px)", color:C.dark, lineHeight:1.7,
-          borderLeft:`3px solid ${accent}`, paddingLeft:"clamp(16px,2.2cqi,26px)" }}>
+          borderLeft:`3px solid ${accent}`, paddingLeft:"clamp(16px,2.2cqi,26px)",
+          whiteSpace:"pre-wrap" }}>
           {slide.disclaimer}
         </p>
         {slide.resources && slide.resources.length > 0 && (
@@ -1659,7 +1710,7 @@ function Presentation() {
         fontSize:10, letterSpacing:2, color:isDark?"rgba(255,255,255,0.7)":C.muted, fontWeight:600,
         background:isDark?"rgba(0,0,0,0.25)":"rgba(250,248,244,0.8)", padding:"3px 9px",
         borderRadius:4, backdropFilter:"blur(4px)" }}>
-        {String(currentSlide+1).padStart(2,"0")} / {String(total).padStart(2,"0")}
+        {getDisplaySlideNumber(slide, currentSlide).padStart(2,"0")} / {String(total).padStart(2,"0")}
       </div>
     </div>
   );
@@ -1684,7 +1735,7 @@ function Presentation() {
                 border:"1px solid rgba(255,255,255,0.18)", opacity:currentSlide===0?0.4:1,
                 cursor:currentSlide===0?"not-allowed":"pointer" }}>← Prev</button>
               <span style={{ fontFamily:"'Inter',sans-serif", fontSize:12, letterSpacing:2, fontWeight:700 }}>
-                {currentSlide+1} / {total}
+                {getDisplaySlideNumber(slide, currentSlide)} / {total}
               </span>
               <div style={{ display:"flex", gap:8 }}>
                 <button className="nw-btn" onClick={exitFullscreen} style={{
@@ -1759,7 +1810,7 @@ function Presentation() {
                 cursor:currentSlide===0?"not-allowed":"pointer" }}>← Previous</button>
               <span style={{ fontFamily:"'Inter',sans-serif", fontSize:11, letterSpacing:2,
                 color:C.muted, fontWeight:600, textTransform:"uppercase" }}>
-                Slide {currentSlide+1} of {total}
+                Slide {getDisplaySlideNumber(slide, currentSlide)} of {total}
               </span>
               <button className="nw-btn" onClick={goNext} disabled={currentSlide===total-1} style={{
                 ...btnBase, background:currentSlide===total-1?C.bg:accent,
@@ -1775,7 +1826,7 @@ function Presentation() {
               role="region" aria-label="Speaker notes">
               <div style={{ fontFamily:"'Inter',sans-serif", fontSize:10, letterSpacing:2.5,
                 color:C.purple, textTransform:"uppercase", fontWeight:700, marginBottom:8 }}>
-                Speaker Notes · Slide {currentSlide+1}
+                Speaker Notes · Slide {getDisplaySlideNumber(slide, currentSlide)}
               </div>
               <p style={{ margin:0, fontFamily:"'Inter',sans-serif",
                 fontSize:14, color:C.dark, lineHeight:1.65 }}>
@@ -1794,7 +1845,7 @@ function Presentation() {
                 const isDkSlide = s.type === "statement" && s.dark;
                 return (
                   <button key={i} role="tab" aria-selected={active} className="nw-btn"
-                    aria-label={`Slide ${i+1}`}
+                    aria-label={`Slide ${getDisplaySlideNumber(s, i)}`}
                     onClick={() => setCurrentSlide(i)}
                     style={{ fontFamily:"'Inter',sans-serif", fontSize:10, fontWeight:700,
                       letterSpacing:1.5, cursor:"pointer", minHeight:36, minWidth:40,
@@ -1802,7 +1853,7 @@ function Presentation() {
                       background:active?C.dark:isDkSlide?C.dark:"transparent",
                       color:active?C.white:isDkSlide?"rgba(255,255,255,0.6)":C.muted,
                       borderRadius:6, transition:"all 0.15s" }}>
-                    {i+1}
+                    {getDisplaySlideNumber(s, i)}
                   </button>
                 );
               })}
